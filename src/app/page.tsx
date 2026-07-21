@@ -3,8 +3,7 @@
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import GSAPHero from "@/components/animations/GSAPHero";
-import GSAPTextRevealSection from "@/components/animations/GSAPTextRevealSection";
-import GSAPHorizontalScroll from "@/components/animations/GSAPHorizontalScroll";
+import GSAPKineticScroll from "@/components/animations/GSAPKineticScroll";
 import GSAPParallaxGrid from "@/components/animations/GSAPParallaxGrid";
 import InteractiveLearningDashboard from "@/components/InteractiveLearningDashboard";
 import ToolGrid from "@/components/ToolGrid";
@@ -31,14 +30,11 @@ export default function Home() {
 
       {/* Main Content Body */}
       <main className="flex-grow">
-        {/* GSAP Hero Section with 3D Scrub and Floating Parallax Badges */}
+        {/* Extraordinary Hero Section with 3D Mouse Tilt & Floating Physics */}
         <GSAPHero />
 
-        {/* GSAP Text Reveal Section (GSAP.com Homepage Inspired) */}
-        <GSAPTextRevealSection />
-
-        {/* GSAP Pin-Scroll Horizontal Showcase Section */}
-        <GSAPHorizontalScroll />
+        {/* Clean Lavender Dream GSAP Horizontal Scroll Feature Showcase */}
+        <GSAPKineticScroll />
 
         {/* GSAP Parallax Floating Feature Grid */}
         <GSAPParallaxGrid />
