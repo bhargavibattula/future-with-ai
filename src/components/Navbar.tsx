@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Sparkles, Menu, X, ArrowUpRight, Search } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface NavbarProps {
   onSearchClick?: () => void;
@@ -20,7 +21,7 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
           </div>
           <div className="flex items-baseline">
             <span className="text-2xl font-extrabold tracking-tight text-[#1E1B2E]">
-              toolkit
+              future
             </span>
             <span className="text-2xl font-extrabold text-[#8B7FE8]">
               .ai
@@ -37,10 +38,10 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
             Explore
           </a>
           <a
-            href="#categories"
+            href="#ecosystem"
             className="hover:text-[#8B7FE8] transition-colors py-1 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-[#8B7FE8] hover:after:w-full after:transition-all"
           >
-            Categories
+            Ecosystem
           </a>
           <a
             href="#how-it-works"
@@ -59,23 +60,23 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
         {/* Action Buttons */}
         <div className="hidden md:flex items-center space-x-4">
           {onSearchClick && (
-            <button
+            <Button
+              variant="ghost"
+              size="icon"
               onClick={onSearchClick}
-              className="p-2.5 text-[#6B6785] hover:text-[#1E1B2E] hover:bg-[#D8D2FA]/40 rounded-full transition-all"
               title="Search AI Tools"
               aria-label="Search AI Tools"
             >
-              <Search className="w-5 h-5" />
-            </button>
+              <Search className="w-5 h-5 text-[#6B6785]" />
+            </Button>
           )}
 
-          <a
-            href="#explore"
-            className="bg-[#8B7FE8] hover:bg-[#786BD6] text-white px-6 py-2.5 rounded-full text-sm font-semibold shadow-soft-md hover:shadow-glow-primary hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 flex items-center gap-1.5"
-          >
-            <span>Get started</span>
-            <ArrowUpRight className="w-4 h-4" />
-          </a>
+          <Button asChild variant="default" size="default">
+            <a href="#explore" className="flex items-center gap-1.5">
+              <span>Get started</span>
+              <ArrowUpRight className="w-4 h-4" />
+            </a>
+          </Button>
         </div>
 
         {/* Mobile menu button */}
@@ -102,11 +103,11 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
               Explore Tools
             </a>
             <a
-              href="#categories"
+              href="#ecosystem"
               onClick={() => setMobileMenuOpen(false)}
               className="py-2 hover:text-[#8B7FE8] border-b border-[#EAE6FE]/50"
             >
-              Categories
+              Ecosystem
             </a>
             <a
               href="#how-it-works"
@@ -125,14 +126,16 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
           </nav>
 
           <div className="pt-2">
-            <a
-              href="#explore"
-              onClick={() => setMobileMenuOpen(false)}
-              className="w-full bg-[#8B7FE8] text-white py-3 rounded-full text-center font-semibold flex items-center justify-center gap-2 shadow-soft-md"
-            >
-              <span>Get started</span>
-              <ArrowUpRight className="w-4 h-4" />
-            </a>
+            <Button asChild variant="default" className="w-full">
+              <a
+                href="#explore"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center justify-center gap-2"
+              >
+                <span>Get started</span>
+                <ArrowUpRight className="w-4 h-4" />
+              </a>
+            </Button>
           </div>
         </div>
       )}

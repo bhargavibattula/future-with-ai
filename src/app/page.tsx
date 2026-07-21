@@ -2,11 +2,13 @@
 
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
-import Hero from "@/components/Hero";
+import GSAPHero from "@/components/animations/GSAPHero";
+import GSAPTextRevealSection from "@/components/animations/GSAPTextRevealSection";
+import GSAPHorizontalScroll from "@/components/animations/GSAPHorizontalScroll";
+import GSAPParallaxGrid from "@/components/animations/GSAPParallaxGrid";
+import InteractiveLearningDashboard from "@/components/InteractiveLearningDashboard";
 import ToolGrid from "@/components/ToolGrid";
 import ToolModal from "@/components/ToolModal";
-import HowItWorks from "@/components/HowItWorks";
-import SubmitSection from "@/components/SubmitSection";
 import Footer from "@/components/Footer";
 import { AITool } from "@/data/tools";
 
@@ -16,7 +18,6 @@ export default function Home() {
 
   const handleCategorySelect = (categorySlug: string) => {
     setSelectedCategory(categorySlug);
-    // Smooth scroll down to explore section if selecting from Hero
     const exploreSection = document.getElementById("explore");
     if (exploreSection) {
       exploreSection.scrollIntoView({ behavior: "smooth" });
@@ -24,33 +25,36 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FCFBFF] text-[#1E1B2E]">
-      {/* Navigation Header */}
+    <div className="min-h-screen flex flex-col bg-[#FCFBFF] text-[#1E1B2E] selection:bg-[#D8D2FA] selection:text-[#1E1B2E]">
+      {/* Navbar Header */}
       <Navbar onSearchClick={() => handleCategorySelect("All")} />
 
       {/* Main Content Body */}
       <main className="flex-grow">
-        {/* Hero Section (Matching toolkit.ai visual layout) */}
-        <Hero
-          onCategorySelect={handleCategorySelect}
-          selectedCategory={selectedCategory}
-        />
+        {/* GSAP Hero Section with 3D Scrub and Floating Parallax Badges */}
+        <GSAPHero />
 
-        {/* Interactive AI Tool Directory & Grid */}
+        {/* GSAP Text Reveal Section (GSAP.com Homepage Inspired) */}
+        <GSAPTextRevealSection />
+
+        {/* GSAP Pin-Scroll Horizontal Showcase Section */}
+        <GSAPHorizontalScroll />
+
+        {/* GSAP Parallax Floating Feature Grid */}
+        <GSAPParallaxGrid />
+
+        {/* Interactive Role Dashboard Experience (Learner, Instructor, Admin) */}
+        <InteractiveLearningDashboard />
+
+        {/* AI Tools & Learning Directory Grid */}
         <ToolGrid
           selectedCategory={selectedCategory}
           onCategorySelect={setSelectedCategory}
           onOpenModal={(tool) => setActiveModalTool(tool)}
         />
-
-        {/* How It Works Section */}
-        <HowItWorks />
-
-        {/* Tool Submission & CTA Section */}
-        <SubmitSection />
       </main>
 
-      {/* Quick View Modal */}
+      {/* Quick View Detail Modal */}
       <ToolModal
         tool={activeModalTool}
         onClose={() => setActiveModalTool(null)}

@@ -55,23 +55,60 @@
 
 /* Custom Soft Glassmorphism */
 .glass-nav {
-  background: rgba(252, 251, 255, 0.82);
+  background: rgba(252, 251, 255, 0.85);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
 }
 
 .glass-card {
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(216, 210, 250, 0.6);
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(234, 230, 254, 0.8);
 }
 
-.glass-card-hover {
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+/* Global GSAP Button & Card Classes */
+.btn-gsap-primary {
+  background-color: #8B7FE8;
+  color: #FFFFFF;
+  box-shadow: 0 4px 14px rgba(139, 127, 232, 0.25);
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.glass-card-hover:hover {
+.btn-gsap-primary:hover {
+  background-color: #786BD6;
+  box-shadow: 0 8px 25px rgba(139, 127, 232, 0.35);
+}
+
+.btn-gsap-outline {
+  background-color: #FFFFFF;
+  color: #1E1B2E;
+  border: 1px solid #EAE6FE;
+  box-shadow: 0 2px 8px rgba(139, 127, 232, 0.06);
+}
+
+.btn-gsap-outline:hover {
+  border-color: rgba(139, 127, 232, 0.4);
+  background-color: #FCFBFF;
+}
+
+.btn-gsap-mint {
+  background-color: #B8E8D8;
+  color: #1E1B2E;
+  border: 1px solid #B8E8D8;
+}
+
+.btn-gsap-pink {
+  background-color: #FFC9DE;
+  color: #1E1B2E;
+  border: 1px solid #FFC9DE;
+}
+
+.card-gsap-hover {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
+}
+
+.card-gsap-hover:hover {
   transform: translateY(-4px);
-  border-color: rgba(139, 127, 232, 0.5);
-  box-shadow: 0 12px 32px -8px rgba(139, 127, 232, 0.18);
+  border-color: rgba(139, 127, 232, 0.4);
+  box-shadow: 0 12px 30px rgba(139, 127, 232, 0.15);
 }

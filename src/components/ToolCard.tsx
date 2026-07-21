@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { Star, ExternalLink, Bookmark, Sparkles, Eye } from "lucide-react";
 import { AITool } from "@/data/tools";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 interface ToolCardProps {
   tool: AITool;
@@ -13,7 +15,7 @@ export default function ToolCard({ tool, onOpenModal }: ToolCardProps) {
   const [isBookmarked, setIsBookmarked] = useState(false);
 
   return (
-    <div className="group relative bg-white rounded-2xl border border-[#EAE6FE] p-6 shadow-soft-sm hover:shadow-soft-md hover:border-[#8B7FE8]/40 transition-all duration-300 flex flex-col justify-between hover:-translate-y-1.5">
+    <div className="card-gsap-hover group relative bg-white rounded-3xl border border-[#EAE6FE] p-6 shadow-soft-sm flex flex-col justify-between">
       {/* Top Header */}
       <div>
         <div className="flex items-start justify-between gap-3 mb-4">
@@ -32,9 +34,9 @@ export default function ToolCard({ tool, onOpenModal }: ToolCardProps) {
                   {tool.name}
                 </h3>
                 {tool.featured && (
-                  <span className="bg-[#D8D2FA] text-[#8B7FE8] text-[11px] font-bold px-2 py-0.5 rounded-full inline-flex items-center gap-1">
+                  <Badge variant="default" className="text-[10px] py-0 px-2">
                     <Sparkles className="w-3 h-3" /> Featured
-                  </span>
+                  </Badge>
                 )}
               </div>
               <p className="text-xs text-[#6B6785] font-medium mt-0.5">
@@ -43,21 +45,16 @@ export default function ToolCard({ tool, onOpenModal }: ToolCardProps) {
             </div>
           </div>
 
-          {/* Bookmark Button (Soft Pink Accent #FFC9DE) */}
-          <button
+          {/* Bookmark Button */}
+          <Button
+            variant={isBookmarked ? "accentPink" : "ghost"}
+            size="icon"
             onClick={() => setIsBookmarked(!isBookmarked)}
-            className={`p-2 rounded-xl transition-all ${
-              isBookmarked
-                ? "bg-[#FFC9DE] text-[#1E1B2E] shadow-soft-sm scale-105"
-                : "bg-[#FCFBFF] text-[#6B6785] hover:bg-[#FFC9DE]/50 hover:text-[#1E1B2E]"
-            }`}
             title={isBookmarked ? "Saved" : "Save tool"}
             aria-label="Save tool"
           >
-            <Bookmark
-              className={`w-4 h-4 ${isBookmarked ? "fill-current" : ""}`}
-            />
-          </button>
+            <Bookmark className={`w-4 h-4 ${isBookmarked ? "fill-current" : ""}`} />
+          </Button>
         </div>
 
         {/* Tagline */}
@@ -70,55 +67,46 @@ export default function ToolCard({ tool, onOpenModal }: ToolCardProps) {
           {tool.description}
         </p>
 
-        {/* Mint Tags (#B8E8D8 as requested for tags) */}
+        {/* Mint Tags */}
         <div className="flex flex-wrap gap-1.5 mb-5">
           {tool.tags.map((tag, idx) => (
-            <span
-              key={idx}
-              className="bg-[#B8E8D8]/70 text-[#1E1B2E] text-xs font-semibold px-2.5 py-1 rounded-lg border border-[#B8E8D8]"
-            >
+            <Badge key={idx} variant="mint">
               {tag}
-            </span>
+            </Badge>
           ))}
         </div>
       </div>
 
-      {/* Card Footer: Rating, Pricing, Actions */}
+      {/* Card Footer */}
       <div className="pt-4 border-t border-[#EAE6FE]/70 flex items-center justify-between gap-2">
         <div className="flex items-center gap-3">
-          {/* Rating */}
           <div className="flex items-center gap-1 text-xs font-bold text-[#1E1B2E]">
             <Star className="w-3.5 h-3.5 fill-[#8B7FE8] text-[#8B7FE8]" />
             <span>{tool.rating}</span>
             <span className="text-[#6B6785] font-normal">({tool.reviewsCount})</span>
           </div>
 
-          {/* Pricing Pill */}
-          <span className="text-xs font-bold text-[#8B7FE8] bg-[#F3F0FE] px-2 py-0.5 rounded-full">
-            {tool.pricing}
-          </span>
+          <Badge variant="default">{tool.pricing}</Badge>
         </div>
 
         {/* Action Buttons */}
         <div className="flex items-center gap-2">
-          <button
+          <Button
+            variant="ghost"
+            size="icon"
             onClick={() => onOpenModal(tool)}
-            className="p-2 rounded-xl text-[#6B6785] hover:text-[#1E1B2E] hover:bg-[#D8D2FA]/40 transition-colors"
             title="Quick view"
             aria-label="Quick view"
           >
-            <Eye className="w-4 h-4" />
-          </button>
+            <Eye className="w-4 h-4 text-[#6B6785]" />
+          </Button>
 
-          <a
-            href={tool.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-[#8B7FE8] hover:bg-[#786BD6] text-white p-2 sm:px-3 sm:py-2 rounded-xl text-xs font-semibold shadow-soft-sm hover:shadow-glow-primary transition-all flex items-center gap-1"
-          >
-            <span className="hidden sm:inline">Try</span>
-            <ExternalLink className="w-3.5 h-3.5" />
-          </a>
+          <Button asChild variant="default" size="sm">
+            <a href={tool.url} target="_blank" rel="noopener noreferrer">
+              <span>Try</span>
+              <ExternalLink className="w-3.5 h-3.5" />
+            </a>
+          </Button>
         </div>
       </div>
     </div>
