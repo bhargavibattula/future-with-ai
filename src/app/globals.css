@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --background: #FCFBFF;
+    --foreground: #1E1B2E;
+    --primary: #8B7FE8;
+    --primary-hover: #786BD6;
+    --primary-light: #D8D2FA;
+    --primary-soft: #F3F0FE;
+    --accent: #FFC9DE;
+    --accent-soft: #FFF0F5;
+    --mint: #B8E8D8;
+    --mint-soft: #EDF9F5;
+    --muted: #6B6785;
+    --card: #FFFFFF;
+    --border: #EAE6FE;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans), 'Plus Jakarta Sans', system-ui, sans-serif;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+@theme {
+  --color-lavender-bg: #FCFBFF;
+  --color-lavender-primary: #8B7FE8;
+  --color-lavender-primary-hover: #786BD6;
+  --color-lavender-primary-light: #D8D2FA;
+  --color-lavender-primary-soft: #F3F0FE;
+  --color-lavender-accent: #FFC9DE;
+  --color-lavender-accent-soft: #FFF0F5;
+  --color-lavender-mint: #B8E8D8;
+  --color-lavender-mint-soft: #EDF9F5;
+  --color-lavender-text: #1E1B2E;
+  --color-lavender-muted: #6B6785;
+}
+
+/* Background Soft Glow Blobs */
+.bg-blob-violet {
+  background: radial-gradient(circle, rgba(216, 210, 250, 0.7) 0%, rgba(252, 251, 255, 0) 70%);
+}
+
+.bg-blob-pink {
+  background: radial-gradient(circle, rgba(255, 201, 222, 0.6) 0%, rgba(252, 251, 255, 0) 70%);
+}
+
+.bg-blob-mint {
+  background: radial-gradient(circle, rgba(184, 232, 216, 0.65) 0%, rgba(252, 251, 255, 0) 70%);
+}
+
+/* Custom Soft Glassmorphism */
+.glass-nav {
+  background: rgba(252, 251, 255, 0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(216, 210, 250, 0.6);
+}
+
+.glass-card-hover {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card-hover:hover {
+  transform: translateY(-4px);
+  border-color: rgba(139, 127, 232, 0.5);
+  box-shadow: 0 12px 32px -8px rgba(139, 127, 232, 0.18);
+}
