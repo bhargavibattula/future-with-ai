@@ -43,9 +43,6 @@ export default function CertificateShowcase() {
         
         {/* Left Content */}
         <div className="space-y-8 max-w-xl">
-          <div className="w-16 h-16 rounded-2xl bg-[#D8D2FA] flex items-center justify-center shadow-sm">
-            <span className="text-3xl font-black text-[#8B7FE8]">3</span>
-          </div>
           <h2 className="font-[var(--font-display)] font-bold text-5xl lg:text-7xl leading-tight">
             Finish the course.<br />
             <span className="text-[#8B7FE8]">Walk away with a certificate.</span>
