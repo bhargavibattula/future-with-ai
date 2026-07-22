@@ -137,7 +137,7 @@ export default function InteractiveLearningDashboard() {
                   <Badge variant="default" className="mb-2">
                     Interactive Lesson
                   </Badge>
-                  <CardTitle>Generative AI Architecture & Fine-Tuning</CardTitle>
+                  <CardTitle>AI Tools & Architecture</CardTitle>
                   <CardDescription>
                     Module 4 • Lesson 2 of 12 • Estimated Reading Time: 8 min
                   </CardDescription>
@@ -186,7 +186,7 @@ export default function InteractiveLearningDashboard() {
                   <div>
                     <h4 className="text-sm font-bold text-[#1E1B2E] flex items-center gap-2">
                       <Volume2 className="w-4 h-4 text-[#8B7FE8]" />
-                      ElevenLabs AI Voice Lesson ({activeLanguage})
+                      Voice Lesson ({activeLanguage})
                     </h4>
                     <p className="text-xs text-[#6B6785]">
                       {isPlayingAudio

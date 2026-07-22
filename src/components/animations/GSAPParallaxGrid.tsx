@@ -51,7 +51,7 @@ export default function GSAPParallaxGrid() {
       icon: Cpu,
       svg: AIBrainSVG,
       title: "AI Voice Lessons",
-      badge: "ElevenLabs API",
+      badge: "Lifelike Audio",
       bgSoft: "#D8D2FA",
       textColor: "#8B7FE8",
       description: "Generates high quality audio explanations for lessons in English and Telugu with custom playback rates.",

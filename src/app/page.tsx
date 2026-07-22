@@ -13,6 +13,8 @@ import GSAPHowItWorks from "@/components/animations/GSAPHowItWorks";
 import CertificateShowcase from "@/components/animations/CertificateShowcase";
 import GSAPParallaxGrid from "@/components/animations/GSAPParallaxGrid";
 import InteractiveLearningDashboard from "@/components/InteractiveLearningDashboard";
+import PlatformFeatures from "@/components/PlatformFeatures";
+import AIToolWorkflows from "@/components/animations/AIToolWorkflows";
 import ToolGrid from "@/components/ToolGrid";
 import TestimonialsMarquee from "@/components/animations/TestimonialsMarquee";
 import ExploreAICourses from "@/components/ExploreAICourses";
@@ -70,6 +72,12 @@ export default function Home() {
 
         {/* Interactive Role Dashboard Experience (Learner, Instructor, Admin) */}
         <InteractiveLearningDashboard />
+
+        {/* Platform Features Grid */}
+        <PlatformFeatures />
+
+        {/* AI Tool Workflows Vertical Marquee */}
+        <AIToolWorkflows />
 
         {/* Premium Loved by Developers Testimonials Marquee */}
         <TestimonialsMarquee />
