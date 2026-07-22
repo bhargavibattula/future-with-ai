@@ -6,7 +6,7 @@ import GSAPHero from "@/components/animations/GSAPHero";
 import ScrollProgress from "@/components/animations/system/ScrollProgress";
 import GSAPTextRevealSection from "@/components/animations/GSAPTextRevealSection";
 import GSAPStreakHeatmap from "@/components/animations/GSAPStreakHeatmap";
-import GSAPHorizontalScroll from "@/components/animations/GSAPHorizontalScroll";
+import GSAPHowItWorks from "@/components/animations/GSAPHowItWorks";
 import GSAPParallaxGrid from "@/components/animations/GSAPParallaxGrid";
 import InteractiveLearningDashboard from "@/components/InteractiveLearningDashboard";
 import ToolGrid from "@/components/ToolGrid";
@@ -50,8 +50,8 @@ export default function Home() {
         {/* Learning Journey Heatmap Streak Section */}
         <GSAPStreakHeatmap />
 
-        {/* GSAP Pin-Scroll Horizontal Showcase Section */}
-        <GSAPHorizontalScroll />
+        {/* Ultra Premium How It Works GSAP Horizontal Scroll */}
+        <GSAPHowItWorks />
 
         {/* GSAP Parallax Floating Feature Grid */}
         <GSAPParallaxGrid />
