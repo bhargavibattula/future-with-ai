@@ -89,7 +89,7 @@ function FloatingParticlesCanvas() {
 }
 
 // ----------------------------------------------------
-// BENTO CARD CONTAINER (Apple & Linear Product Banner Style)
+// BENTO CARD CONTAINER (Explicit High-Contrast Black Text)
 // ----------------------------------------------------
 function BentoCard({
   children,
@@ -116,8 +116,9 @@ function BentoCard({
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className={`bento-card group relative rounded-[36px] bg-white border border-[#D8D2FA] shadow-[0_12px_36px_rgba(139,127,232,0.12)] p-7 sm:p-9 overflow-hidden transition-all duration-300 ease-out select-none flex flex-col justify-between ${className}`}
+      className={`bento-card group relative rounded-[36px] bg-white border border-[#D8D2FA] p-7 sm:p-9 overflow-hidden transition-all duration-300 ease-out select-none flex flex-col justify-between ${className}`}
       style={{
+        color: "#1E1B2E",
         boxShadow: isHovered
           ? "0 24px 50px rgba(139, 127, 232, 0.22)"
           : "0 12px 36px rgba(139, 127, 232, 0.10)",
@@ -191,7 +192,8 @@ export default function WhyChooseCoursiv() {
     <section
       ref={sectionRef}
       id="why-coursiv"
-      className="relative w-full bg-[#FCFBFF] text-[#1E1B2E] py-24 sm:py-32 overflow-hidden select-none"
+      className="relative w-full bg-[#FCFBFF] py-24 sm:py-32 overflow-hidden select-none"
+      style={{ color: "#1E1B2E" }}
     >
       {/* Background Animated Floating Particles Canvas */}
       <FloatingParticlesCanvas />
@@ -202,26 +204,35 @@ export default function WhyChooseCoursiv() {
       <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[750px] h-[750px] rounded-full bg-[#B8E8D8]/30 blur-[150px]" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* SECTION HEADER (High Impact Typography) */}
+        {/* SECTION HEADER */}
         <div className="storytelling-header flex flex-col items-center text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-4.5 py-1.5 rounded-full bg-[#8B7FE8] text-white text-xs font-black mb-4 shadow-md">
+          <div
+            className="inline-flex items-center gap-2 px-4.5 py-1.5 rounded-full text-xs font-black mb-4 shadow-md"
+            style={{ backgroundColor: "#8B7FE8", color: "#FFFFFF" }}
+          >
             <Sparkles className="w-4 h-4 text-white" />
             <span>Product Showcase</span>
           </div>
 
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-[#1E1B2E] mb-4">
+          <h2
+            className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight mb-4"
+            style={{ color: "#1E1B2E" }}
+          >
             Why Choose{" "}
-            <span className="text-[#8B7FE8]">
+            <span style={{ color: "#8B7FE8" }}>
               Coursiv AI?
             </span>
           </h2>
 
-          <p className="max-w-xl text-base sm:text-lg text-[#1E1B2E]/80 font-bold leading-relaxed">
+          <p
+            className="max-w-xl text-base sm:text-lg font-bold leading-relaxed"
+            style={{ color: "#4A4665" }}
+          >
             Everything you need to master today&apos;s leading AI tools with interactive lessons, hands-on projects, and industry-recognized certificates.
           </p>
         </div>
 
-        {/* HIGH-CONTRAST ORGANIC BENTO GRID (60% Illustration Weight) */}
+        {/* HIGH-CONTRAST ORGANIC BENTO GRID */}
         <div className="bento-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
           
           {/* ==================================================
@@ -231,25 +242,40 @@ export default function WhyChooseCoursiv() {
             {/* Top Text (40% Area) */}
             <div>
               <div className="flex items-center justify-between gap-3 mb-3">
-                <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-black bg-[#8B7FE8] text-white shadow-sm">
+                <span
+                  className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-black shadow-sm"
+                  style={{ backgroundColor: "#8B7FE8", color: "#FFFFFF" }}
+                >
                   <Sparkles className="w-3.5 h-3.5 text-white" />
                   Guided Roadmap
                 </span>
-                <span className="px-3.5 py-1 rounded-full text-xs font-black bg-[#10B981] text-white shadow-sm">
+                <span
+                  className="px-3.5 py-1 rounded-full text-xs font-black shadow-sm"
+                  style={{ backgroundColor: "#10B981", color: "#FFFFFF" }}
+                >
                   30 Modules
                 </span>
               </div>
 
-              <h3 className="text-3xl sm:text-4xl font-black text-[#1E1B2E] tracking-tight mb-2">
+              <h3
+                className="text-3xl sm:text-4xl font-black tracking-tight mb-2"
+                style={{ color: "#1E1B2E" }}
+              >
                 30-Day AI Learning Challenge
               </h3>
-              <p className="text-sm sm:text-base text-[#1E1B2E]/80 font-bold max-w-lg">
+              <p
+                className="text-sm sm:text-base font-bold max-w-lg"
+                style={{ color: "#4A4665" }}
+              >
                 Follow a guided learning path that helps you master AI tools through bite-sized daily lessons.
               </p>
             </div>
 
             {/* HUGE 3D ROADMAP ILLUSTRATION (60% Area) */}
-            <div className="relative w-full h-64 sm:h-72 my-4 rounded-3xl bg-[#F3F0FE] border border-[#D8D2FA] shadow-inner overflow-hidden flex items-center justify-center p-6">
+            <div
+              className="relative w-full h-64 sm:h-72 my-4 rounded-3xl border border-[#D8D2FA] shadow-inner overflow-hidden flex items-center justify-center p-6"
+              style={{ backgroundColor: "#F3F0FE" }}
+            >
               {/* Soft Ambient Background Blur */}
               <div className="absolute inset-0 bg-[radial-gradient(#8B7FE8_1.5px,transparent_1.5px)] [background-size:24px_24px] opacity-[0.12] pointer-events-none" />
 
@@ -267,7 +293,10 @@ export default function WhyChooseCoursiv() {
                 ].map((item, i) => (
                   <div key={i} className="flex flex-col items-center relative group">
                     {item.current && (
-                      <div className="absolute -top-11 text-xs font-black px-3.5 py-1.5 rounded-full bg-[#8B7FE8] text-white shadow-xl whitespace-nowrap animate-bounce border-2 border-white">
+                      <div
+                        className="absolute -top-11 text-xs font-black px-3.5 py-1.5 rounded-full shadow-xl whitespace-nowrap animate-bounce border-2 border-white"
+                        style={{ backgroundColor: "#8B7FE8", color: "#FFFFFF" }}
+                      >
                         You are here ✦
                       </div>
                     )}
@@ -278,7 +307,10 @@ export default function WhyChooseCoursiv() {
                     >
                       {item.name.substring(0, 2)}
                     </div>
-                    <span className="text-xs font-black text-[#1E1B2E] mt-2 hidden sm:block">
+                    <span
+                      className="text-xs font-black mt-2 hidden sm:block"
+                      style={{ color: "#1E1B2E" }}
+                    >
                       {item.name}
                     </span>
                   </div>
@@ -288,7 +320,10 @@ export default function WhyChooseCoursiv() {
 
             {/* Bottom CTA */}
             <div className="flex items-center justify-between pt-2">
-              <span className="text-xs font-extrabold text-[#1E1B2E]/70 flex items-center gap-1.5">
+              <span
+                className="text-xs font-extrabold flex items-center gap-1.5"
+                style={{ color: "#4A4665" }}
+              >
                 <Compass className="w-4 h-4 text-[#8B7FE8]" />
                 Daily 15-minute interactive lessons
               </span>
@@ -307,33 +342,54 @@ export default function WhyChooseCoursiv() {
              ================================================== */}
           <BentoCard className="lg:row-span-2 min-h-[580px] bg-white border border-[#D8D2FA] justify-between">
             <div>
-              <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-black bg-[#F59E0B] text-white shadow-sm mb-4">
+              <div
+                className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-black shadow-sm mb-4"
+                style={{ backgroundColor: "#F59E0B", color: "#FFFFFF" }}
+              >
                 <Award className="w-3.5 h-3.5 text-white" />
                 Industry Credential
               </div>
 
-              <h3 className="text-3xl font-black text-[#1E1B2E] tracking-tight mb-2">
+              <h3
+                className="text-3xl font-black tracking-tight mb-2"
+                style={{ color: "#1E1B2E" }}
+              >
                 Earn Certificates
               </h3>
-              <p className="text-sm text-[#1E1B2E]/80 font-bold leading-relaxed mb-6">
+              <p
+                className="text-sm font-bold leading-relaxed mb-6"
+                style={{ color: "#4A4665" }}
+              >
                 Complete learning paths and earn beautiful certificates that showcase your AI expertise.
               </p>
             </div>
 
             {/* HUGE HIGH-CONTRAST CERTIFICATE ILLUSTRATION (60% Area) */}
-            <div className="relative w-full h-80 my-4 p-6 rounded-3xl bg-[#F3F0FE] border border-[#D8D2FA] shadow-inner overflow-hidden flex flex-col justify-between items-center text-center">
+            <div
+              className="relative w-full h-80 my-4 p-6 rounded-3xl border border-[#D8D2FA] shadow-inner overflow-hidden flex flex-col justify-between items-center text-center"
+              style={{ backgroundColor: "#F3F0FE" }}
+            >
               {/* Background ambient lighting */}
               <div className="absolute w-40 h-40 rounded-full bg-[#8B7FE8]/30 blur-3xl pointer-events-none" />
 
               {/* 3D Certificate Document Graphic */}
               <div className="relative z-10 w-full p-6 rounded-2xl bg-white border-2 border-[#8B7FE8] shadow-2xl flex flex-col items-center">
-                <div className="w-16 h-16 rounded-2xl bg-[#8B7FE8] text-white flex items-center justify-center font-black text-3xl shadow-lg mb-3">
+                <div
+                  className="w-16 h-16 rounded-2xl text-white flex items-center justify-center font-black text-3xl shadow-lg mb-3"
+                  style={{ backgroundColor: "#8B7FE8" }}
+                >
                   ✦
                 </div>
-                <span className="text-lg font-black text-[#1E1B2E] tracking-tight block">
+                <span
+                  className="text-lg font-black tracking-tight block"
+                  style={{ color: "#1E1B2E" }}
+                >
                   Verified AI Specialist
                 </span>
-                <span className="text-xs text-[#10B981] font-black mt-1 flex items-center gap-1">
+                <span
+                  className="text-xs font-black mt-1 flex items-center gap-1"
+                  style={{ color: "#10B981" }}
+                >
                   <CheckCircle className="w-4 h-4 text-[#10B981]" /> Shareable on LinkedIn & Resumes
                 </span>
               </div>
@@ -351,7 +407,10 @@ export default function WhyChooseCoursiv() {
             </div>
 
             <div className="text-center pt-2">
-              <span className="text-xs font-extrabold text-[#1E1B2E]/70">
+              <span
+                className="text-xs font-extrabold"
+                style={{ color: "#4A4665" }}
+              >
                 Recognized by leading tech employers worldwide
               </span>
             </div>
@@ -362,21 +421,33 @@ export default function WhyChooseCoursiv() {
              ================================================== */}
           <BentoCard className="min-h-[440px] bg-white border border-[#D8D2FA]">
             <div>
-              <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-black bg-[#10B981] text-white shadow-sm mb-4">
+              <div
+                className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-black shadow-sm mb-4"
+                style={{ backgroundColor: "#10B981", color: "#FFFFFF" }}
+              >
                 <Sparkles className="w-3.5 h-3.5 text-white" />
                 Hands-On Projects
               </div>
 
-              <h3 className="text-2xl sm:text-3xl font-black text-[#1E1B2E] tracking-tight mb-2">
+              <h3
+                className="text-2xl sm:text-3xl font-black tracking-tight mb-2"
+                style={{ color: "#1E1B2E" }}
+              >
                 Learn by Building
               </h3>
-              <p className="text-xs sm:text-sm text-[#1E1B2E]/80 font-bold leading-relaxed mb-4">
+              <p
+                className="text-xs sm:text-sm font-bold leading-relaxed mb-4"
+                style={{ color: "#4A4665" }}
+              >
                 Build real-world projects using the most popular AI platforms.
               </p>
             </div>
 
             {/* HIGH-CONTRAST SOLID 3D AI TILES SHOWCASE (60% Area) */}
-            <div className="relative w-full h-52 p-4 rounded-3xl bg-[#F3F0FE] border border-[#D8D2FA] shadow-inner overflow-hidden flex items-center justify-center">
+            <div
+              className="relative w-full h-52 p-4 rounded-3xl border border-[#D8D2FA] shadow-inner overflow-hidden flex items-center justify-center"
+              style={{ backgroundColor: "#F3F0FE" }}
+            >
               <div className="grid grid-cols-3 gap-3 w-full">
                 {[
                   { name: "ChatGPT", bg: "bg-[#10B981]" },
@@ -402,38 +473,80 @@ export default function WhyChooseCoursiv() {
              ================================================== */}
           <BentoCard className="min-h-[440px] bg-white border border-[#D8D2FA]">
             <div>
-              <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-black bg-[#8B7FE8] text-white shadow-sm mb-4">
+              {/* Category Badge - High Contrast Solid Purple with White Text */}
+              <div
+                className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-black shadow-sm mb-4"
+                style={{ backgroundColor: "#8B7FE8", color: "#FFFFFF" }}
+              >
                 <Smartphone className="w-3.5 h-3.5 text-white" />
                 Multi-Device Access
               </div>
 
-              <h3 className="text-2xl sm:text-3xl font-black text-[#1E1B2E] tracking-tight mb-2">
+              {/* Title - Explicit Dark Color #1E1B2E */}
+              <h3
+                className="text-2xl sm:text-3xl font-black tracking-tight mb-2"
+                style={{ color: "#1E1B2E" }}
+              >
                 Learn Anywhere
               </h3>
-              <p className="text-xs sm:text-sm text-[#1E1B2E]/80 font-bold leading-relaxed mb-4">
+              
+              {/* Description - Explicit Dark Slate Color #4A4665 */}
+              <p
+                className="text-xs sm:text-sm font-bold leading-relaxed mb-4"
+                style={{ color: "#4A4665" }}
+              >
                 Watch videos, read notes, complete quizzes, and listen to lessons from any device.
               </p>
             </div>
 
             {/* HIGH-CONTRAST DEVICE TILES SHOWCASE (60% Area) */}
-            <div className="relative w-full h-52 p-5 rounded-3xl bg-[#F3F0FE] border border-[#D8D2FA] shadow-inner overflow-hidden flex items-center justify-around">
+            <div
+              className="relative w-full h-52 p-5 rounded-3xl border border-[#D8D2FA] shadow-inner overflow-hidden flex items-center justify-around"
+              style={{ backgroundColor: "#F3F0FE" }}
+            >
               <div className="flex flex-col items-center group/dev">
-                <div className="w-14 h-14 rounded-2xl bg-[#8B7FE8] text-white flex items-center justify-center shadow-lg border-2 border-white transition-transform group-hover/dev:scale-110">
-                  <Laptop className="w-7 h-7" />
+                <div
+                  className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg border-2 border-white transition-transform group-hover/dev:scale-110"
+                  style={{ backgroundColor: "#8B7FE8", color: "#FFFFFF" }}
+                >
+                  <Laptop className="w-7 h-7 text-white" />
                 </div>
-                <span className="text-sm font-black text-[#1E1B2E] mt-2 block">Desktop</span>
+                <span
+                  className="text-sm font-black mt-2 block"
+                  style={{ color: "#1E1B2E" }}
+                >
+                  Desktop
+                </span>
               </div>
+
               <div className="flex flex-col items-center group/dev">
-                <div className="w-14 h-14 rounded-2xl bg-[#8B7FE8] text-white flex items-center justify-center shadow-lg border-2 border-white transition-transform group-hover/dev:scale-110">
-                  <Tablet className="w-7 h-7" />
+                <div
+                  className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg border-2 border-white transition-transform group-hover/dev:scale-110"
+                  style={{ backgroundColor: "#8B7FE8", color: "#FFFFFF" }}
+                >
+                  <Tablet className="w-7 h-7 text-white" />
                 </div>
-                <span className="text-sm font-black text-[#1E1B2E] mt-2 block">Tablet</span>
+                <span
+                  className="text-sm font-black mt-2 block"
+                  style={{ color: "#1E1B2E" }}
+                >
+                  Tablet
+                </span>
               </div>
+
               <div className="flex flex-col items-center group/dev">
-                <div className="w-14 h-14 rounded-2xl bg-[#8B7FE8] text-white flex items-center justify-center shadow-lg border-2 border-white transition-transform group-hover/dev:scale-110">
-                  <Smartphone className="w-7 h-7" />
+                <div
+                  className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg border-2 border-white transition-transform group-hover/dev:scale-110"
+                  style={{ backgroundColor: "#8B7FE8", color: "#FFFFFF" }}
+                >
+                  <Smartphone className="w-7 h-7 text-white" />
                 </div>
-                <span className="text-sm font-black text-[#1E1B2E] mt-2 block">Mobile</span>
+                <span
+                  className="text-sm font-black mt-2 block"
+                  style={{ color: "#1E1B2E" }}
+                >
+                  Mobile
+                </span>
               </div>
             </div>
           </BentoCard>
