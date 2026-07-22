@@ -3,32 +3,14 @@
 import React, { useRef, useEffect, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import {
-  Sparkles,
-  ArrowRight,
-  Star,
-  CheckCircle2,
-  Trophy,
-  Award,
-  Smartphone,
-  Tablet,
-  Laptop,
-  Play,
-  Volume2,
-  Users,
-  MessageSquare,
-  Compass,
-  Zap,
-  ShieldCheck,
-  Flame,
-} from "lucide-react";
+import { Sparkles, ArrowRight, Star, Award, Laptop, Smartphone, Tablet, Users, CheckCircle } from "lucide-react";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
 // ----------------------------------------------------
-// FLOATING PARTICLES CANVAS
+// FLOATING PARTICLES BACKGROUND CANVAS
 // ----------------------------------------------------
 function FloatingParticlesCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -66,7 +48,7 @@ function FloatingParticlesCanvas() {
       particles.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        radius: Math.random() * 2.2 + 0.8,
+        radius: Math.random() * 2.5 + 0.8,
         color: colors[Math.floor(Math.random() * colors.length)],
         vx: (Math.random() - 0.5) * 0.25,
         vy: (Math.random() - 0.5) * 0.25 - 0.1,
@@ -84,7 +66,7 @@ function FloatingParticlesCanvas() {
         ctx.save();
         ctx.globalAlpha = p.alpha;
         ctx.fillStyle = p.color;
-        ctx.shadowBlur = 4;
+        ctx.shadowBlur = 6;
         ctx.shadowColor = p.color;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
@@ -107,7 +89,7 @@ function FloatingParticlesCanvas() {
 }
 
 // ----------------------------------------------------
-// BENTO CARD CONTAINER (Apple & Linear Inspired)
+// BENTO CARD CONTAINER (Apple & Linear Product Banner Style)
 // ----------------------------------------------------
 function BentoCard({
   children,
@@ -134,10 +116,10 @@ function BentoCard({
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className={`bento-card group relative rounded-[32px] bg-white/85 border border-[#EAE6FE] backdrop-blur-2xl p-7 sm:p-9 overflow-hidden transition-all duration-300 ease-out select-none flex flex-col justify-between ${className}`}
+      className={`bento-card group relative rounded-[36px] bg-white/90 border border-[#EAE6FE] backdrop-blur-2xl p-7 sm:p-9 overflow-hidden transition-all duration-300 ease-out select-none flex flex-col justify-between ${className}`}
       style={{
         boxShadow: isHovered
-          ? "0 22px 50px rgba(139, 127, 232, 0.18)"
+          ? "0 24px 50px rgba(139, 127, 232, 0.18)"
           : "0 10px 32px rgba(139, 127, 232, 0.08)",
         transform: isHovered ? "translateY(-6px)" : "translateY(0px)",
       }}
@@ -145,7 +127,7 @@ function BentoCard({
       {/* Cursor Radial Spotlight */}
       {isHovered && (
         <div
-          className="pointer-events-none absolute inset-0 z-30 transition-opacity duration-300 rounded-[32px]"
+          className="pointer-events-none absolute inset-0 z-30 transition-opacity duration-300 rounded-[36px]"
           style={{
             background: `radial-gradient(450px circle at ${mousePos.x}px ${mousePos.y}px, ${glowColor}, transparent 80%)`,
           }}
@@ -154,7 +136,7 @@ function BentoCard({
 
       {/* Subtle Glowing Border on Hover */}
       <div
-        className={`absolute inset-0 rounded-[32px] pointer-events-none transition-opacity duration-300 border-2 border-[#8B7FE8]/50 ${
+        className={`absolute inset-0 rounded-[36px] pointer-events-none transition-opacity duration-300 border-2 border-[#8B7FE8]/50 ${
           isHovered ? "opacity-100" : "opacity-0"
         }`}
       />
@@ -165,7 +147,7 @@ function BentoCard({
 }
 
 // ----------------------------------------------------
-// MAIN MARKETING BENTO SECTION
+// REBUILT VISUAL STORYTELLING BENTO SECTION
 // ----------------------------------------------------
 export default function WhyChooseCoursiv() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -176,7 +158,7 @@ export default function WhyChooseCoursiv() {
 
     const ctx = gsap.context(() => {
       // Header Reveal
-      gsap.from(".coursiv-header", {
+      gsap.from(".storytelling-header", {
         opacity: 0,
         y: 40,
         duration: 0.85,
@@ -209,113 +191,111 @@ export default function WhyChooseCoursiv() {
     <section
       ref={sectionRef}
       id="why-coursiv"
-      className="relative w-full bg-[#FCFBFF] text-[#1E1B2E] py-24 sm:py-28 overflow-hidden select-none"
+      className="relative w-full bg-[#FCFBFF] text-[#1E1B2E] py-24 sm:py-32 overflow-hidden select-none"
     >
       {/* Background Animated Floating Particles Canvas */}
       <FloatingParticlesCanvas />
 
-      {/* Soft Ambient Radial Blobs */}
+      {/* Soft Ambient Radial Glow Blobs */}
       <div className="pointer-events-none absolute -top-36 right-1/4 w-[550px] h-[550px] rounded-full bg-[#D8D2FA]/35 blur-[120px] animate-pulse" />
       <div className="pointer-events-none absolute -bottom-36 left-1/4 w-[550px] h-[550px] rounded-full bg-[#FFC9DE]/35 blur-[130px] animate-pulse" />
       <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[750px] h-[750px] rounded-full bg-[#B8E8D8]/25 blur-[150px]" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* SECTION HEADER */}
-        <div className="coursiv-header flex flex-col items-center text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#F3F0FE] border border-[#EAE6FE] text-xs font-bold text-[#8B7FE8] mb-4 shadow-soft-sm">
+        {/* SECTION HEADER (Minimal Text, High Impact) */}
+        <div className="storytelling-header flex flex-col items-center text-center mb-16">
+          <div className="inline-flex items-center gap-2 px-4.5 py-1.5 rounded-full bg-[#F3F0FE] border border-[#EAE6FE] text-xs font-bold text-[#8B7FE8] mb-4 shadow-soft-sm">
             <Sparkles className="w-4 h-4 text-[#8B7FE8]" />
-            <span>Premium Learning Experience</span>
+            <span>Product Showcase</span>
           </div>
 
-          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#1E1B2E] mb-4">
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#1E1B2E] mb-4">
             Why Choose{" "}
             <span className="bg-gradient-to-r from-[#8B7FE8] via-[#786BD6] to-[#A855F7] bg-clip-text text-transparent">
               Coursiv AI?
             </span>
           </h2>
 
-          <p className="max-w-2xl text-base sm:text-lg text-[#6B6785] font-medium leading-relaxed">
+          <p className="max-w-xl text-base sm:text-lg text-[#6B6785] font-medium leading-relaxed">
             Everything you need to master today&apos;s leading AI tools with interactive lessons, hands-on projects, and industry-recognized certificates.
           </p>
         </div>
 
-        {/* TRUE BENTO GRID (Visual-First Marketing Showcase) */}
+        {/* ORGANIC BENTO GRID STORYTELLING (60% Illustration Weight) */}
         <div className="bento-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
           
           {/* ==================================================
-              CARD 1 (LARGE HERO CARD - 2X WIDTH ON DESKTOP)
+              CARD 1: HERO CARD (2X Width on Desktop) - 60% Visual
              ================================================== */}
-          <BentoCard className="lg:col-span-2 min-h-[500px] bg-gradient-to-br from-white/95 via-[#FCFBFF] to-[#F3F0FE]/90">
-            {/* Top Typography (25%) */}
-            <div className="mb-6">
+          <BentoCard className="lg:col-span-2 min-h-[540px] bg-gradient-to-br from-white via-[#FCFBFF] to-[#F3F0FE]/90">
+            {/* Top Text (40% Area) */}
+            <div>
               <div className="flex items-center justify-between gap-3 mb-3">
                 <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-extrabold bg-[#FFC9DE] text-[#1E1B2E] border border-[#FFB0CC] shadow-sm">
-                  <Trophy className="w-3.5 h-3.5 text-[#8B7FE8]" />
-                  Guided Learning Path
+                  <Sparkles className="w-3.5 h-3.5 text-[#8B7FE8]" />
+                  Guided Roadmap
                 </span>
                 <span className="px-3.5 py-1 rounded-full text-xs font-extrabold bg-[#B8E8D8] text-[#1E1B2E] border border-[#9DD9C5]">
                   30 Modules
                 </span>
               </div>
 
-              <h3 className="text-2xl sm:text-4xl font-extrabold text-[#1E1B2E] tracking-tight mb-2">
+              <h3 className="text-3xl sm:text-4xl font-extrabold text-[#1E1B2E] tracking-tight mb-2">
                 30-Day AI Learning Challenge
               </h3>
-              <p className="text-sm sm:text-base text-[#6B6785] leading-relaxed max-w-xl font-medium">
-                Follow a guided learning path that helps you master AI tools through bite-sized daily lessons and hands-on milestones.
+              <p className="text-sm sm:text-base text-[#6B6785] font-medium max-w-lg">
+                Follow a guided learning path that helps you master AI tools through bite-sized daily lessons.
               </p>
             </div>
 
-            {/* Huge 3D Interactive Roadmap Illustration (50% Image Area) */}
-            <div className="relative w-full py-8 px-6 my-2 rounded-3xl bg-gradient-to-r from-[#F3F0FE]/80 via-white to-[#EDF9F5]/80 border border-[#EAE6FE] shadow-inner overflow-hidden flex items-center justify-center">
-              {/* Ambient Glowing Background */}
-              <div className="absolute inset-0 bg-[radial-gradient(#8B7FE8_1px,transparent_1px)] [background-size:20px_20px] opacity-[0.06] pointer-events-none" />
+            {/* HUGE 3D ROADMAP ILLUSTRATION (60% Area) */}
+            <div className="relative w-full h-64 sm:h-72 my-4 rounded-3xl bg-gradient-to-r from-[#F3F0FE] via-white to-[#EDF9F5] border border-[#EAE6FE] shadow-inner overflow-hidden flex items-center justify-center p-6">
+              {/* Soft Ambient Background Blur */}
+              <div className="absolute inset-0 bg-[radial-gradient(#8B7FE8_1.5px,transparent_1.5px)] [background-size:24px_24px] opacity-[0.07] pointer-events-none" />
+              <div className="absolute -top-12 -right-12 w-48 h-48 rounded-full bg-[#FFC9DE]/40 blur-3xl pointer-events-none" />
+              <div className="absolute -bottom-12 -left-12 w-48 h-48 rounded-full bg-[#B8E8D8]/40 blur-3xl pointer-events-none" />
 
-              {/* Connecting 3D Gradient Line */}
-              <div className="absolute left-10 right-10 top-1/2 -translate-y-1/2 h-2.5 bg-gradient-to-r from-[#10B981] via-[#3B82F6] to-[#9333EA] rounded-full shadow-sm" />
+              {/* 3D Connected Line */}
+              <div className="absolute left-8 right-8 top-1/2 -translate-y-1/2 h-3 bg-gradient-to-r from-[#10B981] via-[#3B82F6] to-[#9333EA] rounded-full shadow-inner" />
 
-              {/* Connected Milestone Nodes */}
+              {/* Floating 3D AI Logo Tiles */}
               <div className="relative z-10 w-full flex items-center justify-between">
                 {[
-                  { name: "ChatGPT", color: "from-[#10B981] to-[#059669]", shadow: "rgba(16, 185, 129, 0.4)", day: "Day 1-6" },
-                  { name: "Claude", color: "from-[#F59E0B] to-[#D97706]", shadow: "rgba(245, 158, 11, 0.4)", day: "Day 7-12" },
-                  { name: "Gemini", color: "from-[#3B82F6] to-[#1D4ED8]", shadow: "rgba(59, 130, 246, 0.4)", day: "Day 13-18", active: true },
-                  { name: "Midjourney", color: "from-[#9333EA] to-[#7E22CE]", shadow: "rgba(147, 51, 234, 0.4)", day: "Day 19-24" },
-                  { name: "Cursor", color: "from-[#38BDF8] to-[#0284C7]", shadow: "rgba(56, 189, 248, 0.4)", day: "Day 25-30" },
-                ].map((node, i) => (
+                  { name: "ChatGPT", bg: "from-[#26BA92] to-[#0E8566]", day: "Day 1-6" },
+                  { name: "Claude", bg: "from-[#E08226] to-[#A6570A]", day: "Day 7-12" },
+                  { name: "Gemini", bg: "from-[#3B82F6] to-[#1D4ED8]", day: "Day 13-18", current: true },
+                  { name: "Midjourney", bg: "from-[#9333EA] to-[#7E22CE]", day: "Day 19-24" },
+                  { name: "Cursor", bg: "from-[#38BDF8] to-[#0284C7]", day: "Day 25-30" },
+                ].map((item, i) => (
                   <div key={i} className="flex flex-col items-center relative group">
-                    {node.active && (
-                      <div className="absolute -top-10 text-[11px] font-extrabold px-3 py-1 rounded-full bg-[#8B7FE8] text-white shadow-lg whitespace-nowrap animate-bounce border border-white">
+                    {item.current && (
+                      <div className="absolute -top-11 text-xs font-extrabold px-3 py-1 rounded-full bg-[#8B7FE8] text-white shadow-lg whitespace-nowrap animate-bounce border border-white">
                         You are here ✦
                       </div>
                     )}
-                    {/* 3D Glossy Node Tile */}
+                    {/* 3D Acrylic Tile */}
                     <div
-                      className={`w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br ${node.color} text-white flex items-center justify-center font-extrabold text-sm sm:text-base border-2 border-white shadow-xl transition-transform duration-300 group-hover:scale-110 group-hover:-translate-y-1`}
-                      style={{ boxShadow: `0 10px 24px ${node.shadow}` }}
+                      className={`w-14 h-14 sm:w-18 sm:h-18 rounded-2xl bg-gradient-to-br ${item.bg} text-white flex items-center justify-center font-extrabold text-base sm:text-lg border-2 border-white shadow-xl transition-all duration-300 group-hover:scale-110 group-hover:-translate-y-2`}
+                      style={{ boxShadow: "0 12px 28px rgba(0,0,0,0.18)" }}
                     >
-                      {node.name.substring(0, 2)}
+                      {item.name.substring(0, 2)}
                     </div>
                     <span className="text-xs font-extrabold text-[#1E1B2E] mt-2 hidden sm:block">
-                      {node.name}
-                    </span>
-                    <span className="text-[10px] font-semibold text-[#6B6785] hidden sm:block">
-                      {node.day}
+                      {item.name}
                     </span>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Bottom Action Footer */}
-            <div className="flex items-center justify-between pt-4">
-              <span className="text-xs font-semibold text-[#6B6785] flex items-center gap-1.5">
-                <Compass className="w-4 h-4 text-[#8B7FE8]" />
-                Daily 15-minute lessons
+            {/* Bottom CTA */}
+            <div className="flex items-center justify-between pt-2">
+              <span className="text-xs font-bold text-[#6B6785]">
+                Daily 15-minute interactive lessons
               </span>
               <button
                 type="button"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl text-xs sm:text-sm font-extrabold text-white bg-[#8B7FE8] hover:bg-[#786BD6] shadow-soft-sm transition-all duration-300 active:scale-95"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl text-xs font-extrabold text-white bg-[#8B7FE8] hover:bg-[#786BD6] shadow-soft-sm transition-all duration-300 active:scale-95"
               >
                 <span>Start Challenge</span>
                 <ArrowRight className="w-4 h-4" />
@@ -324,82 +304,88 @@ export default function WhyChooseCoursiv() {
           </BentoCard>
 
           {/* ==================================================
-              CARD 2 (TRUSTED BY LEARNERS - RATING SHOWCASE)
+              CARD 2: TALL FEATURE CARD (Earn Certificates - 580px Height)
              ================================================== */}
-          <BentoCard className="min-h-[500px] bg-gradient-to-br from-white/95 via-[#FFF0F5]/60 to-[#FCFBFF] justify-between">
+          <BentoCard className="lg:row-span-2 min-h-[580px] bg-gradient-to-b from-white via-[#FFF0F5]/50 to-[#FCFBFF] justify-between">
             <div>
-              <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-extrabold bg-[#FFC9DE] text-[#1E1B2E] border border-[#FFB0CC] mb-4 shadow-sm">
-                <Star className="w-3.5 h-3.5 fill-[#8B7FE8] text-[#8B7FE8]" />
-                Top Rated Platform
+              <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-extrabold bg-[#FFC9DE] text-[#1E1B2E] border border-[#FFB0CC] mb-4">
+                <Award className="w-3.5 h-3.5 text-[#8B7FE8]" />
+                Industry Credential
               </div>
 
-              <h3 className="text-2xl sm:text-3xl font-extrabold text-[#1E1B2E] tracking-tight mb-2">
-                Trusted by 50,000+ Learners
+              <h3 className="text-3xl font-extrabold text-[#1E1B2E] tracking-tight mb-2">
+                Earn Certificates
               </h3>
-              <p className="text-xs sm:text-sm text-[#6B6785] leading-relaxed font-medium mb-6">
-                Join thousands of students and working professionals mastering AI skills daily.
+              <p className="text-sm text-[#6B6785] font-medium leading-relaxed mb-6">
+                Complete learning paths and earn beautiful certificates that showcase your AI expertise.
               </p>
             </div>
 
-            {/* Huge 3D Rating & Laurel Graphics Visual (50% Image Area) */}
-            <div className="my-4 p-8 rounded-3xl bg-gradient-to-b from-[#FCFBFF] to-[#F3F0FE] border border-[#EAE6FE] text-center shadow-inner relative overflow-hidden flex flex-col items-center justify-center">
-              {/* Glowing Background Blob */}
-              <div className="absolute w-32 h-32 rounded-full bg-[#FFC9DE]/50 blur-2xl pointer-events-none" />
+            {/* HUGE 3D CERTIFICATE PRODUCT ILLUSTRATION (60% Area) */}
+            <div className="relative w-full h-80 my-4 p-6 rounded-3xl bg-gradient-to-b from-[#FCFBFF] via-white to-[#F3F0FE] border border-[#EAE6FE] shadow-inner overflow-hidden flex flex-col justify-between items-center text-center">
+              {/* Background ambient lighting */}
+              <div className="absolute w-40 h-40 rounded-full bg-[#D8D2FA]/50 blur-3xl pointer-events-none" />
 
-              {/* Floating Golden Stars */}
-              <div className="flex justify-center gap-1.5 text-amber-400 mb-3 relative z-10">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-7 h-7 fill-amber-400 text-amber-400 drop-shadow-md animate-pulse" style={{ animationDelay: `${i * 150}ms` }} />
-                ))}
+              {/* 3D Certificate Document Graphic */}
+              <div className="relative z-10 w-full p-6 rounded-2xl bg-white border border-[#EAE6FE] shadow-xl flex flex-col items-center">
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-[#8B7FE8] to-[#D8D2FA] text-white flex items-center justify-center font-black text-3xl shadow-lg mb-3">
+                  ✦
+                </div>
+                <span className="text-base font-black text-[#1E1B2E] tracking-tight block">
+                  Verified AI Specialist
+                </span>
+                <span className="text-xs text-[#6B6785] font-bold mt-1 flex items-center gap-1">
+                  <CheckCircle className="w-4 h-4 text-emerald-500" /> Shareable on LinkedIn & Resumes
+                </span>
               </div>
 
-              {/* Huge 4.9 Rating Number */}
-              <div className="text-5xl sm:text-6xl font-black text-[#1E1B2E] tracking-tight relative z-10 mb-1">
-                4.9 <span className="text-2xl font-extrabold text-[#8B7FE8]">/ 5.0</span>
+              {/* Gold Ribbon Badge */}
+              <div className="relative z-10 w-full pt-3">
+                <button
+                  type="button"
+                  className="w-full py-3 rounded-2xl bg-[#8B7FE8] text-white text-xs font-extrabold shadow-md hover:bg-[#786BD6] transition-colors flex items-center justify-center gap-1.5"
+                >
+                  <span>View Certificates</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
               </div>
-
-              <p className="text-xs font-extrabold text-[#6B6785] uppercase tracking-wider relative z-10">
-                Based on 12,500+ Verified Reviews
-              </p>
             </div>
 
-            <div className="flex items-center justify-center gap-2 pt-2 text-xs font-extrabold text-[#1E1B2E]">
-              <ShieldCheck className="w-4 h-4 text-emerald-500" />
-              <span>98% Course Completion Satisfaction</span>
+            <div className="text-center pt-2">
+              <span className="text-xs font-bold text-[#6B6785]">
+                Recognized by leading tech employers worldwide
+              </span>
             </div>
           </BentoCard>
 
           {/* ==================================================
-              CARD 3 (LEARN BY BUILDING - FLOATING 3D CARDS)
+              CARD 3: MEDIUM ILLUSTRATION CARD (Learn by Building)
              ================================================== */}
-          <BentoCard className="min-h-[460px] bg-gradient-to-br from-white/95 via-[#EDF9F5]/50 to-[#FCFBFF]">
+          <BentoCard className="min-h-[440px] bg-gradient-to-br from-white via-[#EDF9F5]/40 to-[#FCFBFF]">
             <div>
               <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-extrabold bg-[#B8E8D8] text-[#1E1B2E] border border-[#9DD9C5] mb-4">
-                <Flame className="w-3.5 h-3.5 text-[#10B981]" />
+                <Sparkles className="w-3.5 h-3.5 text-[#10B981]" />
                 Hands-On Projects
               </div>
 
-              <h3 className="text-2xl font-extrabold text-[#1E1B2E] tracking-tight mb-2">
+              <h3 className="text-2xl sm:text-3xl font-extrabold text-[#1E1B2E] tracking-tight mb-2">
                 Learn by Building
               </h3>
-              <p className="text-xs sm:text-sm text-[#6B6785] leading-relaxed font-medium mb-6">
+              <p className="text-xs sm:text-sm text-[#6B6785] font-medium leading-relaxed mb-4">
                 Build real-world projects using the most popular AI platforms.
               </p>
             </div>
 
-            {/* Large Floating 3D Glass Cards Stack (50% Image Area) */}
-            <div className="relative w-full h-56 p-4 rounded-3xl bg-gradient-to-b from-[#FCFBFF] to-[#EDF9F5] border border-[#EAE6FE] shadow-inner overflow-hidden flex items-center justify-center">
+            {/* LARGE FLOATING 3D GLASS CARDS SHOWCASE (60% Area) */}
+            <div className="relative w-full h-52 p-4 rounded-3xl bg-gradient-to-b from-[#FCFBFF] to-[#EDF9F5] border border-[#EAE6FE] shadow-inner overflow-hidden flex items-center justify-center">
               <div className="grid grid-cols-3 gap-2.5 w-full">
                 {[
-                  { name: "ChatGPT", col: "bg-[#10B981]/15 border-[#10B981]/30 text-[#0E8566]" },
-                  { name: "Claude", col: "bg-[#F59E0B]/15 border-[#F59E0B]/30 text-[#A6570A]" },
-                  { name: "Gemini", col: "bg-[#3B82F6]/15 border-[#3B82F6]/30 text-[#1D4ED8]" },
-                  { name: "Midjourney", col: "bg-[#9333EA]/15 border-[#9333EA]/30 text-[#7E22CE]" },
-                  { name: "Cursor", col: "bg-[#38BDF8]/15 border-[#38BDF8]/30 text-[#0284C7]" },
-                  { name: "Lovable", col: "bg-[#F43F5E]/15 border-[#F43F5E]/30 text-[#E11D48]" },
-                  { name: "Kling AI", col: "bg-[#06B6D4]/15 border-[#06B6D4]/30 text-[#0284C7]" },
-                  { name: "Canva AI", col: "bg-[#7D2AE8]/15 border-[#7D2AE8]/30 text-[#6366F1]" },
-                  { name: "Omni", col: "bg-[#8B7FE8]/15 border-[#8B7FE8]/30 text-[#8B7FE8]" },
+                  { name: "ChatGPT", col: "bg-[#10B981]/20 border-[#10B981]/40 text-[#0E8566]" },
+                  { name: "Claude", col: "bg-[#F59E0B]/20 border-[#F59E0B]/40 text-[#A6570A]" },
+                  { name: "Gemini", col: "bg-[#3B82F6]/20 border-[#3B82F6]/40 text-[#1D4ED8]" },
+                  { name: "Midjourney", col: "bg-[#9333EA]/20 border-[#9333EA]/40 text-[#7E22CE]" },
+                  { name: "Cursor", col: "bg-[#38BDF8]/20 border-[#38BDF8]/40 text-[#0284C7]" },
+                  { name: "Lovable", col: "bg-[#F43F5E]/20 border-[#F43F5E]/40 text-[#E11D48]" },
                 ].map((item, i) => (
                   <div
                     key={i}
@@ -413,109 +399,37 @@ export default function WhyChooseCoursiv() {
           </BentoCard>
 
           {/* ==================================================
-              CARD 4 (LEARN ANYWHERE - DEVICE SHOWCASE)
+              CARD 4: MEDIUM ILLUSTRATION CARD (Learn Anywhere)
              ================================================== */}
-          <BentoCard className="min-h-[460px] bg-gradient-to-br from-white/95 via-[#F3F0FE]/70 to-[#FCFBFF]">
+          <BentoCard className="min-h-[440px] bg-gradient-to-br from-white via-[#F3F0FE]/60 to-[#FCFBFF]">
             <div>
               <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-extrabold bg-[#D8D2FA] text-[#4B3FBF] border border-[#C4BDFA] mb-4">
-                <Zap className="w-3.5 h-3.5 text-[#8B7FE8]" />
+                <Smartphone className="w-3.5 h-3.5 text-[#8B7FE8]" />
                 Multi-Device Access
               </div>
 
-              <h3 className="text-2xl font-extrabold text-[#1E1B2E] tracking-tight mb-2">
+              <h3 className="text-2xl sm:text-3xl font-extrabold text-[#1E1B2E] tracking-tight mb-2">
                 Learn Anywhere
               </h3>
-              <p className="text-xs sm:text-sm text-[#6B6785] leading-relaxed font-medium mb-6">
+              <p className="text-xs sm:text-sm text-[#6B6785] font-medium leading-relaxed mb-4">
                 Watch videos, read notes, complete quizzes, and listen to lessons from any device.
               </p>
             </div>
 
-            {/* Large Device & Podcast Waveform Showcase Illustration (50% Image Area) */}
-            <div className="relative w-full h-56 p-6 rounded-3xl bg-gradient-to-b from-[#FCFBFF] to-[#F3F0FE] border border-[#EAE6FE] shadow-inner overflow-hidden flex flex-col justify-between">
-              {/* Device Icons Row */}
-              <div className="flex items-center justify-around text-[#8B7FE8]">
-                <div className="flex flex-col items-center">
-                  <Laptop className="w-10 h-10 drop-shadow-md" />
-                  <span className="text-[10px] font-bold text-[#1E1B2E] mt-1">Laptop</span>
-                </div>
-                <div className="flex flex-col items-center">
-                  <Tablet className="w-8 h-8 drop-shadow-md" />
-                  <span className="text-[10px] font-bold text-[#1E1B2E] mt-1">Tablet</span>
-                </div>
-                <div className="flex flex-col items-center">
-                  <Smartphone className="w-7 h-7 drop-shadow-md" />
-                  <span className="text-[10px] font-bold text-[#1E1B2E] mt-1">Mobile</span>
-                </div>
+            {/* LARGE DEVICE SHOWCASE ILLUSTRATION (60% Area) */}
+            <div className="relative w-full h-52 p-5 rounded-3xl bg-gradient-to-b from-[#FCFBFF] to-[#F3F0FE] border border-[#EAE6FE] shadow-inner overflow-hidden flex items-center justify-around text-[#8B7FE8]">
+              <div className="flex flex-col items-center group/dev">
+                <Laptop className="w-12 h-12 drop-shadow-md transition-transform group-hover/dev:scale-110" />
+                <span className="text-xs font-extrabold text-[#1E1B2E] mt-1.5">Desktop</span>
               </div>
-
-              {/* Audio Waveform & Player Badge */}
-              <div className="p-3 rounded-2xl bg-white/90 border border-[#EAE6FE] shadow-md flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-[#8B7FE8] text-white flex items-center justify-center shadow-md">
-                    <Play className="w-4 h-4 fill-white ml-0.5" />
-                  </div>
-                  <div>
-                    <span className="text-xs font-bold text-[#1E1B2E] block">Audio Sync & Notes</span>
-                    <span className="text-[10px] text-[#6B6785] font-semibold flex items-center gap-1">
-                      <Volume2 className="w-3 h-3 text-[#8B7FE8]" /> Offline Listening
-                    </span>
-                  </div>
-                </div>
-
-                {/* Animated Equalizer Waveform Bars */}
-                <div className="flex items-end gap-1 h-5">
-                  {[12, 20, 16, 24, 14, 18, 10].map((h, i) => (
-                    <div
-                      key={i}
-                      className="w-1 bg-[#8B7FE8] rounded-full animate-pulse"
-                      style={{ height: `${h}px`, animationDelay: `${i * 120}ms` }}
-                    />
-                  ))}
-                </div>
+              <div className="flex flex-col items-center group/dev">
+                <Tablet className="w-10 h-10 drop-shadow-md transition-transform group-hover/dev:scale-110" />
+                <span className="text-xs font-extrabold text-[#1E1B2E] mt-1.5">Tablet</span>
               </div>
-            </div>
-          </BentoCard>
-
-          {/* ==================================================
-              CARD 5 (EARN CERTIFICATES - TALLEST HERO CARD)
-             ================================================== */}
-          <BentoCard className="min-h-[460px] bg-gradient-to-br from-white/95 via-[#FFF0F5]/50 to-[#FCFBFF]">
-            <div>
-              <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-extrabold bg-[#FFC9DE] text-[#1E1B2E] border border-[#FFB0CC] mb-4">
-                <Award className="w-3.5 h-3.5 text-[#8B7FE8]" />
-                Industry Credential
+              <div className="flex flex-col items-center group/dev">
+                <Smartphone className="w-9 h-9 drop-shadow-md transition-transform group-hover/dev:scale-110" />
+                <span className="text-xs font-extrabold text-[#1E1B2E] mt-1.5">Mobile</span>
               </div>
-
-              <h3 className="text-2xl font-extrabold text-[#1E1B2E] tracking-tight mb-2">
-                Earn Certificates
-              </h3>
-              <p className="text-xs sm:text-sm text-[#6B6785] leading-relaxed font-medium mb-6">
-                Complete learning paths and earn beautiful certificates that showcase your AI expertise.
-              </p>
-            </div>
-
-            {/* Large Certificate Illustration & Gold Ribbon (50% Image Area) */}
-            <div className="relative w-full h-56 p-6 rounded-3xl bg-gradient-to-b from-[#FCFBFF] to-[#FFF0F5] border border-[#EAE6FE] shadow-inner overflow-hidden flex flex-col justify-between items-center text-center">
-              <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-[#8B7FE8] to-[#D8D2FA] text-white flex items-center justify-center shadow-lg font-black text-2xl mb-1">
-                ✦
-              </div>
-
-              <div>
-                <span className="text-sm font-black text-[#1E1B2E] block tracking-tight">
-                  Verified AI Specialist
-                </span>
-                <span className="text-xs text-[#6B6785] font-semibold flex items-center justify-center gap-1 mt-0.5">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" /> Shareable on LinkedIn & Resumes
-                </span>
-              </div>
-
-              <button
-                type="button"
-                className="w-full py-2.5 rounded-xl bg-white border border-[#EAE6FE] text-xs font-extrabold text-[#8B7FE8] hover:bg-[#F3F0FE] transition-colors flex items-center justify-center gap-1 shadow-sm"
-              >
-                <span>View Sample Certificate</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
             </div>
           </BentoCard>
 
