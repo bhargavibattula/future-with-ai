@@ -57,13 +57,6 @@ export default function PlatformFeatures() {
     <section className="w-full bg-[#FCFBFF] py-24 px-6 sm:px-12 lg:px-24">
       <div className="max-w-7xl mx-auto flex flex-col items-center">
         
-        {/* Eyebrow Pill */}
-        <div className="flex items-center gap-2 bg-[#F3F0FF] border border-[#D8D2FA] px-4 py-1.5 rounded-full mb-6">
-          <span className="text-[#8B7FE8] text-xs">✨</span>
-          <span className="text-[#6A47F9] text-xs font-semibold tracking-wide">
-            SRS Section 17 • Built-in AI Features
-          </span>
-        </div>
 
         {/* Header Text */}
         <h2 className="text-3xl sm:text-4xl md:text-[42px] font-bold text-[#1E1B2E] tracking-tight leading-tight font-['Space_Grotesk'] text-center mb-4">
