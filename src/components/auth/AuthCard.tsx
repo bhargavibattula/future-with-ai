@@ -482,10 +482,6 @@ export default function AuthCard({
                 We sent a 6-digit OTP code to{" "}
                 <span className="font-semibold text-[#8B7FE8]">{email}</span>
               </p>
-              <div className="mt-1.5 text-[11px] text-[#6B6785] bg-[#F3F0FE] px-3 py-1 rounded-full inline-flex items-center gap-1 border border-[#EAE6FE]">
-                <span>Sender:</span>
-                <strong className="text-[#1E1B2E]">shanmukharani20@gmail.com</strong>
-              </div>
             </>
           )}
 
