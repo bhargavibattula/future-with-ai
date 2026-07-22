@@ -1,4 +1,4 @@
-@import "tailwindcss";
+﻿@import "tailwindcss";
 
 /* Dark mode via .dark class on <html> (Tailwind v4) */
 @custom-variant dark (&:where(.dark, .dark *));
@@ -20,21 +20,21 @@
     --border: #EAE6FE;
   }
 
-  /* Dark mode overrides */
+  /* ── Dark palette tokens ── */
   .dark {
-    --background: #0F0D1A;
-    --foreground: #F0EEFF;
-    --primary: #A99CF0;
-    --primary-hover: #B8AFF5;
-    --primary-light: #2D2850;
-    --primary-soft: #1A1730;
-    --accent: #FF9DC0;
-    --accent-soft: #2A1825;
-    --mint: #6ECFAA;
-    --mint-soft: #0F2820;
-    --muted: #9B96C0;
-    --card: #16132A;
-    --border: #2D2850;
+    --background:    #09080F;
+    --foreground:    #EDE8FF;
+    --primary:       #9D8FEE;
+    --primary-hover: #B0A4F5;
+    --primary-light: #2C2848;
+    --primary-soft:  #1E1B35;
+    --accent:        #F0879B;
+    --accent-soft:   #221520;
+    --mint:          #5CBFA0;
+    --mint-soft:     #0E2018;
+    --muted:         #8A85AD;
+    --card:          #181529;
+    --border:        #2C2848;
   }
 
   body {
@@ -72,261 +72,124 @@
 
 /* Marquee Animations */
 @keyframes marquee-up {
-  0% {
-    transform: translateY(0);
-  }
-
-  100% {
-    transform: translateY(-50%);
-  }
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(-50%); }
 }
-
 @keyframes marquee-down {
-  0% {
-    transform: translateY(-50%);
-  }
-
-  100% {
-    transform: translateY(0);
-  }
+  0%   { transform: translateY(-50%); }
+  100% { transform: translateY(0); }
 }
-
 @keyframes marquee-horizontal {
-  0% {
-    transform: translateX(0);
-  }
-
-  100% {
-    transform: translateX(-50%);
-  }
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
-
-.animate-marquee-up {
-  animation: marquee-up 35s linear infinite;
-}
-
-.animate-marquee-down {
-  animation: marquee-down 40s linear infinite;
-}
-
-.animate-marquee-horizontal {
-  animation: marquee-horizontal 30s linear infinite;
-}
-
+.animate-marquee-up        { animation: marquee-up 35s linear infinite; }
+.animate-marquee-down      { animation: marquee-down 40s linear infinite; }
+.animate-marquee-horizontal{ animation: marquee-horizontal 30s linear infinite; }
 .marquee-container:hover .animate-marquee-up,
-.marquee-container:hover .animate-marquee-down {
-  animation-play-state: paused;
-}
-
+.marquee-container:hover .animate-marquee-down { animation-play-state: paused; }
 @media (max-width: 768px) {
-  .animate-marquee-up {
-    animation-duration: 45s;
-  }
+  .animate-marquee-up { animation-duration: 45s; }
 }
 
 /* Background Soft Glow Blobs */
-.bg-blob-violet {
-  background: radial-gradient(circle, rgba(216, 210, 250, 0.7) 0%, rgba(252, 251, 255, 0) 70%);
-}
+.bg-blob-violet { background: radial-gradient(circle, rgba(216,210,250,0.7) 0%, rgba(252,251,255,0) 70%); }
+.bg-blob-pink   { background: radial-gradient(circle, rgba(255,201,222,0.6) 0%, rgba(252,251,255,0) 70%); }
+.bg-blob-mint   { background: radial-gradient(circle, rgba(184,232,216,0.65) 0%, rgba(252,251,255,0) 70%); }
 
-.bg-blob-pink {
-  background: radial-gradient(circle, rgba(255, 201, 222, 0.6) 0%, rgba(252, 251, 255, 0) 70%);
-}
-
-.bg-blob-mint {
-  background: radial-gradient(circle, rgba(184, 232, 216, 0.65) 0%, rgba(252, 251, 255, 0) 70%);
-}
-
-/* Custom Soft Glassmorphism */
+/* Glassmorphism */
 .glass-nav {
-  background: rgba(252, 251, 255, 0.85);
+  background: rgba(252,251,255,0.85);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   transition: background 0.3s ease;
 }
-
-.dark .glass-nav {
-  background: rgba(15, 13, 26, 0.90);
-}
-
 .glass-card {
-  background: rgba(255, 255, 255, 0.94);
+  background: rgba(255,255,255,0.94);
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(234, 230, 254, 0.8);
+  border: 1px solid rgba(234,230,254,0.8);
   transition: background 0.3s ease, border-color 0.3s ease;
 }
 
-.dark .glass-card {
-  background: rgba(22, 19, 42, 0.96);
-  border-color: rgba(45, 40, 80, 0.8);
-}
-
-/* Global GSAP Button & Card Classes */
+/* GSAP Buttons */
 .btn-gsap-primary {
   background-color: #8B7FE8;
   color: #FFFFFF;
-  box-shadow: 0 4px 14px rgba(139, 127, 232, 0.25);
+  box-shadow: 0 4px 14px rgba(139,127,232,0.25);
   transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
-
-.btn-gsap-primary:hover {
-  background-color: #786BD6;
-  box-shadow: 0 8px 25px rgba(139, 127, 232, 0.35);
-}
-
+.btn-gsap-primary:hover { background-color: #786BD6; box-shadow: 0 8px 25px rgba(139,127,232,0.35); }
 .btn-gsap-outline {
   background-color: #FFFFFF;
   color: #1E1B2E;
   border: 1px solid #EAE6FE;
-  box-shadow: 0 2px 8px rgba(139, 127, 232, 0.06);
+  box-shadow: 0 2px 8px rgba(139,127,232,0.06);
 }
+.btn-gsap-outline:hover { border-color: rgba(139,127,232,0.4); background-color: #FCFBFF; }
+.btn-gsap-mint  { background-color: #B8E8D8; color: #1E1B2E; border: 1px solid #B8E8D8; }
+.btn-gsap-pink  { background-color: #FFC9DE; color: #1E1B2E; border: 1px solid #FFC9DE; }
+.card-gsap-hover { transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s cubic-bezier(0.16,1,0.3,1), border-color 0.3s ease; }
+.card-gsap-hover:hover { transform: translateY(-4px); border-color: rgba(139,127,232,0.4); box-shadow: 0 12px 30px rgba(139,127,232,0.15); }
 
-.btn-gsap-outline:hover {
-  border-color: rgba(139, 127, 232, 0.4);
-  background-color: #FCFBFF;
-}
-
-.btn-gsap-mint {
-  background-color: #B8E8D8;
-  color: #1E1B2E;
-  border: 1px solid #B8E8D8;
-}
-
-.btn-gsap-pink {
-  background-color: #FFC9DE;
-  color: #1E1B2E;
-  border: 1px solid #FFC9DE;
-}
-
-.card-gsap-hover {
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
-}
-
-.card-gsap-hover:hover {
-  transform: translateY(-4px);
-  border-color: rgba(139, 127, 232, 0.4);
-  box-shadow: 0 12px 30px rgba(139, 127, 232, 0.15);
-}
-
-/* Scroll-cue line animation for hero */
+/* Scroll-cue */
 @keyframes scrollline {
-  50% {
-    top: 0;
-  }
-
-  100% {
-    top: 100%;
-  }
+  50%  { top: 0; }
+  100% { top: 100%; }
 }
 
-/* ============================================================
-   PREMIUM DARK MODE  —  Linear / Vercel / Raycast inspired
-   Deep purple night palette, consistent hierarchy, smooth
-   ============================================================ */
+/* ===========================================================
+   DARK MODE OVERRIDES
+   Uses [class*="..."] attribute selectors — these are valid
+   CSS and reliably match Tailwind arbitrary-value classes.
+   =========================================================== */
 
-/* ── 1. Palette tokens ──────────────────────────────────────── */
-.dark {
-  --background:      #09080F;   /* page canvas          */
-  --surface-1:       #110F1E;   /* sections / panels    */
-  --surface-2:       #181529;   /* cards                */
-  --surface-3:       #201D35;   /* raised elements      */
-  --border:          #2C2848;   /* default border       */
-  --border-subtle:   #1E1B30;   /* hairline dividers    */
-  --foreground:      #EDE8FF;   /* primary text         */
-  --muted:           #8A85AD;   /* secondary text       */
-  --faint:           #5A5680;   /* placeholder / hint   */
-  --primary:         #9D8FEE;   /* brand purple         */
-  --primary-hover:   #B0A4F5;   /* hover state          */
-  --primary-glow:    rgba(157,143,238,0.18);
-  --accent-pink:     #F0879B;   /* accent               */
-  --accent-mint:     #5CBFA0;   /* mint                 */
-  --card:            #181529;
-  --primary-soft:    #1E1B35;
-  --primary-light:   #2C2848;
-  --accent-soft:     #221520;
-  --mint-soft:       #0E2018;
-}
+/* ── Root & body ── */
+html.dark        { background-color: #09080F; color: #EDE8FF; color-scheme: dark; }
+.dark body       { background-color: #09080F; color: #EDE8FF; }
 
-/* ── 2. Root document ───────────────────────────────────────── */
-html.dark {
-  background-color: #09080F;
-  color: #EDE8FF;
-  color-scheme: dark;
-}
+/* ── Typography ── */
+.dark h1,.dark h2,.dark h3,.dark h4,.dark h5,.dark h6 { color: #EDE8FF; }
+.dark p,.dark li  { color: #C4BFDF; }
+.dark label       { color: #EDE8FF; }
+.dark span        { color: inherit; }
+.dark svg         { color: inherit; }
 
-.dark body {
-  background-color: #09080F;
-  color: #EDE8FF;
-}
+/* ── Backgrounds via attribute substring selectors ── */
+.dark [class*="bg-[#FCFBFF]"] { background-color: #09080F !important; }
+.dark [class*="bg-[#F8F7FF]"] { background-color: #110F1E !important; }
+.dark [class*="bg-[#F3F0FF]"] { background-color: #1E1B35 !important; }
+.dark [class*="bg-[#F3F0FE]"] { background-color: #1E1B35 !important; }
+.dark [class*="bg-[#EAE6FE]"] { background-color: #201D35 !important; }
+.dark [class*="bg-[#E8E4FF]"] { background-color: #1E1B35 !important; }
+.dark [class*="bg-[#D8D2FA]"] { background-color: #2C2848 !important; }
+.dark [class*="bg-[#EDF9F5]"] { background-color: #0E2018 !important; }
+.dark [class*="bg-[#FFF0F5]"] { background-color: #221520 !important; }
+.dark [class*="bg-[#FFFFFF]"] { background-color: #181529 !important; }
+.dark [class*="bg-white"]     { background-color: #181529 !important; }
 
-/* ── 3. Typography cascade ──────────────────────────────────── */
-.dark h1, .dark h2, .dark h3,
-.dark h4, .dark h5, .dark h6 {
-  color: #EDE8FF;
-}
+/* ── Border colors ── */
+.dark [class*="border-[#EAE6FE]"] { border-color: #2C2848 !important; }
+.dark [class*="border-[#D8D2FA]"] { border-color: #3A3660 !important; }
+.dark [class*="border-[#B8E8D8]"] { border-color: #1C4A38 !important; }
+.dark [class*="border-[#FFC9DE]"] { border-color: #4A1830 !important; }
 
-.dark p, .dark li {
-  color: #C4BFDF;
-}
-
-.dark label {
-  color: #EDE8FF;
-}
-
-/* ── 4. Backgrounds (escaped bracket selectors) ─────────────── */
-.dark .bg-\[#FCFBFF\]   { background-color: #09080F !important; }
-.dark .bg-white          { background-color: #181529 !important; }
-.dark .bg-\[#F3F0FF\]   { background-color: #1E1B35 !important; }
-.dark .bg-\[#F3F0FE\]   { background-color: #1E1B35 !important; }
-.dark .bg-\[#EDF9F5\]   { background-color: #0E2018 !important; }
-.dark .bg-\[#FFF0F5\]   { background-color: #221520 !important; }
-.dark .bg-\[#D8D2FA\]   { background-color: #2C2848 !important; }
-.dark .bg-\[#EAE6FE\]   { background-color: #201D35 !important; }
-.dark .bg-\[#FFFFFF\]   { background-color: #181529 !important; }
-.dark .bg-\[#F8F7FF\]   { background-color: #110F1E !important; }
-.dark .bg-\[#E8E4FF\]   { background-color: #1E1B35 !important; }
-
-/* Gradient stops */
-.dark .from-\[#FCFBFF\]  { --tw-gradient-from: #09080F !important; }
-.dark .to-\[#FCFBFF\]    { --tw-gradient-to:   #09080F !important; }
-.dark .via-\[#FCFBFF\]   { --tw-gradient-via:  #09080F !important; }
-.dark .from-white         { --tw-gradient-from: #181529 !important; }
-.dark .to-white           { --tw-gradient-to:   #181529 !important; }
-
-/* Hover backgrounds */
-.dark .hover\:bg-\[#F3F0FE\]:hover { background-color: #201D35 !important; }
-.dark .hover\:bg-\[#F3F0FF\]:hover { background-color: #201D35 !important; }
-.dark .hover\:bg-\[#FCFBFF\]:hover  { background-color: #110F1E !important; }
-
-/* ── 5. Borders ─────────────────────────────────────────────── */
-.dark .border-\[#EAE6FE\]       { border-color: #2C2848 !important; }
-.dark .border-\[#EAE6FE\]\/60   { border-color: rgba(44,40,72,0.6) !important; }
-.dark .border-\[#EAE6FE\]\/50   { border-color: rgba(44,40,72,0.5) !important; }
-.dark .border-\[#EAE6FE\]\/80   { border-color: rgba(44,40,72,0.8) !important; }
-.dark .border-\[#D8D2FA\]       { border-color: #3A3660 !important; }
-.dark .border-\[#D8D2FA\]\/40   { border-color: rgba(58,54,96,0.4) !important; }
-.dark .hover\:border-\[#D8D2FA\]:hover { border-color: #3A3660 !important; }
-
-/* ── 6. Shadows ─────────────────────────────────────────────── */
-.dark .shadow-2xl { box-shadow: 0 24px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.04) !important; }
-.dark .shadow-xl  { box-shadow: 0 16px 50px rgba(0,0,0,0.55) !important; }
-.dark .shadow-lg  { box-shadow: 0  8px 30px rgba(0,0,0,0.45) !important; }
-.dark .shadow-md  { box-shadow: 0  4px 16px rgba(0,0,0,0.38) !important; }
-.dark .shadow-sm  { box-shadow: 0  2px  8px rgba(0,0,0,0.30) !important; }
-
-/* ── 7. Glassmorphism ───────────────────────────────────────── */
-.dark .glass-nav {
-  background: rgba(9, 8, 15, 0.88) !important;
-  border-bottom-color: rgba(44,40,72,0.5) !important;
+/* ── Glassmorphism ── */
+.dark .glass-nav  {
+  background: rgba(9,8,15,0.90) !important;
+  border-bottom-color: rgba(44,40,72,0.6) !important;
   backdrop-filter: blur(20px) saturate(180%);
 }
-
 .dark .glass-card {
-  background: rgba(24, 21, 41, 0.98) !important;
+  background: rgba(24,21,41,0.98) !important;
   border-color: #2C2848 !important;
 }
 
-/* ── 8. Inputs / Forms ──────────────────────────────────────── */
+/* ── Blob gradients ── */
+.dark .bg-blob-violet { background: radial-gradient(circle, rgba(100,80,200,0.18) 0%, transparent 70%); }
+.dark .bg-blob-pink   { background: radial-gradient(circle, rgba(180,60,100,0.14) 0%, transparent 70%); }
+.dark .bg-blob-mint   { background: radial-gradient(circle, rgba(30,120,90,0.14)  0%, transparent 70%); }
+
+/* ── Inputs & Forms ── */
 .dark input,
 .dark textarea,
 .dark select {
@@ -335,100 +198,51 @@ html.dark {
   border-color: #2C2848 !important;
   caret-color: #9D8FEE;
 }
-
 .dark input::placeholder,
-.dark textarea::placeholder {
-  color: #5A5680 !important;
-  opacity: 1;
-}
-
+.dark textarea::placeholder { color: #5A5680 !important; opacity: 1; }
 .dark input:focus,
 .dark textarea:focus,
 .dark select:focus {
   background-color: #1E1B35 !important;
   border-color: #9D8FEE !important;
-  box-shadow: 0 0 0 3px rgba(157,143,238,0.2) !important;
+  box-shadow: 0 0 0 3px rgba(157,143,238,0.22) !important;
   outline: none;
 }
 
-/* ── 9. Buttons ─────────────────────────────────────────────── */
-.dark .btn-gsap-primary {
-  background-color: #9D8FEE !important;
-  box-shadow: 0 4px 20px rgba(157,143,238,0.3) !important;
-}
+/* ── Buttons ── */
+.dark .btn-gsap-primary  { background-color: #9D8FEE !important; box-shadow: 0 4px 20px rgba(157,143,238,0.35) !important; }
+.dark .btn-gsap-outline  { background-color: #181529 !important; color: #EDE8FF !important; border-color: #2C2848 !important; }
+.dark .btn-gsap-outline:hover { background-color: #201D35 !important; border-color: #9D8FEE !important; }
 
-.dark .btn-gsap-outline {
-  background-color: #181529 !important;
-  color: #EDE8FF !important;
-  border-color: #2C2848 !important;
-}
+/* ── Card hover ── */
+.dark .card-gsap-hover:hover { border-color: rgba(157,143,238,0.4) !important; box-shadow: 0 12px 40px rgba(157,143,238,0.12) !important; }
 
-.dark .btn-gsap-outline:hover {
-  background-color: #201D35 !important;
-  border-color: #9D8FEE !important;
-}
+/* ── Shadows ── */
+.dark [class*="shadow-2xl"] { box-shadow: 0 24px 80px rgba(0,0,0,0.75), 0 0 0 1px rgba(255,255,255,0.04) !important; }
+.dark [class*="shadow-xl"]  { box-shadow: 0 16px 50px rgba(0,0,0,0.6) !important; }
+.dark [class*="shadow-lg"]  { box-shadow: 0  8px 30px rgba(0,0,0,0.5) !important; }
+.dark [class*="shadow-md"]  { box-shadow: 0  4px 16px rgba(0,0,0,0.4) !important; }
+.dark [class*="shadow-sm"]  { box-shadow: 0  2px  8px rgba(0,0,0,0.32) !important; }
 
-/* ── 10. Card hover ─────────────────────────────────────────── */
-.dark .card-gsap-hover:hover {
-  border-color: rgba(157,143,238,0.4) !important;
-  box-shadow: 0 12px 40px rgba(157,143,238,0.12) !important;
-}
+/* ── Footer ── */
+.dark footer                 { background-color: #05040A !important; border-top-color: #1E1B30 !important; color: #8A85AD !important; }
+.dark footer a               { color: #8A85AD !important; }
+.dark footer a:hover         { color: #EDE8FF !important; }
+.dark footer h3,.dark footer h4 { color: #EDE8FF !important; }
+.dark footer p               { color: #8A85AD !important; }
 
-/* ── 11. Auth card tabs ─────────────────────────────────────── */
-.dark .bg-white.shadow-sm { background-color: #201D35 !important; color: #EDE8FF !important; }
-.dark .bg-white.rounded-xl { background-color: #201D35 !important; color: #EDE8FF !important; }
+/* ── Selection ── */
+.dark ::selection { background-color: #2C2848; color: #EDE8FF; }
 
-/* ── 12. Footer ─────────────────────────────────────────────── */
-.dark footer {
-  background-color: #05040A !important;
-  border-top-color: #1E1B30 !important;
-  color: #8A85AD !important;
-}
+/* ── Scrollbar ── */
+.dark ::-webkit-scrollbar             { width: 6px; background-color: #09080F; }
+.dark ::-webkit-scrollbar-thumb       { background-color: #2C2848; border-radius: 8px; }
+.dark ::-webkit-scrollbar-thumb:hover { background-color: #3A3660; }
 
-.dark footer a    { color: #8A85AD !important; }
-.dark footer a:hover { color: #EDE8FF !important; }
-.dark footer h3, .dark footer h4 { color: #EDE8FF !important; }
-.dark footer p    { color: #8A85AD !important; }
-
-/* ── 13. Blob ambient gradients ─────────────────────────────── */
-.dark .bg-blob-violet {
-  background: radial-gradient(circle, rgba(100,80,200,0.18) 0%, transparent 70%);
-}
-.dark .bg-blob-pink {
-  background: radial-gradient(circle, rgba(180,60,100,0.14) 0%, transparent 70%);
-}
-.dark .bg-blob-mint {
-  background: radial-gradient(circle, rgba(30,120,90,0.14) 0%, transparent 70%);
-}
-
-/* ── 14. Page wrapper overrides ─────────────────────────────── */
-.dark .min-h-screen.bg-\[#FCFBFF\] { background-color: #09080F !important; }
-
-/* ── 15. Scrollbar ──────────────────────────────────────────── */
-.dark ::-webkit-scrollbar              { width: 6px; background-color: #09080F; }
-.dark ::-webkit-scrollbar-thumb        { background-color: #2C2848; border-radius: 8px; }
-.dark ::-webkit-scrollbar-thumb:hover  { background-color: #3A3660; }
-
-/* ── 16. Selection highlight ────────────────────────────────── */
-.dark ::selection {
-  background-color: #2C2848;
-  color: #EDE8FF;
-}
-
-/* ── 17. SVG icons ──────────────────────────────────────────── */
-.dark svg { color: inherit; }
-
-/* ── 18. Smooth transition for colour-bearing properties ─────── */
-.dark *,
-.dark *::before,
-.dark *::after {
+/* ── Global transition (colour properties only) ── */
+.dark *,.dark *::before,.dark *::after {
   transition-property: background-color, border-color, color, fill, stroke, box-shadow;
   transition-duration: 200ms;
   transition-timing-function: ease;
 }
-
-/* Exclude animation-only elements */
-.dark [class*="animate-"],
-.dark canvas {
-  transition-property: none;
-}
+.dark [class*="animate-"],.dark canvas { transition-property: none; }
