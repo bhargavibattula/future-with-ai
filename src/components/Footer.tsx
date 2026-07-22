@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Sparkles, Heart } from "lucide-react";
 
 export default function Footer() {
@@ -41,17 +42,16 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Col 3: Resources */}
+          {/* Col 3: Account & Auth */}
           <div>
             <h4 className="text-sm font-bold text-[#1E1B2E] uppercase tracking-wider mb-4">
-              Resources
+              Account
             </h4>
             <ul className="space-y-2 text-xs font-medium text-[#6B6785]">
-              <li><a href="#how-it-works" className="hover:text-[#8B7FE8] transition-colors">Documentation</a></li>
-              <li><a href="#how-it-works" className="hover:text-[#8B7FE8] transition-colors">AI Benchmarks</a></li>
-              <li><a href="#submit" className="hover:text-[#8B7FE8] transition-colors">Submit Your Tool</a></li>
-              <li><a href="#" className="hover:text-[#8B7FE8] transition-colors">API Directory Access</a></li>
-              <li><a href="#" className="hover:text-[#8B7FE8] transition-colors">Brand Assets</a></li>
+              <li><Link href="/login" className="hover:text-[#8B7FE8] transition-colors">Log In</Link></li>
+              <li><Link href="/signup" className="hover:text-[#8B7FE8] transition-colors">Create Account</Link></li>
+              <li><Link href="/forgot-password" className="hover:text-[#8B7FE8] transition-colors">Reset Password</Link></li>
+              <li><a href="/#submit" className="hover:text-[#8B7FE8] transition-colors">Submit Your Tool</a></li>
             </ul>
           </div>
 
