@@ -11,7 +11,6 @@ import GSAPTextRevealSection from "@/components/animations/GSAPTextRevealSection
 import GSAPStreakHeatmap from "@/components/animations/GSAPStreakHeatmap";
 import GSAPHowItWorks from "@/components/animations/GSAPHowItWorks";
 import CertificateShowcase from "@/components/animations/CertificateShowcase";
-import GSAPParallaxGrid from "@/components/animations/GSAPParallaxGrid";
 import InteractiveLearningDashboard from "@/components/InteractiveLearningDashboard";
 import ToolGrid from "@/components/ToolGrid";
 import TestimonialsMarquee from "@/components/animations/TestimonialsMarquee";
@@ -64,9 +63,6 @@ export default function Home() {
 
         {/* Dedicated Dark Certificate Showcase Section */}
         <CertificateShowcase />
-
-        {/* GSAP Parallax Floating Feature Grid */}
-        <GSAPParallaxGrid />
 
         {/* Interactive Role Dashboard Experience (Learner, Instructor, Admin) */}
         <InteractiveLearningDashboard />
