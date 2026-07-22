@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import AuthModal from "@/components/auth/AuthModal";
 import { AuthMode } from "@/components/auth/AuthCard";
 import { useAuth } from "@/lib/auth";
+import DarkModeToggle from "@/components/DarkModeToggle";
 
 interface NavbarProps {
   onSearchClick?: () => void;
@@ -110,6 +111,9 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
 
           {/* Action Buttons / User Profile */}
           <div className="hidden md:flex items-center space-x-3">
+            {/* Dark mode toggle */}
+            <DarkModeToggle />
+
             {onSearchClick && (
               <Button
                 variant="ghost"
@@ -227,7 +231,8 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
           </div>
 
           {/* Mobile menu button */}
-          <div className="md:hidden flex items-center gap-2">
+          <div className="md:hidden flex items-center gap-3">
+            <DarkModeToggle />
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-2 text-[#1E1B2E] hover:bg-[#D8D2FA]/30 rounded-xl transition-colors"

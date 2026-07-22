@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Dark mode via .dark class on <html> (Tailwind v4) */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @layer base {
   :root {
     --background: #FCFBFF;
@@ -17,12 +20,30 @@
     --border: #EAE6FE;
   }
 
+  /* Dark mode overrides */
+  .dark {
+    --background: #0F0D1A;
+    --foreground: #F0EEFF;
+    --primary: #A99CF0;
+    --primary-hover: #B8AFF5;
+    --primary-light: #2D2850;
+    --primary-soft: #1A1730;
+    --accent: #FF9DC0;
+    --accent-soft: #2A1825;
+    --mint: #6ECFAA;
+    --mint-soft: #0F2820;
+    --muted: #9B96C0;
+    --card: #16132A;
+    --border: #2D2850;
+  }
+
   body {
     background-color: var(--background);
     color: var(--foreground);
     font-family: var(--font-sans), 'Plus Jakarta Sans', system-ui, sans-serif;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 }
 
@@ -121,12 +142,23 @@
   background: rgba(252, 251, 255, 0.85);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
+  transition: background 0.3s ease;
+}
+
+.dark .glass-nav {
+  background: rgba(15, 13, 26, 0.90);
 }
 
 .glass-card {
   background: rgba(255, 255, 255, 0.94);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(234, 230, 254, 0.8);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.dark .glass-card {
+  background: rgba(22, 19, 42, 0.96);
+  border-color: rgba(45, 40, 80, 0.8);
 }
 
 /* Global GSAP Button & Card Classes */
