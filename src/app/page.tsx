@@ -34,8 +34,15 @@ export default function Home() {
 
       {/* Main Content Body */}
       <main className="flex-grow">
-        {/* GSAP Hero Section with 3D Scrub and Floating Parallax Badges */}
+        {/* GSAP Hero Section */}
         <GSAPHero />
+
+        {/* AI Tools & Learning Directory Grid */}
+        <ToolGrid
+          selectedCategory={selectedCategory}
+          onCategorySelect={setSelectedCategory}
+          onOpenModal={(tool) => setActiveModalTool(tool)}
+        />
 
         {/* GSAP Text Reveal Section (GSAP.com Homepage Inspired) */}
         <GSAPTextRevealSection />
@@ -51,13 +58,6 @@ export default function Home() {
 
         {/* Interactive Role Dashboard Experience (Learner, Instructor, Admin) */}
         <InteractiveLearningDashboard />
-
-        {/* AI Tools & Learning Directory Grid */}
-        <ToolGrid
-          selectedCategory={selectedCategory}
-          onCategorySelect={setSelectedCategory}
-          onOpenModal={(tool) => setActiveModalTool(tool)}
-        />
       </main>
 
       {/* Quick View Detail Modal */}

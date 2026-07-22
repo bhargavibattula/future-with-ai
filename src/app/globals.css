@@ -112,3 +112,9 @@
   border-color: rgba(139, 127, 232, 0.4);
   box-shadow: 0 12px 30px rgba(139, 127, 232, 0.15);
 }
+
+/* Scroll-cue line animation for hero */
+@keyframes scrollline {
+  50% { top: 0; }
+  100% { top: 100%; }
+}

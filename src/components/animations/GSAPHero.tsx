@@ -1,327 +1,196 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import { Sparkles, ArrowRight, Play, Volume2, Flame, Award, Zap } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-
-import {
-  SplitTextReveal,
-  HorizontalReveal,
-  SVGFloat,
-  SVGParallax,
-  MagneticButton,
-  GlowCursor,
-  CardReveal,
-} from "@/components/animations/system";
-
-import {
-  AIBrainSVG,
-  RobotSVG,
-  CodeWindowSVG,
-  LightningSVG,
-  StarSparkleSVG,
-  FloatingCubeSVG,
-} from "@/components/animations/HeroSVGs";
+import ExploreCoursesButton from "@/components/ui/ExploreCoursesButton";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
+/* ════════════════════════════════════════════════════
+   GSAPHero — GSAP.com-quality editorial hero
+   Patterns: word-reveal translateY, floating organic shapes,
+   ambient parallax, magnetic buttons, scroll-cue indicator.
+   Palette: Lavender Dream (#FCFBFF, #8B7FE8, #D8D2FA, #B8E8D8, #FFC9DE)
+   ════════════════════════════════════════════════════ */
+
 export default function GSAPHero() {
-  const heroContainerRef = useRef<HTMLDivElement>(null);
-  const mockupContainerRef = useRef<HTMLDivElement>(null);
+  const heroRef = useRef<HTMLDivElement>(null);
 
-  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
-
+  /* ─── Master entrance timeline ─── */
   useGSAP(
     () => {
-      if (!heroContainerRef.current || !mockupContainerRef.current) return;
+      if (!heroRef.current) return;
 
-      // Master GSAP ScrollTrigger Scrub Timeline
-      const masterTl = gsap.timeline({
-        scrollTrigger: {
-          trigger: heroContainerRef.current,
-          start: "top top",
-          end: "bottom top",
-          scrub: 0.8,
-          markers: false,
-        },
-      });
+      const ctx = gsap.context(() => {
+        const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
 
-      // Hero Mockup 3D Un-tilt & Zoom Scrub
-      masterTl.to(
-        mockupContainerRef.current,
-        {
-          rotateX: 0,
-          scale: 1,
-          y: -30,
-          boxShadow: "0 30px 70px rgba(139, 127, 232, 0.22)",
-          ease: "power2.out",
-        },
-        0
-      );
+        // 1. Eyebrow fade in
+        tl.to(".hero-eyebrow", { opacity: 1, duration: 0.6 });
 
-      // Hero Floating Elements Staggered Parallax Scroll Out
-      const floatingElements = gsap.utils.toArray<HTMLElement>(".hero-floating-svg");
-      floatingElements.forEach((el, index) => {
-        const dir = index % 2 === 0 ? 1 : -1;
-        masterTl.to(
-          el,
-          {
-            y: dir * 100,
-            rotate: dir * 35,
-            opacity: 0.4,
-            ease: "none",
-          },
-          0
-        );
-      });
+        // 2. Word reveals — set initial position via GSAP (not Tailwind, to avoid transform conflicts)
+        gsap.set(".hero-word-inner", { yPercent: 115 });
+        tl.to(".hero-word-inner", {
+          yPercent: 0,
+          duration: 1.1,
+          stagger: 0.08,
+        }, "-=0.4");
+
+        // 3. Paragraph fade
+        tl.to(".hero-para", { opacity: 1, duration: 0.8 }, "-=0.5");
+
+        // 4. Action buttons
+        tl.to(".hero-actions", { opacity: 1, duration: 0.8 }, "-=0.6");
+
+        // 5. Scroll cue
+        tl.to(".hero-scroll-cue", { opacity: 1, duration: 0.6 }, "-=0.4");
+
+        // 6. Floating shapes entrance
+        tl.from(".hero-shape", {
+          opacity: 0,
+          scale: 0.6,
+          stagger: 0.1,
+          duration: 1,
+          ease: "back.out(1.7)",
+        }, "-=1.2");
+
+        /* ─── Ambient float loops ─── */
+        gsap.to(".shape-ring", {
+          y: -24, rotate: 20, duration: 5, repeat: -1, yoyo: true, ease: "sine.inOut",
+        });
+        gsap.to(".shape-blob", {
+          y: 20, rotate: -10, duration: 6, repeat: -1, yoyo: true, ease: "sine.inOut",
+        });
+        gsap.to(".shape-pill", {
+          y: -14, duration: 4.5, repeat: -1, yoyo: true, ease: "sine.inOut",
+        });
+        gsap.to(".shape-diamond", {
+          y: 16, rotate: 225, duration: 5.5, repeat: -1, yoyo: true, ease: "sine.inOut",
+        });
+
+        /* ─── Scroll parallax for shapes ─── */
+        gsap.utils.toArray<HTMLElement>(".hero-shape").forEach((el) => {
+          const speed = parseFloat(el.dataset.speed || "0.3");
+          gsap.to(el, {
+            yPercent: -30 * speed,
+            scrollTrigger: {
+              trigger: heroRef.current!,
+              start: "top top",
+              end: "bottom top",
+              scrub: 1,
+            },
+          });
+        });
+      }, heroRef);
+
+      return () => ctx.revert();
     },
-    { scope: heroContainerRef }
+    { scope: heroRef }
+  );
+
+  /* ─── Word-wrap helper (each word in overflow-hidden container) ─── */
+  const Word = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
+    <span className="inline-block overflow-hidden align-top">
+      <span className={`hero-word-inner inline-block ${className}`}>
+        {children}
+      </span>
+    </span>
   );
 
   return (
     <section
-      ref={heroContainerRef}
-      className="relative min-h-[96vh] pt-12 pb-24 flex flex-col items-center justify-center overflow-hidden bg-[#FCFBFF] text-[#1E1B2E] selection:bg-[#D8D2FA] selection:text-[#1E1B2E]"
+      ref={heroRef}
+      className="relative min-h-screen flex flex-col justify-center px-[6vw] overflow-hidden bg-[#FCFBFF]"
     >
-      {/* 1. Subtle Glow Cursor Aura with Soft Lavender Hue */}
-      <GlowCursor color="rgba(139, 127, 232, 0.18)" size={320} blur={80} />
-
-      {/* 2. Soft Ambient Glowing Mesh Backdrops (Original Website Palette) */}
-      <div className="absolute top-[-15%] left-[-10%] w-[600px] h-[600px] rounded-full bg-blob-violet blur-3xl opacity-75 pointer-events-none" />
-      <div className="absolute top-10 right-[-10%] w-[550px] h-[550px] rounded-full bg-blob-mint blur-3xl opacity-70 pointer-events-none" />
-      <div className="absolute bottom-[-10%] left-[30%] w-[500px] h-[500px] rounded-full bg-blob-pink blur-3xl opacity-60 pointer-events-none" />
-
-      {/* 3. Floating Vector SVGs with Physics & Parallax (Soft Light Aesthetic) */}
-      <div className="absolute inset-0 pointer-events-none z-10 overflow-hidden">
-        {/* Top-Left: AI Brain SVG */}
-        <SVGParallax speed={50} rotateSpeed={15} className="hero-floating-svg absolute top-12 left-4 sm:left-14">
-          <SVGFloat floatDistance={18} rotateDegree={10} duration={3.8}>
-            <div className="p-3.5 rounded-2xl bg-white/90 border border-[#EAE6FE] shadow-soft-md backdrop-blur-md">
-              <AIBrainSVG className="w-12 h-12 sm:w-14 sm:h-14" />
-            </div>
-          </SVGFloat>
-        </SVGParallax>
-
-        {/* Top-Right: Robot AI Agent SVG */}
-        <SVGParallax speed={-45} rotateSpeed={-20} className="hero-floating-svg absolute top-16 right-4 sm:right-16">
-          <SVGFloat floatDistance={16} rotateDegree={-12} duration={3.5}>
-            <div className="p-3.5 rounded-2xl bg-white/90 border border-[#B8E8D8] shadow-soft-md backdrop-blur-md">
-              <RobotSVG className="w-12 h-12 sm:w-14 sm:h-14" />
-            </div>
-          </SVGFloat>
-        </SVGParallax>
-
-        {/* Mid-Left: Code Window SVG */}
-        <SVGParallax speed={35} rotateSpeed={-12} className="hero-floating-svg absolute top-[46%] left-4 sm:left-10">
-          <SVGFloat floatDistance={14} rotateDegree={6} duration={4.2}>
-            <div className="p-3 rounded-2xl bg-white/90 border border-[#D8D2FA] shadow-soft-md backdrop-blur-md hidden sm:block">
-              <CodeWindowSVG className="w-16 h-12 sm:w-18 sm:h-14" />
-            </div>
-          </SVGFloat>
-        </SVGParallax>
-
-        {/* Mid-Right: Floating Cubes SVG */}
-        <SVGParallax speed={-60} rotateSpeed={25} className="hero-floating-svg absolute top-[44%] right-4 sm:right-12">
-          <SVGFloat floatDistance={20} rotateDegree={14} duration={3.6}>
-            <div className="p-3 rounded-2xl bg-white/90 border border-[#FFC9DE] shadow-soft-md backdrop-blur-md">
-              <FloatingCubeSVG className="w-12 h-12 sm:w-14 sm:h-14" />
-            </div>
-          </SVGFloat>
-        </SVGParallax>
-
-        {/* Bottom-Left: Lightning Bolt SVG */}
-        <SVGParallax speed={25} rotateSpeed={8} className="hero-floating-svg absolute bottom-24 left-16 hidden md:block">
-          <SVGFloat floatDistance={12} rotateDegree={-8} duration={3.2}>
-            <LightningSVG className="w-9 h-13" />
-          </SVGFloat>
-        </SVGParallax>
-
-        {/* Bottom-Right: Star Sparkle SVG */}
-        <SVGParallax speed={-30} rotateSpeed={-15} className="hero-floating-svg absolute bottom-20 right-20 hidden md:block">
-          <SVGFloat floatDistance={15} rotateDegree={16} duration={4.4}>
-            <StarSparkleSVG className="w-9 h-9" />
-          </SVGFloat>
-        </SVGParallax>
+      {/* ═══ Eyebrow ═══ */}
+      <div className="hero-eyebrow opacity-0 text-xs font-semibold tracking-[0.14em] uppercase text-[#6B6785] mb-5 flex items-center gap-2.5">
+        <span className="w-1.5 h-1.5 rounded-full bg-[#8B7FE8]" />
+        AI Learning, Reimagined
       </div>
 
-      {/* Hero Content Container */}
-      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 text-center z-20">
-        {/* Top Header Badge matching site theme */}
-        <div className="inline-block mb-6">
-          <Badge variant="default" className="py-2 px-5 text-xs sm:text-sm font-extrabold shadow-soft-sm">
-            <Sparkles className="w-4 h-4 text-[#8B7FE8] animate-pulse" />
-            <span>Future With AI • Enterprise Learning Ecosystem</span>
-          </Badge>
+      {/* ═══ Headline — editorial word-by-word reveal ═══ */}
+      <h1 className="font-[var(--font-display)] font-semibold tracking-[-0.03em] leading-[0.98] text-[clamp(44px,8vw,108px)] max-w-[1100px] text-[#1E1B2E]">
+        <Word>Learn</Word>
+        <br />
+        <Word>AI&nbsp;that&nbsp;</Word>
+        <Word className="bg-gradient-to-r from-[#8B7FE8] via-[#6B5BD6] to-[#8B7FE8] bg-clip-text text-transparent">
+          actually
+        </Word>
+        <br />
+        <Word className="bg-gradient-to-r from-[#8B7FE8] via-[#6B5BD6] to-[#8B7FE8] bg-clip-text text-transparent">
+          sticks.
+        </Word>
+      </h1>
+
+      {/* ═══ Supporting paragraph ═══ */}
+      <p className="hero-para opacity-0 max-w-[480px] mt-7 text-[17px] leading-relaxed text-[#6B6785]">
+        Structured courses, AI voice lessons, streaks that pull you back,
+        and certificates worth sharing — one platform built to make you
+        finish what you start.
+      </p>
+
+      {/* ═══ Action buttons ═══ */}
+      <div className="hero-actions opacity-0 mt-10 flex items-center gap-4 flex-wrap">
+        {/* Primary CTA — ExploreCoursesButton with built-in magnetic + GSAP animations */}
+        <ExploreCoursesButton />
+
+        {/* Secondary button */}
+        <button
+          className="group flex items-center gap-2 font-[var(--font-display)] font-semibold text-[15px] text-[#1E1B2E] bg-transparent border-none cursor-pointer"
+        >
+          <span className="w-[38px] h-[38px] rounded-full border-[1.5px] border-[#1E1B2E] flex items-center justify-center group-hover:rotate-45 transition-transform duration-300">
+            ↗
+          </span>
+          Watch demo
+        </button>
+      </div>
+
+      {/* ═══ Floating organic shapes ═══ */}
+
+      {/* Conic gradient ring */}
+      <div
+        className="hero-shape shape-ring absolute top-[14%] right-[20%] w-[120px] h-[120px] rounded-full will-change-transform"
+        data-speed="0.4"
+        style={{
+          background: "conic-gradient(from 180deg, #8B7FE8, #B8E8D8, #FFC9DE, #8B7FE8)",
+          WebkitMask: "radial-gradient(farthest-side, transparent calc(100% - 18px), #000 calc(100% - 17px))",
+          mask: "radial-gradient(farthest-side, transparent calc(100% - 18px), #000 calc(100% - 17px))",
+        }}
+      />
+
+      {/* Gradient blob */}
+      <div
+        className="hero-shape shape-blob absolute top-[46%] right-[6%] w-[230px] h-[230px] will-change-transform"
+        data-speed="0.25"
+        style={{
+          background: "radial-gradient(circle at 32% 28%, #D8D2FA, #8B7FE8 75%)",
+          borderRadius: "42% 58% 63% 37% / 45% 40% 60% 55%",
+        }}
+      />
+
+      {/* Pill badge */}
+      <div
+        className="hero-shape shape-pill absolute top-[8%] right-[44%] w-[150px] h-[64px] rounded-full bg-[#B8E8D8] flex items-center justify-center font-[var(--font-display)] font-semibold text-sm text-[#1E1B2E] will-change-transform"
+        data-speed="0.55"
+      >
+        Level up daily
+      </div>
+
+      {/* Diamond accent */}
+      <div
+        className="hero-shape shape-diamond absolute top-[62%] right-[32%] w-[26px] h-[26px] bg-[#FFC9DE] rounded-[6px] rotate-45 will-change-transform"
+        data-speed="0.7"
+      />
+
+      {/* ═══ Scroll cue indicator ═══ */}
+      <div className="hero-scroll-cue opacity-0 absolute bottom-9 left-[6vw] flex items-center gap-2.5 text-xs text-[#6B6785]">
+        <div className="w-px h-[34px] bg-[#6B6785] relative overflow-hidden">
+          <span className="absolute top-[-100%] left-0 w-full h-full bg-[#8B7FE8] animate-[scrollline_1.8s_ease-in-out_infinite]" />
         </div>
-
-        {/* Headline revealed with Horizontal Reveal & SplitText in light theme */}
-        <div className="relative mb-8 max-w-5xl mx-auto">
-          <HorizontalReveal direction="left-to-right" duration={1.1}>
-            <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-[#1E1B2E] tracking-tight leading-[1.08]">
-              <SplitTextReveal
-                text="Learn AI with"
-                type="words"
-                stagger={0.05}
-                className="text-[#1E1B2E]"
-              />
-              <br />
-              <span className="text-[#8B7FE8] bg-gradient-to-r from-[#8B7FE8] via-[#6B5BD6] to-[#8B7FE8] bg-clip-text text-transparent underline decoration-[#D8D2FA] decoration-wavy">
-                <SplitTextReveal
-                  text="Next-Gen Kinetic Voice"
-                  type="words"
-                  stagger={0.07}
-                  badgeWords={[
-                    { word: "Next-Gen", bg: "#FFC9DE", text: "#1E1B2E", rotate: -3 },
-                    { word: "Kinetic", bg: "#B8E8D8", text: "#1E1B2E", rotate: 4 },
-                  ]}
-                />
-              </span>{" "}
-              & Gamification
-            </h1>
-          </HorizontalReveal>
-        </div>
-
-        {/* Subtitle */}
-        <p className="max-w-2xl mx-auto text-lg sm:text-xl text-[#6B6785] leading-relaxed mb-10 font-normal">
-          Enterprise AI learning platform inspired by Coursera, Duolingo, LeetCode & Coursiv. Built with Next.js 15, Tailwind, and GSAP.
-        </p>
-
-        {/* Magnetic CTA Buttons in original theme colors */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
-          <MagneticButton strength={0.35}>
-            <Button size="lg" className="w-full sm:w-auto text-base font-bold gap-2 h-14 px-8 shadow-soft-md hover:shadow-glow-primary">
-              <span>Start Free Trial</span>
-              <ArrowRight className="w-5 h-5" />
-            </Button>
-          </MagneticButton>
-
-          <MagneticButton strength={0.3}>
-            <Button
-              variant="outline"
-              size="lg"
-              onClick={() => setIsPlayingAudio(!isPlayingAudio)}
-              className="w-full sm:w-auto text-base font-bold gap-2 h-14 px-8 border-[#EAE6FE] hover:bg-[#F3F0FE] text-[#1E1B2E]"
-            >
-              <Volume2 className={`w-5 h-5 text-[#8B7FE8] ${isPlayingAudio ? "animate-bounce" : ""}`} />
-              <span>{isPlayingAudio ? "Pause ElevenLabs AI Voice" : "Play ElevenLabs AI Voice"}</span>
-            </Button>
-          </MagneticButton>
-        </div>
-
-        {/* 4. Interactive 3D Card Dashboard Showcase in Light Theme */}
-        <CardReveal direction="bottom" duration={1.1} tilt3d={true}>
-          <div
-            ref={mockupContainerRef}
-            className="relative max-w-5xl mx-auto rounded-3xl bg-white border border-[#EAE6FE] shadow-soft-lg p-5 sm:p-8 text-left transition-all duration-200 transform-gpu cursor-pointer"
-            style={{ perspective: "1200px" }}
-          >
-            {/* Top Bar */}
-            <div className="flex items-center justify-between pb-5 mb-6 border-b border-[#EAE6FE]">
-              <div className="flex items-center gap-2">
-                <div className="w-3.5 h-3.5 rounded-full bg-[#FFC9DE]" />
-                <div className="w-3.5 h-3.5 rounded-full bg-[#B8E8D8]" />
-                <div className="w-3.5 h-3.5 rounded-full bg-[#D8D2FA]" />
-                <span className="text-xs font-bold text-[#6B6785] ml-3 hidden sm:inline">
-                  future-with-ai.app • SRS Enterprise LMS
-                </span>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <Badge variant="mint" className="text-xs font-black">
-                  <Flame className="w-3.5 h-3.5" /> 14 Day Streak
-                </Badge>
-                <Badge variant="pink" className="text-xs font-black">
-                  <Award className="w-3.5 h-3.5" /> 3,420 XP
-                </Badge>
-              </div>
-            </div>
-
-            {/* Inner Dashboard */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {/* Active Course */}
-              <div className="md:col-span-2 bg-[#FCFBFF] p-6 rounded-2xl border border-[#EAE6FE] flex flex-col justify-between">
-                <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <Badge variant="default">Module 3 • Neural Networks</Badge>
-                    <span className="text-xs font-bold text-[#8B7FE8]">78% Progress</span>
-                  </div>
-                  <h3 className="font-extrabold text-2xl text-[#1E1B2E] mb-2">
-                    Building Production LLM Agents
-                  </h3>
-                  <p className="text-xs text-[#6B6785] mb-4">
-                    Interactive lesson with ElevenLabs AI Voice explanation in English & Telugu.
-                  </p>
-
-                  <div className="w-full h-3 bg-[#D8D2FA]/50 rounded-full overflow-hidden mb-5">
-                    <div className="w-[78%] h-full bg-[#8B7FE8] rounded-full shadow-soft-sm transition-all duration-500" />
-                  </div>
-                </div>
-
-                <div className="bg-white p-4 rounded-xl border border-[#EAE6FE] flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <button
-                      onClick={() => setIsPlayingAudio(!isPlayingAudio)}
-                      className="w-10 h-10 rounded-xl bg-[#8B7FE8] text-white flex items-center justify-center shadow-soft-sm hover:scale-105 transition-transform"
-                    >
-                      {isPlayingAudio ? (
-                        <span className="flex h-3.5 w-3.5 rounded-sm bg-white" />
-                      ) : (
-                        <Play className="w-5 h-5 fill-white ml-0.5" />
-                      )}
-                    </button>
-
-                    <div>
-                      <h4 className="text-xs font-bold text-[#1E1B2E]">ElevenLabs AI Voice Narration</h4>
-                      <div className="flex items-center gap-1 mt-1">
-                        {[40, 75, 30, 90, 60, 100, 45, 80, 50, 70].map((h, i) => (
-                          <span
-                            key={i}
-                            className={`w-1 rounded-full transition-all ${
-                              isPlayingAudio ? "bg-[#8B7FE8] animate-pulse" : "bg-[#D8D2FA]"
-                            }`}
-                            style={{ height: isPlayingAudio ? `${h / 4}px` : "8px" }}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-
-                  <Button size="sm" variant="default" className="text-xs h-8 px-3">
-                    Resume Lesson
-                  </Button>
-                </div>
-              </div>
-
-              {/* Stats */}
-              <div className="space-y-4">
-                <div className="bg-white p-5 rounded-2xl border border-[#EAE6FE] shadow-soft-sm">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-bold text-[#6B6785]">Daily XP Target</span>
-                    <Zap className="w-4 h-4 text-[#8B7FE8]" />
-                  </div>
-                  <div className="text-3xl font-black text-[#8B7FE8]">350 / 500</div>
-                  <span className="text-[11px] font-medium text-[#6B6785]">Complete 1 quiz to claim rewards</span>
-                </div>
-
-                <div className="bg-[#B8E8D8]/40 p-5 rounded-2xl border border-[#B8E8D8] shadow-soft-sm">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h4 className="text-xs font-bold text-[#1E1B2E]">AI Coins Balance</h4>
-                      <span className="text-xl font-black text-[#1E1B2E]">1,850 Coins</span>
-                    </div>
-                    <Badge variant="mint">Wallet</Badge>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </CardReveal>
+        Scroll
       </div>
     </section>
   );
