@@ -3,7 +3,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Sparkles, ArrowRight, Star, Award, Laptop, Smartphone, Tablet, Users, CheckCircle } from "lucide-react";
+import { Sparkles, ArrowRight, Award, Laptop, Smartphone, Tablet, CheckCircle, Compass } from "lucide-react";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -116,11 +116,11 @@ function BentoCard({
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className={`bento-card group relative rounded-[36px] bg-white/90 border border-[#EAE6FE] backdrop-blur-2xl p-7 sm:p-9 overflow-hidden transition-all duration-300 ease-out select-none flex flex-col justify-between ${className}`}
+      className={`bento-card group relative rounded-[36px] bg-white border border-[#D8D2FA] shadow-[0_12px_36px_rgba(139,127,232,0.12)] p-7 sm:p-9 overflow-hidden transition-all duration-300 ease-out select-none flex flex-col justify-between ${className}`}
       style={{
         boxShadow: isHovered
-          ? "0 24px 50px rgba(139, 127, 232, 0.18)"
-          : "0 10px 32px rgba(139, 127, 232, 0.08)",
+          ? "0 24px 50px rgba(139, 127, 232, 0.22)"
+          : "0 12px 36px rgba(139, 127, 232, 0.10)",
         transform: isHovered ? "translateY(-6px)" : "translateY(0px)",
       }}
     >
@@ -136,7 +136,7 @@ function BentoCard({
 
       {/* Subtle Glowing Border on Hover */}
       <div
-        className={`absolute inset-0 rounded-[36px] pointer-events-none transition-opacity duration-300 border-2 border-[#8B7FE8]/50 ${
+        className={`absolute inset-0 rounded-[36px] pointer-events-none transition-opacity duration-300 border-2 border-[#8B7FE8] ${
           isHovered ? "opacity-100" : "opacity-0"
         }`}
       />
@@ -147,7 +147,7 @@ function BentoCard({
 }
 
 // ----------------------------------------------------
-// REBUILT VISUAL STORYTELLING BENTO SECTION
+// HIGH-CONTRAST REBUILT VISUAL STORYTELLING BENTO SECTION
 // ----------------------------------------------------
 export default function WhyChooseCoursiv() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -197,66 +197,64 @@ export default function WhyChooseCoursiv() {
       <FloatingParticlesCanvas />
 
       {/* Soft Ambient Radial Glow Blobs */}
-      <div className="pointer-events-none absolute -top-36 right-1/4 w-[550px] h-[550px] rounded-full bg-[#D8D2FA]/35 blur-[120px] animate-pulse" />
-      <div className="pointer-events-none absolute -bottom-36 left-1/4 w-[550px] h-[550px] rounded-full bg-[#FFC9DE]/35 blur-[130px] animate-pulse" />
-      <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[750px] h-[750px] rounded-full bg-[#B8E8D8]/25 blur-[150px]" />
+      <div className="pointer-events-none absolute -top-36 right-1/4 w-[550px] h-[550px] rounded-full bg-[#D8D2FA]/40 blur-[120px] animate-pulse" />
+      <div className="pointer-events-none absolute -bottom-36 left-1/4 w-[550px] h-[550px] rounded-full bg-[#FFC9DE]/40 blur-[130px] animate-pulse" />
+      <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[750px] h-[750px] rounded-full bg-[#B8E8D8]/30 blur-[150px]" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* SECTION HEADER (Minimal Text, High Impact) */}
+        {/* SECTION HEADER (High Impact Typography) */}
         <div className="storytelling-header flex flex-col items-center text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-4.5 py-1.5 rounded-full bg-[#F3F0FE] border border-[#EAE6FE] text-xs font-bold text-[#8B7FE8] mb-4 shadow-soft-sm">
-            <Sparkles className="w-4 h-4 text-[#8B7FE8]" />
+          <div className="inline-flex items-center gap-2 px-4.5 py-1.5 rounded-full bg-[#8B7FE8] text-white text-xs font-black mb-4 shadow-md">
+            <Sparkles className="w-4 h-4 text-white" />
             <span>Product Showcase</span>
           </div>
 
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#1E1B2E] mb-4">
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-[#1E1B2E] mb-4">
             Why Choose{" "}
-            <span className="bg-gradient-to-r from-[#8B7FE8] via-[#786BD6] to-[#A855F7] bg-clip-text text-transparent">
+            <span className="text-[#8B7FE8]">
               Coursiv AI?
             </span>
           </h2>
 
-          <p className="max-w-xl text-base sm:text-lg text-[#6B6785] font-medium leading-relaxed">
+          <p className="max-w-xl text-base sm:text-lg text-[#1E1B2E]/80 font-bold leading-relaxed">
             Everything you need to master today&apos;s leading AI tools with interactive lessons, hands-on projects, and industry-recognized certificates.
           </p>
         </div>
 
-        {/* ORGANIC BENTO GRID STORYTELLING (60% Illustration Weight) */}
+        {/* HIGH-CONTRAST ORGANIC BENTO GRID (60% Illustration Weight) */}
         <div className="bento-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
           
           {/* ==================================================
               CARD 1: HERO CARD (2X Width on Desktop) - 60% Visual
              ================================================== */}
-          <BentoCard className="lg:col-span-2 min-h-[540px] bg-gradient-to-br from-white via-[#FCFBFF] to-[#F3F0FE]/90">
+          <BentoCard className="lg:col-span-2 min-h-[540px] bg-white border border-[#D8D2FA]">
             {/* Top Text (40% Area) */}
             <div>
               <div className="flex items-center justify-between gap-3 mb-3">
-                <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-extrabold bg-[#FFC9DE] text-[#1E1B2E] border border-[#FFB0CC] shadow-sm">
-                  <Sparkles className="w-3.5 h-3.5 text-[#8B7FE8]" />
+                <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-black bg-[#8B7FE8] text-white shadow-sm">
+                  <Sparkles className="w-3.5 h-3.5 text-white" />
                   Guided Roadmap
                 </span>
-                <span className="px-3.5 py-1 rounded-full text-xs font-extrabold bg-[#B8E8D8] text-[#1E1B2E] border border-[#9DD9C5]">
+                <span className="px-3.5 py-1 rounded-full text-xs font-black bg-[#10B981] text-white shadow-sm">
                   30 Modules
                 </span>
               </div>
 
-              <h3 className="text-3xl sm:text-4xl font-extrabold text-[#1E1B2E] tracking-tight mb-2">
+              <h3 className="text-3xl sm:text-4xl font-black text-[#1E1B2E] tracking-tight mb-2">
                 30-Day AI Learning Challenge
               </h3>
-              <p className="text-sm sm:text-base text-[#6B6785] font-medium max-w-lg">
+              <p className="text-sm sm:text-base text-[#1E1B2E]/80 font-bold max-w-lg">
                 Follow a guided learning path that helps you master AI tools through bite-sized daily lessons.
               </p>
             </div>
 
             {/* HUGE 3D ROADMAP ILLUSTRATION (60% Area) */}
-            <div className="relative w-full h-64 sm:h-72 my-4 rounded-3xl bg-gradient-to-r from-[#F3F0FE] via-white to-[#EDF9F5] border border-[#EAE6FE] shadow-inner overflow-hidden flex items-center justify-center p-6">
+            <div className="relative w-full h-64 sm:h-72 my-4 rounded-3xl bg-[#F3F0FE] border border-[#D8D2FA] shadow-inner overflow-hidden flex items-center justify-center p-6">
               {/* Soft Ambient Background Blur */}
-              <div className="absolute inset-0 bg-[radial-gradient(#8B7FE8_1.5px,transparent_1.5px)] [background-size:24px_24px] opacity-[0.07] pointer-events-none" />
-              <div className="absolute -top-12 -right-12 w-48 h-48 rounded-full bg-[#FFC9DE]/40 blur-3xl pointer-events-none" />
-              <div className="absolute -bottom-12 -left-12 w-48 h-48 rounded-full bg-[#B8E8D8]/40 blur-3xl pointer-events-none" />
+              <div className="absolute inset-0 bg-[radial-gradient(#8B7FE8_1.5px,transparent_1.5px)] [background-size:24px_24px] opacity-[0.12] pointer-events-none" />
 
               {/* 3D Connected Line */}
-              <div className="absolute left-8 right-8 top-1/2 -translate-y-1/2 h-3 bg-gradient-to-r from-[#10B981] via-[#3B82F6] to-[#9333EA] rounded-full shadow-inner" />
+              <div className="absolute left-8 right-8 top-1/2 -translate-y-1/2 h-3.5 bg-gradient-to-r from-[#10B981] via-[#3B82F6] to-[#9333EA] rounded-full shadow-md" />
 
               {/* Floating 3D AI Logo Tiles */}
               <div className="relative z-10 w-full flex items-center justify-between">
@@ -269,18 +267,18 @@ export default function WhyChooseCoursiv() {
                 ].map((item, i) => (
                   <div key={i} className="flex flex-col items-center relative group">
                     {item.current && (
-                      <div className="absolute -top-11 text-xs font-extrabold px-3 py-1 rounded-full bg-[#8B7FE8] text-white shadow-lg whitespace-nowrap animate-bounce border border-white">
+                      <div className="absolute -top-11 text-xs font-black px-3.5 py-1.5 rounded-full bg-[#8B7FE8] text-white shadow-xl whitespace-nowrap animate-bounce border-2 border-white">
                         You are here ✦
                       </div>
                     )}
                     {/* 3D Acrylic Tile */}
                     <div
-                      className={`w-14 h-14 sm:w-18 sm:h-18 rounded-2xl bg-gradient-to-br ${item.bg} text-white flex items-center justify-center font-extrabold text-base sm:text-lg border-2 border-white shadow-xl transition-all duration-300 group-hover:scale-110 group-hover:-translate-y-2`}
-                      style={{ boxShadow: "0 12px 28px rgba(0,0,0,0.18)" }}
+                      className={`w-14 h-14 sm:w-18 sm:h-18 rounded-2xl bg-gradient-to-br ${item.bg} text-white flex items-center justify-center font-black text-base sm:text-lg border-2 border-white shadow-xl transition-all duration-300 group-hover:scale-110 group-hover:-translate-y-2`}
+                      style={{ boxShadow: "0 12px 28px rgba(0,0,0,0.22)" }}
                     >
                       {item.name.substring(0, 2)}
                     </div>
-                    <span className="text-xs font-extrabold text-[#1E1B2E] mt-2 hidden sm:block">
+                    <span className="text-xs font-black text-[#1E1B2E] mt-2 hidden sm:block">
                       {item.name}
                     </span>
                   </div>
@@ -290,12 +288,13 @@ export default function WhyChooseCoursiv() {
 
             {/* Bottom CTA */}
             <div className="flex items-center justify-between pt-2">
-              <span className="text-xs font-bold text-[#6B6785]">
+              <span className="text-xs font-extrabold text-[#1E1B2E]/70 flex items-center gap-1.5">
+                <Compass className="w-4 h-4 text-[#8B7FE8]" />
                 Daily 15-minute interactive lessons
               </span>
               <button
                 type="button"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl text-xs font-extrabold text-white bg-[#8B7FE8] hover:bg-[#786BD6] shadow-soft-sm transition-all duration-300 active:scale-95"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl text-xs font-black text-white bg-[#8B7FE8] hover:bg-[#786BD6] shadow-md transition-all duration-300 active:scale-95"
               >
                 <span>Start Challenge</span>
                 <ArrowRight className="w-4 h-4" />
@@ -306,36 +305,36 @@ export default function WhyChooseCoursiv() {
           {/* ==================================================
               CARD 2: TALL FEATURE CARD (Earn Certificates - 580px Height)
              ================================================== */}
-          <BentoCard className="lg:row-span-2 min-h-[580px] bg-gradient-to-b from-white via-[#FFF0F5]/50 to-[#FCFBFF] justify-between">
+          <BentoCard className="lg:row-span-2 min-h-[580px] bg-white border border-[#D8D2FA] justify-between">
             <div>
-              <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-extrabold bg-[#FFC9DE] text-[#1E1B2E] border border-[#FFB0CC] mb-4">
-                <Award className="w-3.5 h-3.5 text-[#8B7FE8]" />
+              <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-black bg-[#F59E0B] text-white shadow-sm mb-4">
+                <Award className="w-3.5 h-3.5 text-white" />
                 Industry Credential
               </div>
 
-              <h3 className="text-3xl font-extrabold text-[#1E1B2E] tracking-tight mb-2">
+              <h3 className="text-3xl font-black text-[#1E1B2E] tracking-tight mb-2">
                 Earn Certificates
               </h3>
-              <p className="text-sm text-[#6B6785] font-medium leading-relaxed mb-6">
+              <p className="text-sm text-[#1E1B2E]/80 font-bold leading-relaxed mb-6">
                 Complete learning paths and earn beautiful certificates that showcase your AI expertise.
               </p>
             </div>
 
-            {/* HUGE 3D CERTIFICATE PRODUCT ILLUSTRATION (60% Area) */}
-            <div className="relative w-full h-80 my-4 p-6 rounded-3xl bg-gradient-to-b from-[#FCFBFF] via-white to-[#F3F0FE] border border-[#EAE6FE] shadow-inner overflow-hidden flex flex-col justify-between items-center text-center">
+            {/* HUGE HIGH-CONTRAST CERTIFICATE ILLUSTRATION (60% Area) */}
+            <div className="relative w-full h-80 my-4 p-6 rounded-3xl bg-[#F3F0FE] border border-[#D8D2FA] shadow-inner overflow-hidden flex flex-col justify-between items-center text-center">
               {/* Background ambient lighting */}
-              <div className="absolute w-40 h-40 rounded-full bg-[#D8D2FA]/50 blur-3xl pointer-events-none" />
+              <div className="absolute w-40 h-40 rounded-full bg-[#8B7FE8]/30 blur-3xl pointer-events-none" />
 
               {/* 3D Certificate Document Graphic */}
-              <div className="relative z-10 w-full p-6 rounded-2xl bg-white border border-[#EAE6FE] shadow-xl flex flex-col items-center">
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-[#8B7FE8] to-[#D8D2FA] text-white flex items-center justify-center font-black text-3xl shadow-lg mb-3">
+              <div className="relative z-10 w-full p-6 rounded-2xl bg-white border-2 border-[#8B7FE8] shadow-2xl flex flex-col items-center">
+                <div className="w-16 h-16 rounded-2xl bg-[#8B7FE8] text-white flex items-center justify-center font-black text-3xl shadow-lg mb-3">
                   ✦
                 </div>
-                <span className="text-base font-black text-[#1E1B2E] tracking-tight block">
+                <span className="text-lg font-black text-[#1E1B2E] tracking-tight block">
                   Verified AI Specialist
                 </span>
-                <span className="text-xs text-[#6B6785] font-bold mt-1 flex items-center gap-1">
-                  <CheckCircle className="w-4 h-4 text-emerald-500" /> Shareable on LinkedIn & Resumes
+                <span className="text-xs text-[#10B981] font-black mt-1 flex items-center gap-1">
+                  <CheckCircle className="w-4 h-4 text-[#10B981]" /> Shareable on LinkedIn & Resumes
                 </span>
               </div>
 
@@ -343,7 +342,7 @@ export default function WhyChooseCoursiv() {
               <div className="relative z-10 w-full pt-3">
                 <button
                   type="button"
-                  className="w-full py-3 rounded-2xl bg-[#8B7FE8] text-white text-xs font-extrabold shadow-md hover:bg-[#786BD6] transition-colors flex items-center justify-center gap-1.5"
+                  className="w-full py-3 rounded-2xl bg-[#8B7FE8] text-white text-xs font-black shadow-md hover:bg-[#786BD6] transition-colors flex items-center justify-center gap-1.5"
                 >
                   <span>View Certificates</span>
                   <ArrowRight className="w-4 h-4" />
@@ -352,7 +351,7 @@ export default function WhyChooseCoursiv() {
             </div>
 
             <div className="text-center pt-2">
-              <span className="text-xs font-bold text-[#6B6785]">
+              <span className="text-xs font-extrabold text-[#1E1B2E]/70">
                 Recognized by leading tech employers worldwide
               </span>
             </div>
@@ -361,35 +360,35 @@ export default function WhyChooseCoursiv() {
           {/* ==================================================
               CARD 3: MEDIUM ILLUSTRATION CARD (Learn by Building)
              ================================================== */}
-          <BentoCard className="min-h-[440px] bg-gradient-to-br from-white via-[#EDF9F5]/40 to-[#FCFBFF]">
+          <BentoCard className="min-h-[440px] bg-white border border-[#D8D2FA]">
             <div>
-              <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-extrabold bg-[#B8E8D8] text-[#1E1B2E] border border-[#9DD9C5] mb-4">
-                <Sparkles className="w-3.5 h-3.5 text-[#10B981]" />
+              <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-black bg-[#10B981] text-white shadow-sm mb-4">
+                <Sparkles className="w-3.5 h-3.5 text-white" />
                 Hands-On Projects
               </div>
 
-              <h3 className="text-2xl sm:text-3xl font-extrabold text-[#1E1B2E] tracking-tight mb-2">
+              <h3 className="text-2xl sm:text-3xl font-black text-[#1E1B2E] tracking-tight mb-2">
                 Learn by Building
               </h3>
-              <p className="text-xs sm:text-sm text-[#6B6785] font-medium leading-relaxed mb-4">
+              <p className="text-xs sm:text-sm text-[#1E1B2E]/80 font-bold leading-relaxed mb-4">
                 Build real-world projects using the most popular AI platforms.
               </p>
             </div>
 
-            {/* LARGE FLOATING 3D GLASS CARDS SHOWCASE (60% Area) */}
-            <div className="relative w-full h-52 p-4 rounded-3xl bg-gradient-to-b from-[#FCFBFF] to-[#EDF9F5] border border-[#EAE6FE] shadow-inner overflow-hidden flex items-center justify-center">
-              <div className="grid grid-cols-3 gap-2.5 w-full">
+            {/* HIGH-CONTRAST SOLID 3D AI TILES SHOWCASE (60% Area) */}
+            <div className="relative w-full h-52 p-4 rounded-3xl bg-[#F3F0FE] border border-[#D8D2FA] shadow-inner overflow-hidden flex items-center justify-center">
+              <div className="grid grid-cols-3 gap-3 w-full">
                 {[
-                  { name: "ChatGPT", col: "bg-[#10B981]/20 border-[#10B981]/40 text-[#0E8566]" },
-                  { name: "Claude", col: "bg-[#F59E0B]/20 border-[#F59E0B]/40 text-[#A6570A]" },
-                  { name: "Gemini", col: "bg-[#3B82F6]/20 border-[#3B82F6]/40 text-[#1D4ED8]" },
-                  { name: "Midjourney", col: "bg-[#9333EA]/20 border-[#9333EA]/40 text-[#7E22CE]" },
-                  { name: "Cursor", col: "bg-[#38BDF8]/20 border-[#38BDF8]/40 text-[#0284C7]" },
-                  { name: "Lovable", col: "bg-[#F43F5E]/20 border-[#F43F5E]/40 text-[#E11D48]" },
+                  { name: "ChatGPT", bg: "bg-[#10B981]" },
+                  { name: "Claude", bg: "bg-[#F59E0B]" },
+                  { name: "Gemini", bg: "bg-[#3B82F6]" },
+                  { name: "Midjourney", bg: "bg-[#9333EA]" },
+                  { name: "Cursor", bg: "bg-[#0284C7]" },
+                  { name: "Lovable", bg: "bg-[#F43F5E]" },
                 ].map((item, i) => (
                   <div
                     key={i}
-                    className={`p-3 rounded-2xl text-center text-xs font-black border backdrop-blur-md shadow-sm transition-all duration-300 group-hover:scale-105 ${item.col}`}
+                    className={`p-3 rounded-2xl text-center text-xs font-black text-white shadow-md border-2 border-white transition-all duration-300 group-hover:scale-105 ${item.bg}`}
                   >
                     {item.name}
                   </div>
@@ -401,34 +400,40 @@ export default function WhyChooseCoursiv() {
           {/* ==================================================
               CARD 4: MEDIUM ILLUSTRATION CARD (Learn Anywhere)
              ================================================== */}
-          <BentoCard className="min-h-[440px] bg-gradient-to-br from-white via-[#F3F0FE]/60 to-[#FCFBFF]">
+          <BentoCard className="min-h-[440px] bg-white border border-[#D8D2FA]">
             <div>
-              <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-extrabold bg-[#D8D2FA] text-[#4B3FBF] border border-[#C4BDFA] mb-4">
-                <Smartphone className="w-3.5 h-3.5 text-[#8B7FE8]" />
+              <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-black bg-[#8B7FE8] text-white shadow-sm mb-4">
+                <Smartphone className="w-3.5 h-3.5 text-white" />
                 Multi-Device Access
               </div>
 
-              <h3 className="text-2xl sm:text-3xl font-extrabold text-[#1E1B2E] tracking-tight mb-2">
+              <h3 className="text-2xl sm:text-3xl font-black text-[#1E1B2E] tracking-tight mb-2">
                 Learn Anywhere
               </h3>
-              <p className="text-xs sm:text-sm text-[#6B6785] font-medium leading-relaxed mb-4">
+              <p className="text-xs sm:text-sm text-[#1E1B2E]/80 font-bold leading-relaxed mb-4">
                 Watch videos, read notes, complete quizzes, and listen to lessons from any device.
               </p>
             </div>
 
-            {/* LARGE DEVICE SHOWCASE ILLUSTRATION (60% Area) */}
-            <div className="relative w-full h-52 p-5 rounded-3xl bg-gradient-to-b from-[#FCFBFF] to-[#F3F0FE] border border-[#EAE6FE] shadow-inner overflow-hidden flex items-center justify-around text-[#8B7FE8]">
+            {/* HIGH-CONTRAST DEVICE TILES SHOWCASE (60% Area) */}
+            <div className="relative w-full h-52 p-5 rounded-3xl bg-[#F3F0FE] border border-[#D8D2FA] shadow-inner overflow-hidden flex items-center justify-around">
               <div className="flex flex-col items-center group/dev">
-                <Laptop className="w-12 h-12 drop-shadow-md transition-transform group-hover/dev:scale-110" />
-                <span className="text-xs font-extrabold text-[#1E1B2E] mt-1.5">Desktop</span>
+                <div className="w-14 h-14 rounded-2xl bg-[#8B7FE8] text-white flex items-center justify-center shadow-lg border-2 border-white transition-transform group-hover/dev:scale-110">
+                  <Laptop className="w-7 h-7" />
+                </div>
+                <span className="text-sm font-black text-[#1E1B2E] mt-2 block">Desktop</span>
               </div>
               <div className="flex flex-col items-center group/dev">
-                <Tablet className="w-10 h-10 drop-shadow-md transition-transform group-hover/dev:scale-110" />
-                <span className="text-xs font-extrabold text-[#1E1B2E] mt-1.5">Tablet</span>
+                <div className="w-14 h-14 rounded-2xl bg-[#8B7FE8] text-white flex items-center justify-center shadow-lg border-2 border-white transition-transform group-hover/dev:scale-110">
+                  <Tablet className="w-7 h-7" />
+                </div>
+                <span className="text-sm font-black text-[#1E1B2E] mt-2 block">Tablet</span>
               </div>
               <div className="flex flex-col items-center group/dev">
-                <Smartphone className="w-9 h-9 drop-shadow-md transition-transform group-hover/dev:scale-110" />
-                <span className="text-xs font-extrabold text-[#1E1B2E] mt-1.5">Mobile</span>
+                <div className="w-14 h-14 rounded-2xl bg-[#8B7FE8] text-white flex items-center justify-center shadow-lg border-2 border-white transition-transform group-hover/dev:scale-110">
+                  <Smartphone className="w-7 h-7" />
+                </div>
+                <span className="text-sm font-black text-[#1E1B2E] mt-2 block">Mobile</span>
               </div>
             </div>
           </BentoCard>
