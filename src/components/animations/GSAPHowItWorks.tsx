@@ -24,9 +24,9 @@ export default function GSAPHowItWorks() {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top",
-          // Extended scroll length by multiplying by 2 for a slower, smoother scroll experience
-          end: () => `+=${(containerRef.current?.scrollWidth || window.innerWidth) * 2}`,
-          scrub: 1,
+          // Extended scroll length by multiplying by 4 for a much slower, leisurely scroll experience
+          end: () => `+=${(containerRef.current?.scrollWidth || window.innerWidth) * 4}`,
+          scrub: 1.5,
           pin: true,
           anticipatePin: 1,
           snap: 1 / (sections.length - 1),
@@ -47,8 +47,8 @@ export default function GSAPHowItWorks() {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
-          end: () => `+=${(containerRef.current?.scrollWidth || window.innerWidth) * 2}`,
-          scrub: 0.5, // Smooth scrubbing
+          end: () => `+=${(containerRef.current?.scrollWidth || window.innerWidth) * 4}`,
+          scrub: 1.5, // Even smoother scrubbing
         },
       });
 

@@ -42,13 +42,10 @@ export default function GSAPHero() {
         // 3. Paragraph fade
         tl.to(".hero-para", { opacity: 1, duration: 0.8 }, "-=0.5");
 
-        // 4. Action buttons
+        // 4. Hero action buttons
         tl.to(".hero-actions", { opacity: 1, duration: 0.8 }, "-=0.6");
 
-        // 5. Scroll cue
-        tl.to(".hero-scroll-cue", { opacity: 1, duration: 0.6 }, "-=0.4");
-
-        // 6. Floating shapes entrance
+        // 5. Floating shapes pop in
         tl.from(".hero-shape", {
           opacity: 0,
           scale: 0.6,
@@ -184,14 +181,6 @@ export default function GSAPHero() {
         className="hero-shape shape-diamond absolute top-[62%] right-[32%] w-[26px] h-[26px] bg-[#FFC9DE] rounded-[6px] rotate-45 will-change-transform"
         data-speed="0.7"
       />
-
-      {/* ═══ Scroll cue indicator ═══ */}
-      <div className="hero-scroll-cue opacity-0 absolute bottom-9 left-[6vw] flex items-center gap-2.5 text-xs text-[#6B6785]">
-        <div className="w-px h-[34px] bg-[#6B6785] relative overflow-hidden">
-          <span className="absolute top-[-100%] left-0 w-full h-full bg-[#8B7FE8] animate-[scrollline_1.8s_ease-in-out_infinite]" />
-        </div>
-        Scroll
-      </div>
     </section>
   );
 }
