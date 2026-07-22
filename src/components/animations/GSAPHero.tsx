@@ -149,7 +149,7 @@ export default function GSAPHero() {
 
       {/* Conic gradient ring */}
       <div
-        className="hero-shape shape-ring absolute top-[14%] right-[20%] w-[120px] h-[120px] rounded-full will-change-transform"
+        className="hero-shape shape-ring hidden lg:block absolute top-[14%] right-[20%] w-[120px] h-[120px] rounded-full will-change-transform"
         data-speed="0.4"
         style={{
           background: "conic-gradient(from 180deg, #8B7FE8, #B8E8D8, #FFC9DE, #8B7FE8)",
@@ -160,7 +160,7 @@ export default function GSAPHero() {
 
       {/* Gradient blob */}
       <div
-        className="hero-shape shape-blob absolute top-[46%] right-[6%] w-[230px] h-[230px] will-change-transform"
+        className="hero-shape shape-blob hidden lg:block absolute top-[46%] right-[6%] w-[230px] h-[230px] will-change-transform"
         data-speed="0.25"
         style={{
           background: "radial-gradient(circle at 32% 28%, #D8D2FA, #8B7FE8 75%)",
@@ -170,7 +170,7 @@ export default function GSAPHero() {
 
       {/* Pill badge */}
       <div
-        className="hero-shape shape-pill absolute top-[8%] right-[44%] w-[150px] h-[64px] rounded-full bg-[#B8E8D8] flex items-center justify-center font-[var(--font-display)] font-semibold text-sm text-[#1E1B2E] will-change-transform"
+        className="hero-shape shape-pill hidden lg:flex absolute top-[8%] right-[44%] w-[150px] h-[64px] rounded-full bg-[#B8E8D8] items-center justify-center font-[var(--font-display)] font-semibold text-sm text-[#1E1B2E] will-change-transform"
         data-speed="0.55"
       >
         Level up daily
@@ -178,7 +178,7 @@ export default function GSAPHero() {
 
       {/* Diamond accent */}
       <div
-        className="hero-shape shape-diamond absolute top-[62%] right-[32%] w-[26px] h-[26px] bg-[#FFC9DE] rounded-[6px] rotate-45 will-change-transform"
+        className="hero-shape shape-diamond hidden lg:block absolute top-[62%] right-[32%] w-[26px] h-[26px] bg-[#FFC9DE] rounded-[6px] rotate-45 will-change-transform"
         data-speed="0.7"
       />
     </section>

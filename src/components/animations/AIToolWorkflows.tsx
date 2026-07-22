@@ -53,7 +53,7 @@ export default function AIToolWorkflows() {
         </div>
 
         {/* Right Side: Vertical Marquee */}
-        <div className="relative h-[600px] overflow-hidden marquee-container mask-vertical flex justify-center lg:justify-end">
+        <div className="relative h-[400px] lg:h-[600px] overflow-hidden marquee-container mask-vertical flex justify-center lg:justify-end mt-10 lg:mt-0">
           
           {/* Fading Edges */}
           <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#FCFBFF] to-transparent z-10 pointer-events-none"></div>
