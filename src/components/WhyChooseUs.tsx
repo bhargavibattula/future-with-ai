@@ -86,8 +86,8 @@ export default function WhyChooseUs() {
             </p>
             <div className="absolute bottom-6 left-6 right-6 h-20 flex items-center justify-center gap-1 opacity-60">
               {/* Fake Audio Waveform */}
-              {[...Array(20)].map((_, i) => (
-                <div key={i} className="w-1.5 bg-[#8B7FE8] rounded-full" style={{ height: `${20 + ((i * 47) % 80)}%` }}></div>
+              {[40, 75, 30, 85, 50, 95, 60, 35, 80, 45, 90, 65, 25, 70, 55, 85, 40, 75, 50, 30].map((h, i) => (
+                <div key={i} className="w-1.5 bg-[#8B7FE8] rounded-full" style={{ height: `${h}%` }}></div>
               ))}
               <div className="absolute bottom-2 right-2 w-10 h-10 bg-[#8B7FE8] rounded-full flex items-center justify-center shadow-lg cursor-pointer hover:scale-105 transition-transform">
                 <div className="w-0 h-0 border-t-[6px] border-t-transparent border-l-[10px] border-l-white border-b-[6px] border-b-transparent ml-1"></div>
