@@ -1,4 +1,4 @@
-import { Search, Compass, CheckCircle2, ShieldCheck, Zap } from "lucide-react";
+import { Search, ShieldCheck, Zap } from "lucide-react";
 
 export default function HowItWorks() {
   const steps = [

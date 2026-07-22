@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { Sparkles, PenTool, Palette, Code2, ArrowRight } from "lucide-react";
-import { CATEGORIES } from "@/data/tools";
 
 interface HeroProps {
   onCategorySelect: (categorySlug: string) => void;
@@ -18,7 +17,7 @@ export default function Hero({ onCategorySelect, selectedCategory }: HeroProps) 
       setWordIndex((prev) => (prev + 1) % dynamicWords.length);
     }, 2800);
     return () => clearInterval(interval);
-  }, []);
+  }, [dynamicWords.length]);
 
   return (
     <section className="relative overflow-hidden pt-12 pb-20 md:pt-16 md:pb-28">

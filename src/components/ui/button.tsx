@@ -101,7 +101,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     return (
       <Comp
-        ref={buttonRef as any}
+        ref={buttonRef as unknown as React.Ref<HTMLButtonElement>}
         className={cn(buttonVariants({ variant, size, className }))}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}

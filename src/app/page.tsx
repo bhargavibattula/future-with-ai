@@ -3,7 +3,9 @@
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import GSAPHero from "@/components/animations/GSAPHero";
+import ScrollProgress from "@/components/animations/system/ScrollProgress";
 import GSAPTextRevealSection from "@/components/animations/GSAPTextRevealSection";
+import GSAPStreakHeatmap from "@/components/animations/GSAPStreakHeatmap";
 import GSAPHorizontalScroll from "@/components/animations/GSAPHorizontalScroll";
 import GSAPParallaxGrid from "@/components/animations/GSAPParallaxGrid";
 import InteractiveLearningDashboard from "@/components/InteractiveLearningDashboard";
@@ -26,6 +28,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FCFBFF] text-[#1E1B2E] selection:bg-[#D8D2FA] selection:text-[#1E1B2E]">
+      <ScrollProgress />
       {/* Navbar Header */}
       <Navbar onSearchClick={() => handleCategorySelect("All")} />
 
@@ -36,6 +39,9 @@ export default function Home() {
 
         {/* GSAP Text Reveal Section (GSAP.com Homepage Inspired) */}
         <GSAPTextRevealSection />
+
+        {/* Learning Journey Heatmap Streak Section */}
+        <GSAPStreakHeatmap />
 
         {/* GSAP Pin-Scroll Horizontal Showcase Section */}
         <GSAPHorizontalScroll />

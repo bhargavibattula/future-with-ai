@@ -1,6 +1,6 @@
 "use client";
 
-import { X, Star, ExternalLink, ShieldCheck, Zap, Users, Sparkles, CheckCircle2 } from "lucide-react";
+import { X, Star, ExternalLink, Zap, Users, Sparkles, CheckCircle2 } from "lucide-react";
 import { AITool } from "@/data/tools";
 
 interface ToolModalProps {

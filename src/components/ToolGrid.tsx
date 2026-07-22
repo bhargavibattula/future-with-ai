@@ -96,7 +96,7 @@ export default function ToolGrid({
               <SlidersHorizontal className="w-3.5 h-3.5 text-[#8B7FE8]" />
               <select
                 value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as any)}
+                onChange={(e) => setSortBy(e.target.value as "trending" | "rating" | "reviews")}
                 aria-label="Sort tools"
                 className="bg-transparent text-[#1E1B2E] font-semibold outline-none cursor-pointer"
               >
@@ -188,7 +188,7 @@ export default function ToolGrid({
           </div>
           <h3 className="text-xl font-bold text-[#1E1B2E] mb-2">No AI tools found</h3>
           <p className="text-sm text-[#6B6785] mb-6">
-            We couldn't find any tools matching your search criteria. Try removing filters or searching for another term.
+            We couldn&apos;t find any tools matching your search criteria. Try removing filters or searching for another term.
           </p>
           <button
             onClick={() => {

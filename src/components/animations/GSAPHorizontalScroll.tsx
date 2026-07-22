@@ -4,7 +4,7 @@ import { useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import { BookOpen, Flame, Volume2, ShieldCheck, HelpCircle, ArrowRight, CheckCircle2, Sparkles, QrCode, Zap } from "lucide-react";
+import { BookOpen, Flame, Volume2, ShieldCheck, HelpCircle, ArrowRight, CheckCircle2, Sparkles, QrCode } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 

@@ -2,17 +2,13 @@
 
 import { useState } from "react";
 import {
-  BookOpen,
   Flame,
   Award,
   Volume2,
-  CheckCircle2,
   Sparkles,
   Zap,
   ShieldCheck,
   Play,
-  QrCode,
-  Users,
   BarChart3,
   PlusCircle,
 } from "lucide-react";
