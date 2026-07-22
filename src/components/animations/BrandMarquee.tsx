@@ -13,7 +13,7 @@ import {
   SiSpotify, 
   SiTesla 
 } from "react-icons/si";
-import { FaAmazon } from "react-icons/fa";
+import { FaAmazon } from "react-icons/fa6";
 
 const logos = [
   { name: "Google", Icon: SiGoogle },
