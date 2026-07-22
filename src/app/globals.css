@@ -40,6 +40,44 @@
   --color-lavender-muted: #6B6785;
 }
 
+/* Glowing Cursor Effect */
+.cursor-glow {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle 600px at var(--x, 50vw) var(--y, 50vh), rgba(139, 127, 232, 0.08), transparent 40%);
+  z-index: 50;
+}
+
+/* Marquee Animations */
+@keyframes marquee-up { 
+  0% { transform: translateY(0); } 
+  100% { transform: translateY(-50%); } 
+}
+@keyframes marquee-down { 
+  0% { transform: translateY(-50%); } 
+  100% { transform: translateY(0); } 
+}
+@keyframes marquee-horizontal { 
+  0% { transform: translateX(0); } 
+  100% { transform: translateX(-50%); } 
+}
+.animate-marquee-up { 
+  animation: marquee-up 35s linear infinite; 
+}
+.animate-marquee-down { 
+  animation: marquee-down 40s linear infinite; 
+}
+.animate-marquee-horizontal { 
+  animation: marquee-horizontal 30s linear infinite; 
+}
+.marquee-container:hover .animate-marquee-up, .marquee-container:hover .animate-marquee-down { 
+  animation-play-state: paused; 
+}
+@media (max-width: 768px) { 
+  .animate-marquee-up { animation-duration: 45s; } 
+}
+
 /* Background Soft Glow Blobs */
 .bg-blob-violet {
   background: radial-gradient(circle, rgba(216, 210, 250, 0.7) 0%, rgba(252, 251, 255, 0) 70%);
