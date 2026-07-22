@@ -13,9 +13,9 @@ export async function sendOTPEmail(
   purpose: "2FA" | "Forgot Password" | "Sign Up 2FA" = "2FA"
 ) {
   const rawUser = process.env.EMAIL_USER || "shanmukharani20@gmail.com";
-  const rawPass = process.env.EMAIL_PASS || "ddteqmgakedmtno";
+  const rawPass = process.env.EMAIL_PASS || "jtytkdvizknjajvi";
   const user = rawUser.trim();
-  const pass = rawPass.trim();
+  const pass = rawPass.replace(/\s+/g, "").trim();
 
   // Configure Nodemailer Gmail Transport
   const transporter = nodemailer.createTransport({
