@@ -175,14 +175,6 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-[#8B7FE8] transition-colors flex items-center gap-1.5">
-                  <span>Careers</span>
-                  <span className="px-2 py-0.5 rounded-full bg-[#10B981] text-white text-[9px] font-black">
-                    Hiring
-                  </span>
-                </a>
-              </li>
-              <li>
                 <a href="#" className="hover:text-[#8B7FE8] transition-colors">
                   Privacy Policy
                 </a>
@@ -193,7 +185,7 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-[#8B7FE8] transition-colors">
+                <a href="#" className="hover:text-[#8B7FE8] transition-[#8B7FE8]">
                   Security & Trust
                 </a>
               </li>
@@ -202,25 +194,10 @@ export default function Footer() {
 
         </div>
 
-        {/* BOTTOM COPYRIGHT & STATUS BAR */}
+        {/* BOTTOM COPYRIGHT */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-bold text-[#4A4665]">
           <div className="flex items-center gap-3">
             <span>© {new Date().getFullYear()} Future.ai Inc. All rights reserved.</span>
-          </div>
-
-          <div className="flex items-center gap-6">
-            {/* System Status Pill */}
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#EDF9F5] border border-[#B8E8D8] text-[11px] font-black text-[#10B981]">
-              <span className="w-2 h-2 rounded-full bg-[#10B981] animate-ping" />
-              <span>All Systems Operational</span>
-            </div>
-
-            {/* Built with love indicator */}
-            <div className="flex items-center gap-1.5 text-xs font-bold text-[#4A4665]">
-              <span>Crafted with</span>
-              <Heart className="w-3.5 h-3.5 fill-[#F43F5E] text-[#F43F5E]" />
-              <span>for AI Learners</span>
-            </div>
           </div>
         </div>
 
