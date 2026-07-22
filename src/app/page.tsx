@@ -10,7 +10,6 @@ import GSAPHowItWorks from "@/components/animations/GSAPHowItWorks";
 import GSAPParallaxGrid from "@/components/animations/GSAPParallaxGrid";
 import InteractiveLearningDashboard from "@/components/InteractiveLearningDashboard";
 import ExploreAICourses from "@/components/ExploreAICourses";
-import WhyChooseCoursiv from "@/components/WhyChooseCoursiv";
 import ToolModal from "@/components/ToolModal";
 import Footer from "@/components/Footer";
 import { AITool } from "@/data/tools";
@@ -38,9 +37,6 @@ export default function Home() {
 
         {/* Premium Infinite Horizontal Scrolling "Explore AI Courses" Section */}
         <ExploreAICourses />
-
-        {/* Brand-New Bento Grid "Why Choose Coursiv AI?" Section */}
-        <WhyChooseCoursiv />
 
         {/* GSAP Text Reveal Section (GSAP.com Homepage Inspired) */}
         <GSAPTextRevealSection />
