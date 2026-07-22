@@ -9,17 +9,15 @@ import GSAPStreakHeatmap from "@/components/animations/GSAPStreakHeatmap";
 import GSAPHowItWorks from "@/components/animations/GSAPHowItWorks";
 import GSAPParallaxGrid from "@/components/animations/GSAPParallaxGrid";
 import InteractiveLearningDashboard from "@/components/InteractiveLearningDashboard";
-import ToolGrid from "@/components/ToolGrid";
+import ExploreAICourses from "@/components/ExploreAICourses";
 import ToolModal from "@/components/ToolModal";
 import Footer from "@/components/Footer";
 import { AITool } from "@/data/tools";
 
 export default function Home() {
-  const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [activeModalTool, setActiveModalTool] = useState<AITool | null>(null);
 
-  const handleCategorySelect = (categorySlug: string) => {
-    setSelectedCategory(categorySlug);
+  const handleSearchClick = () => {
     const exploreSection = document.getElementById("explore");
     if (exploreSection) {
       exploreSection.scrollIntoView({ behavior: "smooth" });
@@ -30,19 +28,15 @@ export default function Home() {
     <div className="min-h-screen flex flex-col bg-[#FCFBFF] text-[#1E1B2E] selection:bg-[#D8D2FA] selection:text-[#1E1B2E]">
       <ScrollProgress />
       {/* Navbar Header */}
-      <Navbar onSearchClick={() => handleCategorySelect("All")} />
+      <Navbar onSearchClick={handleSearchClick} />
 
       {/* Main Content Body */}
       <main className="flex-grow">
         {/* GSAP Hero Section */}
         <GSAPHero />
 
-        {/* AI Tools & Learning Directory Grid */}
-        <ToolGrid
-          selectedCategory={selectedCategory}
-          onCategorySelect={setSelectedCategory}
-          onOpenModal={(tool) => setActiveModalTool(tool)}
-        />
+        {/* Premium Infinite Horizontal Scrolling "Explore AI Courses" Section */}
+        <ExploreAICourses />
 
         {/* GSAP Text Reveal Section (GSAP.com Homepage Inspired) */}
         <GSAPTextRevealSection />
