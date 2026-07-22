@@ -4,6 +4,8 @@ import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import GSAPHero from "@/components/animations/GSAPHero";
 import BrandMarquee from "@/components/animations/BrandMarquee";
+import AILayoffsStats from "@/components/AILayoffsStats";
+import WhyChooseUs from "@/components/WhyChooseUs";
 import ScrollProgress from "@/components/animations/system/ScrollProgress";
 import GSAPTextRevealSection from "@/components/animations/GSAPTextRevealSection";
 import GSAPStreakHeatmap from "@/components/animations/GSAPStreakHeatmap";
@@ -20,7 +22,6 @@ import { AITool } from "@/data/tools";
 
 export default function Home() {
   const [activeModalTool, setActiveModalTool] = useState<AITool | null>(null);
-  const [selectedCategory, setSelectedCategory] = useState("All");
 
   const handleSearchClick = () => {
     const exploreSection = document.getElementById("explore");
@@ -43,12 +44,11 @@ export default function Home() {
         {/* Brand Marquee (People who learn from us) */}
         <BrandMarquee />
 
-        {/* AI Tools & Learning Directory Grid */}
-        <ToolGrid
-          selectedCategory={selectedCategory}
-          onCategorySelect={setSelectedCategory}
-          onOpenModal={(tool) => setActiveModalTool(tool)}
-        />
+        {/* AI Job Statistics Section */}
+        <AILayoffsStats />
+
+        {/* Why Choose Us Bento Grid */}
+        <WhyChooseUs />
 
         {/* Premium Infinite Horizontal Scrolling "Explore AI Courses" Section */}
         <ExploreAICourses />

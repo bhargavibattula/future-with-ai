@@ -10,7 +10,7 @@ export default function GSAPHowItWorks() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
+  useGSAP(() => {
     gsap.registerPlugin(ScrollTrigger, TextPlugin);
 
     const sections = gsap.utils.toArray<HTMLElement>(".step");
@@ -32,17 +32,7 @@ export default function GSAPHowItWorks() {
           snap: 1 / (sections.length - 1),
         },
       });
-    });
 
-    return () => {
-      ScrollTrigger.getAll().forEach((t) => t.kill());
-    };
-  }, []);
-
-  useGSAP(() => {
-    const mm = gsap.matchMedia();
-
-    mm.add("(min-width: 1024px)", () => {
       // Timeline for scrubbed interactive animations
       const tl = gsap.timeline({
         scrollTrigger: {
