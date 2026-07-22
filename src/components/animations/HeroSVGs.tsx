@@ -101,3 +101,49 @@ export const FloatingCubeSVG = ({ className = "w-16 h-16" }: { className?: strin
     <path d="M50 52.5L15 35" stroke="#FF2A85" strokeWidth="2.5" />
   </svg>
 );
+
+export const CertificateRibbonSVG = ({ className = "w-16 h-16" }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="certGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#8B7FE8" />
+        <stop offset="100%" stopColor="#D8D2FA" />
+      </linearGradient>
+    </defs>
+    <circle cx="50" cy="40" r="25" stroke="url(#certGrad)" strokeWidth="4" fill="#1E1B2E" />
+    <path d="M50 25L54 34L64 35L56 42L59 52L50 46L41 52L44 42L36 35L46 34L50 25Z" fill="#8B7FE8" />
+    <path d="M38 60L30 85L50 75L70 85L62 60" stroke="url(#certGrad)" strokeWidth="3.5" fill="none" strokeLinejoin="round" />
+  </svg>
+);
+
+export const QuizPuzzleSVG = ({ className = "w-16 h-16" }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="quizGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#B8E8D8" />
+        <stop offset="100%" stopColor="#8B7FE8" />
+      </linearGradient>
+    </defs>
+    <rect x="20" y="20" width="60" height="60" rx="12" stroke="url(#quizGrad)" strokeWidth="3.5" fill="#1E1B2E" />
+    <path d="M40 35H60M35 50H65M45 65H55" stroke="url(#quizGrad)" strokeWidth="3.5" strokeLinecap="round" />
+    <circle cx="68" cy="35" r="4" fill="#B8E8D8" />
+  </svg>
+);
+
+export const CircuitPathSVG = ({ className = "w-full h-24" }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 600 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M10 50 Q 150 10 300 50 T 590 50"
+      stroke="url(#circuitGrad)"
+      strokeWidth="3"
+      strokeDasharray="8 8"
+    />
+    <defs>
+      <linearGradient id="circuitGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stopColor="#8B7FE8" />
+        <stop offset="50%" stopColor="#B8E8D8" />
+        <stop offset="100%" stopColor="#FFC9DE" />
+      </linearGradient>
+    </defs>
+  </svg>
+);
