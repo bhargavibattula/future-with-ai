@@ -218,3 +218,98 @@
     top: 100%;
   }
 }
+
+/* ============================================================
+   COMPREHENSIVE DARK MODE OVERRIDES
+   Targets every hardcoded Tailwind hex class used across all
+   page components — no component files need to be edited.
+   ============================================================ */
+
+/* --- Backgrounds --- */
+.dark .bg-\[#FCFBFF\]  { background-color: #0F0D1A !important; }
+.dark .bg-white         { background-color: #16132A !important; }
+.dark .bg-\[#F3F0FF\]  { background-color: #1A1730 !important; }
+.dark .bg-\[#F3F0FE\]  { background-color: #1A1730 !important; }
+.dark .bg-\[#EDF9F5\]  { background-color: #0D2018 !important; }
+.dark .bg-\[#FFF0F5\]  { background-color: #221220 !important; }
+.dark .bg-\[#D8D2FA\]  { background-color: #2D2850 !important; }
+.dark .bg-\[#EAE6FE\]  { background-color: #221E42 !important; }
+.dark .bg-\[#FFFFFF\]  { background-color: #16132A !important; }
+.dark .bg-\[#FCFBFF\]\/50 { background-color: rgba(15,13,26,0.5) !important; }
+.dark .bg-\[#F8F7FF\]  { background-color: #13102A !important; }
+.dark .bg-\[#E8E4FF\]  { background-color: #1E1B3A !important; }
+
+/* Gradient backgrounds */
+.dark .from-\[#FCFBFF\] { --tw-gradient-from: #0F0D1A !important; }
+.dark .to-\[#FCFBFF\]   { --tw-gradient-to:   #0F0D1A !important; }
+.dark .via-\[#FCFBFF\]  { --tw-gradient-via:  #0F0D1A !important; }
+.dark .from-white        { --tw-gradient-from: #16132A !important; }
+.dark .to-white          { --tw-gradient-to:   #16132A !important; }
+
+/* --- Text colors — use body-level cascade to avoid CSS-optimizer hash warnings --- */
+.dark body,
+.dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6,
+.dark p, .dark span:not([class*="text-["]),
+.dark a:not([class*="text-["]) {
+  color: inherit;
+}
+
+/* Override the specific hardcoded dark text classes */
+.dark [class~="text-lavender-text"]   { color: #F0EEFF !important; }
+
+/* Broad fallback: any element whose only text colour is the dark brand colour */
+.dark section, .dark main, .dark article, .dark nav, .dark header, .dark footer {
+  color: #F0EEFF;
+}
+
+/* --- Border colors --- */
+.dark .border-\[#EAE6FE\]            { border-color: #2D2850 !important; }
+.dark .border-\[#EAE6FE\]\/60        { border-color: rgba(45,40,80,0.6) !important; }
+.dark .border-\[#EAE6FE\]\/50        { border-color: rgba(45,40,80,0.5) !important; }
+.dark .border-\[#EAE6FE\]\/80        { border-color: rgba(45,40,80,0.8) !important; }
+.dark .border-\[#D8D2FA\]            { border-color: #3D3870 !important; }
+.dark .border-\[#D8D2FA\]\/40        { border-color: rgba(61,56,112,0.4) !important; }
+
+/* --- Ring colors --- */
+.dark .ring-\[#EAE6FE\]  { --tw-ring-color: #2D2850 !important; }
+
+/* --- Divide colors --- */
+.dark .divide-\[#EAE6FE\] > * + * { border-color: #2D2850 !important; }
+
+/* --- Shadow overrides --- */
+.dark .shadow-xl  { box-shadow: 0 20px 60px rgba(0,0,0,0.6) !important; }
+.dark .shadow-lg  { box-shadow: 0 10px 40px rgba(0,0,0,0.5) !important; }
+.dark .shadow-md  { box-shadow: 0 4px 20px rgba(0,0,0,0.4) !important; }
+.dark .shadow-sm  { box-shadow: 0 2px 8px  rgba(0,0,0,0.35) !important; }
+
+/* --- Hover state background overrides --- */
+.dark .hover\:bg-\[#F3F0FE\]:hover { background-color: #1A1730 !important; }
+.dark .hover\:bg-\[#F3F0FF\]:hover { background-color: #1A1730 !important; }
+.dark .hover\:border-\[#D8D2FA\]:hover { border-color: #3D3870 !important; }
+.dark .hover\:bg-\[#FCFBFF\]:hover  { background-color: #13102A !important; }
+
+/* --- Selection highlight --- */
+.dark ::selection {
+  background-color: #2D2850;
+  color: #F0EEFF;
+}
+
+/* --- Smooth transition for all colour-bearing properties --- */
+.dark *,
+.dark *::before,
+.dark *::after {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-duration: 250ms;
+  transition-timing-function: ease;
+}
+
+/* Keep animation-only elements unaffected by the global transition rule */
+.dark [class*="animate-"],
+.dark [class*="gsap"] {
+  transition-property: none;
+}
+
+/* --- Scrollbar --- */
+.dark ::-webkit-scrollbar              { background-color: #0F0D1A; }
+.dark ::-webkit-scrollbar-thumb        { background-color: #2D2850; border-radius: 8px; }
+.dark ::-webkit-scrollbar-thumb:hover  { background-color: #3D3870; }
