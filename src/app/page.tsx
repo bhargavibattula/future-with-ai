@@ -3,12 +3,18 @@
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import GSAPHero from "@/components/animations/GSAPHero";
+import BrandMarquee from "@/components/animations/BrandMarquee";
+import AILayoffsStats from "@/components/AILayoffsStats";
+import WhyChooseUs from "@/components/WhyChooseUs";
 import ScrollProgress from "@/components/animations/system/ScrollProgress";
 import GSAPTextRevealSection from "@/components/animations/GSAPTextRevealSection";
 import GSAPStreakHeatmap from "@/components/animations/GSAPStreakHeatmap";
 import GSAPHowItWorks from "@/components/animations/GSAPHowItWorks";
+import CertificateShowcase from "@/components/animations/CertificateShowcase";
 import GSAPParallaxGrid from "@/components/animations/GSAPParallaxGrid";
 import InteractiveLearningDashboard from "@/components/InteractiveLearningDashboard";
+import ToolGrid from "@/components/ToolGrid";
+import TestimonialsMarquee from "@/components/animations/TestimonialsMarquee";
 import ExploreAICourses from "@/components/ExploreAICourses";
 import ToolModal from "@/components/ToolModal";
 import Footer from "@/components/Footer";
@@ -35,6 +41,15 @@ export default function Home() {
         {/* GSAP Hero Section */}
         <GSAPHero />
 
+        {/* Brand Marquee (People who learn from us) */}
+        <BrandMarquee />
+
+        {/* AI Job Statistics Section */}
+        <AILayoffsStats />
+
+        {/* Why Choose Us Bento Grid */}
+        <WhyChooseUs />
+
         {/* Premium Infinite Horizontal Scrolling "Explore AI Courses" Section */}
         <ExploreAICourses />
 
@@ -47,11 +62,17 @@ export default function Home() {
         {/* Ultra Premium How It Works GSAP Horizontal Scroll */}
         <GSAPHowItWorks />
 
+        {/* Dedicated Dark Certificate Showcase Section */}
+        <CertificateShowcase />
+
         {/* GSAP Parallax Floating Feature Grid */}
         <GSAPParallaxGrid />
 
         {/* Interactive Role Dashboard Experience (Learner, Instructor, Admin) */}
         <InteractiveLearningDashboard />
+
+        {/* Premium Loved by Developers Testimonials Marquee */}
+        <TestimonialsMarquee />
       </main>
 
       {/* Quick View Detail Modal */}

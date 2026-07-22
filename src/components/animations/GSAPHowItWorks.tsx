@@ -10,7 +10,7 @@ export default function GSAPHowItWorks() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
+  useGSAP(() => {
     gsap.registerPlugin(ScrollTrigger, TextPlugin);
 
     const sections = gsap.utils.toArray<HTMLElement>(".step");
@@ -24,31 +24,21 @@ export default function GSAPHowItWorks() {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top",
-          // Extended scroll length by multiplying by 2 for a slower, smoother scroll experience
-          end: () => `+=${(containerRef.current?.scrollWidth || window.innerWidth) * 2}`,
-          scrub: 1,
+          // Extended scroll length by multiplying by 4 for a much slower, leisurely scroll experience
+          end: () => `+=${(containerRef.current?.scrollWidth || window.innerWidth) * 4}`,
+          scrub: 1.5,
           pin: true,
           anticipatePin: 1,
           snap: 1 / (sections.length - 1),
         },
       });
-    });
 
-    return () => {
-      ScrollTrigger.getAll().forEach((t) => t.kill());
-    };
-  }, []);
-
-  useGSAP(() => {
-    const mm = gsap.matchMedia();
-
-    mm.add("(min-width: 1024px)", () => {
       // Timeline for scrubbed interactive animations
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
-          end: () => `+=${(containerRef.current?.scrollWidth || window.innerWidth) * 2}`,
-          scrub: 0.5, // Smooth scrubbing
+          end: () => `+=${(containerRef.current?.scrollWidth || window.innerWidth) * 4}`,
+          scrub: 1.5, // Even smoother scrubbing
         },
       });
 
