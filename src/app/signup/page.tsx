@@ -7,7 +7,7 @@ import AuthCard from "@/components/auth/AuthCard";
 
 export default function SignUpPage() {
   return (
-    <div className="min-h-screen flex flex-col bg-[#FCFBFF] text-[#1E1B2E] selection:bg-[#D8D2FA] selection:text-[#1E1B2E]">
+    <div className="min-h-screen flex flex-col bg-[var(--background)] text-[var(--foreground)] selection:bg-[#D8D2FA] selection:text-[#1E1B2E]">
       <Navbar />
 
       <main className="flex-grow flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
