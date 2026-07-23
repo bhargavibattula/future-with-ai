@@ -527,15 +527,13 @@ export function getCoursePathData(slug: string): DetailedCoursePath {
     },
   ];
 
-  // Pick a recommended next course
+  // Pick a recommended next course deterministically to prevent hydration errors
   const otherCourses = COURSES.filter(
     (c) => c.id.replace("course-", "") !== cleanSlug
   );
+  const deterministicIndex = cleanSlug.length % otherCourses.length;
   const recommendedSlug =
-    otherCourses[Math.floor(Math.random() * otherCourses.length)].id.replace(
-      "course-",
-      ""
-    );
+    otherCourses[deterministicIndex].id.replace("course-", "");
 
   return {
     slug: cleanSlug,
