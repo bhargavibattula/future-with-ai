@@ -15,6 +15,7 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
+import Link from "next/link";
 import { AICourse, COURSES } from "@/data/courses";
 
 // ----------------------------------------------------
@@ -236,13 +237,13 @@ function CourseCard({ course }: { course: AICourse }) {
               Interactive Module
             </span>
 
-            <button
-              type="button"
+            <Link
+              href={`/courses/${course.id.replace("course-", "")}`}
               className="relative group/btn inline-flex items-center gap-2 px-4 py-2 rounded-2xl text-xs font-extrabold text-white bg-[#8B7FE8] hover:bg-[#786BD6] shadow-soft-sm transition-all duration-300 active:scale-95"
             >
               <span>Start Learning</span>
               <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover/btn:translate-x-1" />
-            </button>
+            </Link>
           </div>
         </div>
       </div>
