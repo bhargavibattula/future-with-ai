@@ -26,10 +26,9 @@ export default function GSAPHowItWorks() {
           start: "top top",
           // Extended scroll length by multiplying by 4 for a much slower, leisurely scroll experience
           end: () => `+=${(containerRef.current?.scrollWidth || window.innerWidth) * 4}`,
-          scrub: 1.5,
+          scrub: 1,
           pin: true,
           anticipatePin: 1,
-          snap: 1 / (sections.length - 1),
         },
       });
 
@@ -38,7 +37,7 @@ export default function GSAPHowItWorks() {
         scrollTrigger: {
           trigger: containerRef.current,
           end: () => `+=${(containerRef.current?.scrollWidth || window.innerWidth) * 4}`,
-          scrub: 1.5, // Even smoother scrubbing
+          scrub: 1, // Tighter scrubbing for smoother momentum tracking
         },
       });
 
@@ -167,10 +166,10 @@ export default function GSAPHowItWorks() {
     >
       <div className="absolute w-[75%] h-px bg-[#8B7FE8]/20 left-1/2 -translate-x-1/2 top-0" />
 
-      <div ref={containerRef} className="flex w-screen flex-col lg:flex-row lg:w-[300vw] h-screen">
+      <div ref={containerRef} className="flex flex-col lg:flex-row w-full lg:w-[300vw] h-auto lg:h-screen will-change-transform">
 
         {/* ─── Step 1 ─── */}
-        <div className="step w-screen h-full flex relative isolate">
+        <div className="step w-full lg:w-screen min-h-screen lg:h-full flex relative isolate py-20 lg:py-0">
           <div className="grid lg:grid-cols-2 w-full max-w-7xl mx-auto px-6 sm:px-12 py-10 h-full items-center">
 
             {/* Left Content */}
@@ -223,7 +222,7 @@ export default function GSAPHowItWorks() {
         </div>
 
         {/* ─── Step 2 ─── */}
-        <div className="step w-screen h-full flex flex-col justify-center relative px-6 sm:px-12">
+        <div className="step w-full lg:w-screen min-h-[70vh] lg:h-full flex flex-col justify-center relative px-6 sm:px-12 py-20 lg:py-0">
           <div className="absolute w-[75%] h-px bg-[#8B7FE8]/20 left-1/2 -translate-x-1/2 top-0 lg:hidden" />
 
           <div className="flex flex-wrap gap-4 lg:gap-8 items-center justify-center max-w-6xl mx-auto w-full text-center">
@@ -288,7 +287,7 @@ export default function GSAPHowItWorks() {
         </div>
 
         {/* ─── Step 3 ─── */}
-        <div className="step w-screen h-full flex items-center justify-center relative">
+        <div className="step w-full lg:w-screen min-h-[50vh] lg:h-full flex items-center justify-center relative py-20 lg:py-0">
           <div className="text-center space-y-8 px-6 max-w-4xl">
             <h2 className="font-[var(--font-display)] font-bold text-5xl lg:text-8xl tracking-tighter text-[#1E1B2E]">
               Ready to accelerate?
