@@ -310,15 +310,15 @@ export default function AuthCard({
             setStoredUser({ name: displayName, email: email.trim() });
 
             // SUCCESS OTP VERIFICATION FOR LOGIN / SIGNUP -> REDIRECT TO HOME PAGE!
-            setSuccessMsg(`Welcome, ${displayName}! Redirecting to home page...`);
+            setSuccessMsg(`Welcome, ${displayName}! Redirecting to dashboard...`);
             showToast(
               "success",
               "Authentication Successful",
-              `Welcome, ${displayName}! Redirecting to home page...`
+              `Welcome, ${displayName}! Redirecting to dashboard...`
             );
             setTimeout(() => {
               if (isModal && onClose) onClose();
-              router.push("/");
+              router.push("/dashboard");
             }, 1200);
           }
         } else {
@@ -353,15 +353,15 @@ export default function AuthCard({
       setLoading(true);
       setTimeout(() => {
         setLoading(false);
-        setSuccessMsg("Password reset successfully! Redirecting to home page...");
+        setSuccessMsg("Password reset successfully! Redirecting to dashboard...");
         showToast(
           "success",
           "Password Updated",
-          "Password reset successfully! Redirecting to home page..."
+          "Password reset successfully! Redirecting to dashboard..."
         );
         setTimeout(() => {
           if (isModal && onClose) onClose();
-          router.push("/");
+          router.push("/dashboard");
         }, 1200);
       }, 1000);
     }
