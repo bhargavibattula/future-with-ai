@@ -3,6 +3,7 @@
 import { useAuth } from "@/lib/auth";
 import ActivityHeatmap from "@/components/profile/ActivityHeatmap";
 import BadgeShowcase from "@/components/profile/BadgeShowcase";
+import ProfileCertificates from "@/components/profile/ProfileCertificates";
 import { User, Mail, Calendar, Settings, Share2, Copy, Check } from "lucide-react";
 import { useState, use } from "react";
 
@@ -116,6 +117,9 @@ export default function ProfilePage({ params }: { params: Promise<{ username: st
       {/* Heatmap Section */}
       <ActivityHeatmap />
       
+      {/* Certificates Section */}
+      <ProfileCertificates username={displayUsername} />
+
       {/* Badges Section */}
       <BadgeShowcase />
     </div>
