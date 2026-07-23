@@ -13,7 +13,10 @@ import {
   User,
   LogOut,
   ChevronDown,
-  Flame
+  Flame,
+  Bookmark,
+  ShieldCheck,
+  LayoutDashboard
 } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { useRouter, usePathname } from "next/navigation";
@@ -132,13 +135,36 @@ export default function DashboardNavbar() {
                 </div>
                 
                 <Link
+                  href="/dashboard"
+                  onClick={() => setProfileDropdownOpen(false)}
+                  className="flex items-center gap-2.5 px-3 py-2 text-sm font-semibold text-[#1E1B2E] rounded-xl hover:bg-[#F3F0FE] transition-colors"
+                >
+                  <LayoutDashboard className="w-4 h-4 text-[#8B7FE8]" />
+                  <span>Dashboard</span>
+                </Link>
+                
+                <Link
                   href={`/dashboard/profile/${user?.name?.toLowerCase().replace(/\s+/g, '-') || 'guest'}`}
                   onClick={() => setProfileDropdownOpen(false)}
                   className="flex items-center gap-2.5 px-3 py-2 text-sm font-semibold text-[#1E1B2E] rounded-xl hover:bg-[#F3F0FE] transition-colors"
                 >
                   <User className="w-4 h-4 text-[#8B7FE8]" />
-                  <span>Profile Settings</span>
+                  <span>My Account</span>
                 </Link>
+
+                <Link
+                  href="/dashboard/tools"
+                  onClick={() => setProfileDropdownOpen(false)}
+                  className="flex items-center gap-2.5 px-3 py-2 text-sm font-semibold text-[#1E1B2E] rounded-xl hover:bg-[#F3F0FE] transition-colors"
+                >
+                  <Bookmark className="w-4 h-4 text-[#8B7FE8]" />
+                  <span>Saved AI Tools</span>
+                </Link>
+
+                <div className="flex items-center gap-2.5 px-3 py-2 text-sm font-semibold text-[#1E1B2E] rounded-xl hover:bg-[#F3F0FE] transition-colors cursor-default">
+                  <ShieldCheck className="w-4 h-4 text-[#8B7FE8]" />
+                  <span>2FA Security Active</span>
+                </div>
 
                 <div className="border-t border-[#EAE6FE] pt-1 mt-1">
                   <button
