@@ -132,7 +132,7 @@ export default function DashboardNavbar() {
                 </div>
                 
                 <Link
-                  href="/dashboard/profile"
+                  href={`/dashboard/profile/${user?.name?.toLowerCase().replace(/\s+/g, '-') || 'guest'}`}
                   onClick={() => setProfileDropdownOpen(false)}
                   className="flex items-center gap-2.5 px-3 py-2 text-sm font-semibold text-[#1E1B2E] rounded-xl hover:bg-[#F3F0FE] transition-colors"
                 >
