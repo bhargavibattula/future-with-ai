@@ -236,6 +236,17 @@ export default function AuthCard({
 
     // Mode 2: Signup Submit -> Trigger 2FA
     if (mode === "signup") {
+      if (
+        email.trim().toLowerCase() === "shanmukharani20@gmail.com" ||
+        email.trim().toLowerCase() === "shanm@future.ai"
+      ) {
+        const msg =
+          "Admin accounts cannot be registered via public signup. Please log in directly via the Admin Portal.";
+        setErrorMsg(msg);
+        showToast("error", "Registration Prohibited", msg);
+        return;
+      }
+
       if (!fullName.trim()) {
         const msg = "Please enter your full name.";
         setErrorMsg(msg);
