@@ -9,6 +9,8 @@ export default function AdminLoginPage() {
   const [checking, setChecking] = useState(true);
 
   useEffect(() => {
+    let isMounted = true;
+
     try {
       const match = document.cookie
         .split("; ")
@@ -19,9 +21,15 @@ export default function AdminLoginPage() {
       }
     } catch (e) {
       // Cookie check fallback
-    } finally {
+    }
+
+    if (isMounted) {
       setChecking(false);
     }
+
+    return () => {
+      isMounted = false;
+    };
   }, [router]);
 
   if (checking) {
