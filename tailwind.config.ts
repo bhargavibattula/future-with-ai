@@ -10,17 +10,17 @@ const config: Config = {
     extend: {
       colors: {
         lavender: {
-          bg: "#FCFBFF",
+          bg: "#0A0A0A",
           primary: "#8B7FE8",
-          "primary-hover": "#786BD6",
-          "primary-light": "#D8D2FA",
-          "primary-soft": "#F3F0FE",
-          accent: "#FFC9DE",
-          "accent-soft": "#FFF0F5",
-          mint: "#B8E8D8",
-          "mint-soft": "#EDF9F5",
-          text: "#1E1B2E",
-          muted: "#6B6785",
+          "primary-hover": "#9D8FEE",
+          "primary-light": "#2A2540",
+          "primary-soft": "#1A1830",
+          accent: "#F0879B",
+          "accent-soft": "#2A1520",
+          mint: "#5CBFA0",
+          "mint-soft": "#0E2018",
+          text: "#FFFFFF",
+          muted: "#808080",
         },
       },
       fontFamily: {

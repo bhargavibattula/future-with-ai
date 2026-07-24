@@ -128,7 +128,7 @@ export default function Admin2FAGate({ onAuthenticated }: Admin2FAGateProps) {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAFAFF] text-[#1E1B2E] selection:bg-[#D8D2FA] selection:text-[#1E1B2E]">
+    <div className="min-h-screen flex flex-col bg-[var(--background)] text-[var(--foreground)]">
       <Navbar />
 
       <main className="flex-1 flex items-center justify-center p-4 sm:p-6 relative overflow-hidden">

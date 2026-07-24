@@ -1,5 +1,6 @@
 "use client";
 
+import { signIn } from "next-auth/react";
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -384,13 +385,12 @@ export default function AuthCard({
       {toast && (
         <div className="fixed top-24 right-6 sm:right-8 z-[9999] max-w-sm w-full animate-in slide-in-from-right-8 fade-in duration-300 pointer-events-none">
           <div
-            className={`p-4 sm:p-5 rounded-2xl shadow-2xl border-2 flex items-start gap-3.5 bg-white text-[#1E1B2E] pointer-events-auto transition-all ${
-              toast.type === "success"
-                ? "border-[#B8E8D8] shadow-emerald-500/10"
-                : toast.type === "error"
+            className={`p-4 sm:p-5 rounded-2xl shadow-2xl border-2 flex items-start gap-3.5 bg-white text-[#1E1B2E] pointer-events-auto transition-all ${toast.type === "success"
+              ? "border-[#B8E8D8] shadow-emerald-500/10"
+              : toast.type === "error"
                 ? "border-[#FFC9DE] shadow-red-500/10"
                 : "border-[#8B7FE8] shadow-purple-500/10"
-            }`}
+              }`}
           >
             {toast.type === "success" && (
               <div className="w-9 h-9 rounded-xl bg-[#EDF9F5] border border-[#B8E8D8] text-[#1E1B2E] flex items-center justify-center shrink-0 shadow-sm">
@@ -517,22 +517,20 @@ export default function AuthCard({
             <button
               type="button"
               onClick={() => switchMode("login")}
-              className={`flex-1 py-2 text-sm font-semibold rounded-xl transition-all duration-200 ${
-                mode === "login"
-                  ? "bg-white text-[#1E1B2E] shadow-sm"
-                  : "text-[#6B6785] hover:text-[#1E1B2E]"
-              }`}
+              className={`flex-1 py-2 text-sm font-semibold rounded-xl transition-all duration-200 ${mode === "login"
+                ? "bg-white text-[#1E1B2E] shadow-sm"
+                : "text-[#6B6785] hover:text-[#1E1B2E]"
+                }`}
             >
               Log In
             </button>
             <button
               type="button"
               onClick={() => switchMode("signup")}
-              className={`flex-1 py-2 text-sm font-semibold rounded-xl transition-all duration-200 ${
-                mode === "signup"
-                  ? "bg-white text-[#1E1B2E] shadow-sm"
-                  : "text-[#6B6785] hover:text-[#1E1B2E]"
-              }`}
+              className={`flex-1 py-2 text-sm font-semibold rounded-xl transition-all duration-200 ${mode === "signup"
+                ? "bg-white text-[#1E1B2E] shadow-sm"
+                : "text-[#6B6785] hover:text-[#1E1B2E]"
+                }`}
             >
               Sign Up
             </button>
@@ -653,19 +651,16 @@ export default function AuthCard({
                   </div>
                   <div className="h-1.5 w-full bg-[#EAE6FE] rounded-full overflow-hidden flex gap-1">
                     <div
-                      className={`h-full transition-all duration-300 ${
-                        strength.score >= 1 ? strength.color : "bg-transparent"
-                      } flex-1 rounded-full`}
+                      className={`h-full transition-all duration-300 ${strength.score >= 1 ? strength.color : "bg-transparent"
+                        } flex-1 rounded-full`}
                     />
                     <div
-                      className={`h-full transition-all duration-300 ${
-                        strength.score >= 2 ? strength.color : "bg-transparent"
-                      } flex-1 rounded-full`}
+                      className={`h-full transition-all duration-300 ${strength.score >= 2 ? strength.color : "bg-transparent"
+                        } flex-1 rounded-full`}
                     />
                     <div
-                      className={`h-full transition-all duration-300 ${
-                        strength.score >= 3 ? strength.color : "bg-transparent"
-                      } flex-1 rounded-full`}
+                      className={`h-full transition-all duration-300 ${strength.score >= 3 ? strength.color : "bg-transparent"
+                        } flex-1 rounded-full`}
                     />
                   </div>
                 </div>
@@ -790,19 +785,16 @@ export default function AuthCard({
                     </div>
                     <div className="h-1.5 w-full bg-[#EAE6FE] rounded-full overflow-hidden flex gap-1">
                       <div
-                        className={`h-full transition-all duration-300 ${
-                          strength.score >= 1 ? strength.color : "bg-transparent"
-                        } flex-1 rounded-full`}
+                        className={`h-full transition-all duration-300 ${strength.score >= 1 ? strength.color : "bg-transparent"
+                          } flex-1 rounded-full`}
                       />
                       <div
-                        className={`h-full transition-all duration-300 ${
-                          strength.score >= 2 ? strength.color : "bg-transparent"
-                        } flex-1 rounded-full`}
+                        className={`h-full transition-all duration-300 ${strength.score >= 2 ? strength.color : "bg-transparent"
+                          } flex-1 rounded-full`}
                       />
                       <div
-                        className={`h-full transition-all duration-300 ${
-                          strength.score >= 3 ? strength.color : "bg-transparent"
-                        } flex-1 rounded-full`}
+                        className={`h-full transition-all duration-300 ${strength.score >= 3 ? strength.color : "bg-transparent"
+                          } flex-1 rounded-full`}
                       />
                     </div>
                   </div>
@@ -926,9 +918,15 @@ export default function AuthCard({
               <div className="grid grid-cols-2 gap-3">
                 <button
                   type="button"
-                  onClick={() =>
-                    requestOtpDispatch("google.user@example.com", "2FA")
-                  }
+                  onClick={async () => {
+                    try {
+                      await signIn("google", {
+                        callbackUrl: "/dashboard",
+                      });
+                    } catch (error) {
+                      console.error("Google sign in failed:", error);
+                    }
+                  }}
                   className="flex items-center justify-center gap-2 py-2.5 px-4 bg-[#FCFBFF] border border-[#EAE6FE] rounded-2xl text-xs font-semibold text-[#1E1B2E] hover:bg-[#F3F0FE] transition-colors"
                 >
                   <svg className="w-4 h-4" viewBox="0 0 24 24">
