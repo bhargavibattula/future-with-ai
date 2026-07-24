@@ -98,6 +98,23 @@ export default function AuthCard({
     }, 5000);
   };
 
+  // Handle URL error query params (e.g. /login?error=Configuration)
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const err = params.get("error");
+      if (err === "Configuration") {
+        setErrorMsg(
+          "Google OAuth Configuration Notice: Please set valid AUTH_GOOGLE_ID & AUTH_GOOGLE_SECRET keys in your Google Cloud Console."
+        );
+      } else if (err === "AccessDenied") {
+        setErrorMsg("Google authentication request was denied.");
+      } else if (err) {
+        setErrorMsg(`Authentication error: ${err}`);
+      }
+    }
+  }, []);
+
   // Timer countdown hook
   useEffect(() => {
     let interval: NodeJS.Timeout;
