@@ -84,13 +84,13 @@ export default function CertificateShowcase() {
               <div className="text-xs lg:text-sm font-bold text-gray-400 uppercase tracking-[0.3em]">
                 Certificate of Completion
               </div>
-              <h3 className="font-serif text-3xl lg:text-4xl font-black text-[#1E1B2E] tracking-tight">
+              <h3 className="font-serif text-3xl lg:text-4xl font-black tracking-tight" style={{ color: '#1E1B2E' }}>
                 AI MASTERY PROGRAM
               </h3>
               
               <div className="pt-6 pb-2">
                 <div className="text-xs text-gray-400 uppercase tracking-widest mb-2">Issued To</div>
-                <div className="text-2xl font-serif italic text-[#1E1B2E] border-b border-gray-200 inline-block px-8 pb-2">
+                <div className="text-2xl font-serif italic border-b border-gray-200 inline-block px-8 pb-2" style={{ color: '#1E1B2E' }}>
                   You
                 </div>
               </div>
@@ -104,7 +104,7 @@ export default function CertificateShowcase() {
             <div className="mt-12 flex justify-between items-end relative z-10">
               <div>
                 <div className="text-[10px] text-gray-400 uppercase tracking-widest mb-1">Date of Issue</div>
-                <div className="text-sm font-bold text-[#1E1B2E]">30 March 2026</div>
+                <div className="text-sm font-bold" style={{ color: '#1E1B2E' }}>30 March 2026</div>
               </div>
               
               <div className="flex -space-x-2">

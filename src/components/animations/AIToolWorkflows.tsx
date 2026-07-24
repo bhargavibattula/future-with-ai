@@ -55,10 +55,7 @@ export default function AIToolWorkflows() {
         {/* Right Side: Vertical Marquee */}
         <div className="relative h-[400px] lg:h-[600px] overflow-hidden marquee-container mask-vertical flex justify-center lg:justify-end mt-10 lg:mt-0">
           
-          {/* Fading Edges */}
-          <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#FCFBFF] to-transparent z-10 pointer-events-none"></div>
-          <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#FCFBFF] to-transparent z-10 pointer-events-none"></div>
-
+          {/* Fading Edges (Removed to fix white cast, handled by mask-image) */}
           {/* Scrolling Track - Increased speed by forcing animation-duration to 8s */}
           <div className="flex flex-col gap-6 w-full max-w-[500px] animate-marquee-up" style={{ animationDuration: '8s' }}>
             {/* Double the array for seamless infinite scroll */}

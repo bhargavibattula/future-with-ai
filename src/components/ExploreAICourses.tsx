@@ -422,6 +422,10 @@ export default function ExploreAICourses() {
         {/* INFINITE CAROUSEL SCROLL CONTAINER */}
         <div
           className="explore-courses-carousel relative w-full overflow-hidden cursor-grab active:cursor-grabbing py-6"
+          style={{
+            maskImage: "linear-gradient(to right, transparent, black 5%, black 95%, transparent)",
+            WebkitMaskImage: "linear-gradient(to right, transparent, black 5%, black 95%, transparent)"
+          }}
           onWheel={handleWheel}
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
@@ -430,9 +434,7 @@ export default function ExploreAICourses() {
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
-          {/* Left & Right Gradient Fade Mask Overlays */}
-          <div className="pointer-events-none absolute top-0 left-0 bottom-0 w-16 sm:w-28 bg-gradient-to-r from-[#FCFBFF] to-transparent z-30" />
-          <div className="pointer-events-none absolute top-0 right-0 bottom-0 w-16 sm:w-28 bg-gradient-to-l from-[#FCFBFF] to-transparent z-30" />
+          {/* Left & Right Gradient Fade Mask Overlays (Removed to fix white cast in dark mode, handled by mask-image above) */}
 
           {/* Horizontal Track */}
           <div

@@ -28,7 +28,7 @@ export default function CoursePathClient({ slug }: CoursePathClientProps) {
   };
 
   return (
-    <div className="min-h-screen bg-[#FCFBFF] text-[#1E1B2E] flex flex-col font-sans selection:bg-[#D8D2FA] selection:text-[#1E1B2E]">
+    <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] flex flex-col font-sans">
       {/* Navbar */}
       <Navbar />
 
