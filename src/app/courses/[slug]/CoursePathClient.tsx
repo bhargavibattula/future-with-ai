@@ -55,7 +55,7 @@ export default function CoursePathClient({ slug }: CoursePathClientProps) {
 
             {/* RIGHT COLUMN: Interactive Learning Canvas (70% Width) */}
             <div className="lg:col-span-7 w-full">
-              <div className="w-full rounded-3xl bg-white/80 backdrop-blur-xl border border-[#E8E3FF] p-6 sm:p-8 shadow-soft">
+              <div className="w-full rounded-3xl bg-white/80 dark:bg-[#1A1726]/80 backdrop-blur-xl border border-[#E8E3FF] dark:border-[#2A2640] p-6 sm:p-8 shadow-soft">
                 <CoursePathRoadmap
                   modules={pathData.modules}
                   onSelectModule={(mod) => setSelectedModule(mod)}

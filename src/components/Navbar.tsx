@@ -16,6 +16,7 @@ import {
   Bookmark,
   Settings,
   Shield,
+  LayoutDashboard,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import AuthModal from "@/components/auth/AuthModal";
@@ -167,6 +168,14 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
 
                     <div className="space-y-1 py-1">
                       <Link
+                        href="/dashboard"
+                        onClick={() => setProfileDropdownOpen(false)}
+                        className="flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-[#1E1B2E] rounded-xl hover:bg-[#F3F0FE] transition-colors"
+                      >
+                        <LayoutDashboard className="w-4 h-4 text-[#8B7FE8]" />
+                        <span>Dashboard</span>
+                      </Link>
+                      <Link
                         href="/#explore"
                         onClick={() => setProfileDropdownOpen(false)}
                         className="flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-[#1E1B2E] rounded-xl hover:bg-[#F3F0FE] transition-colors"
@@ -263,6 +272,16 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
             )}
 
             <nav className="flex flex-col space-y-3 font-medium text-[#1E1B2E]">
+              {user && (
+                <Link
+                  href="/dashboard"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="py-2 text-[#8B7FE8] hover:text-[#786BD6] border-b border-[#EAE6FE]/50 font-bold flex items-center gap-2"
+                >
+                  <LayoutDashboard className="w-5 h-5" />
+                  Dashboard
+                </Link>
+              )}
               <Link
                 href="/#explore"
                 onClick={() => setMobileMenuOpen(false)}

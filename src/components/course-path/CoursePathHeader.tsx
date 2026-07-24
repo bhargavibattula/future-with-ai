@@ -29,7 +29,7 @@ export default function CoursePathHeader({ data }: CoursePathHeaderProps) {
       </nav>
 
       {/* GLASS COURSE HEADER CARD */}
-      <div className="relative w-full rounded-3xl bg-gradient-to-r from-[#F5F2FF] via-[#FFFFFF] to-[#F8F9FC] border border-[#E8E3FF] backdrop-blur-xl p-6 sm:p-8 md:p-10 shadow-soft overflow-hidden">
+      <div className="relative w-full rounded-3xl bg-gradient-to-r from-[#F5F2FF] via-[#FFFFFF] to-[#F8F9FC] dark:from-[#13111C] dark:via-[#1A1726] dark:to-[#13111C] border border-[#E8E3FF] dark:border-[#2A2640] backdrop-blur-xl p-6 sm:p-8 md:p-10 shadow-soft overflow-hidden">
         {/* Soft Ambient Background Glow Blobs */}
         <div className="pointer-events-none absolute -top-16 -right-16 w-64 h-64 rounded-full bg-[#8B7FE8]/15 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-16 -left-16 w-64 h-64 rounded-full bg-[#74D99F]/15 blur-3xl" />
@@ -84,16 +84,16 @@ export default function CoursePathHeader({ data }: CoursePathHeaderProps) {
               </p>
 
               {/* Metadata Badges */}
-              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 text-xs font-bold text-[#6B6785]">
-                <div className="flex items-center gap-1.5 bg-white/80 border border-[#E8E3FF] px-3 py-1.5 rounded-full shadow-soft-sm">
+              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 text-xs font-bold text-[#6B6785] dark:text-[#A9A4C0]">
+                <div className="flex items-center gap-1.5 bg-white/80 dark:bg-[#2A2640]/80 border border-[#E8E3FF] dark:border-[#3A3650] px-3 py-1.5 rounded-full shadow-soft-sm">
                   <Clock className="w-4 h-4 text-[#8B7FE8]" />
                   <span>{course.duration}</span>
                 </div>
-                <div className="flex items-center gap-1.5 bg-white/80 border border-[#E8E3FF] px-3 py-1.5 rounded-full shadow-soft-sm">
+                <div className="flex items-center gap-1.5 bg-white/80 dark:bg-[#2A2640]/80 border border-[#E8E3FF] dark:border-[#3A3650] px-3 py-1.5 rounded-full shadow-soft-sm">
                   <BarChart3 className="w-4 h-4 text-[#74D99F]" />
                   <span>{level}</span>
                 </div>
-                <div className="flex items-center gap-1.5 bg-white/80 border border-[#E8E3FF] px-3 py-1.5 rounded-full shadow-soft-sm">
+                <div className="flex items-center gap-1.5 bg-white/80 dark:bg-[#2A2640]/80 border border-[#E8E3FF] dark:border-[#3A3650] px-3 py-1.5 rounded-full shadow-soft-sm">
                   <Calendar className="w-4 h-4 text-[#8B7FE8]" />
                   <span>Updated {lastUpdated}</span>
                 </div>
@@ -102,12 +102,12 @@ export default function CoursePathHeader({ data }: CoursePathHeaderProps) {
           </div>
 
           {/* RIGHT: OVERALL PROGRESS RING */}
-          <div className="shrink-0 flex flex-col items-center justify-center bg-white/90 border border-[#E8E3FF] rounded-3xl p-5 shadow-soft min-w-[160px]">
+          <div className="shrink-0 flex flex-col items-center justify-center bg-white/90 dark:bg-[#1A1726]/90 border border-[#E8E3FF] dark:border-[#2A2640] rounded-3xl p-5 shadow-soft min-w-[160px]">
             <div className="relative w-24 h-24 flex items-center justify-center mb-2">
               <svg className="w-full h-full -rotate-90" viewBox="0 0 36 36">
                 {/* Background Circle Track */}
                 <path
-                  className="text-[#E8E3FF]"
+                  className="text-[#E8E3FF] dark:text-[#2A2640]"
                   strokeWidth="3.5"
                   stroke="currentColor"
                   fill="none"
