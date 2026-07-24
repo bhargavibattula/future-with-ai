@@ -47,17 +47,24 @@ export function useAuth() {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    setLocalUser(getStoredUser());
-    setLoading(false);
+    let isMounted = true;
+
+    if (isMounted) {
+      setLocalUser(getStoredUser());
+      setLoading(false);
+    }
 
     const handleAuthChange = () => {
-      setLocalUser(getStoredUser());
+      if (isMounted) {
+        setLocalUser(getStoredUser());
+      }
     };
 
     window.addEventListener("auth-state-change", handleAuthChange);
     window.addEventListener("storage", handleAuthChange);
 
     return () => {
+      isMounted = false;
       window.removeEventListener("auth-state-change", handleAuthChange);
       window.removeEventListener("storage", handleAuthChange);
     };
