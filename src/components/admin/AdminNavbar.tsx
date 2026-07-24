@@ -17,6 +17,7 @@ import {
   X,
 } from "lucide-react";
 import { AdminTab } from "./AdminSidebar";
+import DarkModeToggle from "@/components/DarkModeToggle";
 
 interface AdminNavbarProps {
   onSelectTab: (tab: AdminTab) => void;
@@ -66,6 +67,7 @@ export default function AdminNavbar({ onSelectTab, onOpenQuickCreate }: AdminNav
 
         {/* RIGHT NAVBAR ACTIONS */}
         <div className="flex items-center gap-3">
+          <DarkModeToggle />
           {/* QUICK CREATE DROPDOWN BUTTON */}
           <div ref={quickCreateRef} className="relative">
             <button
