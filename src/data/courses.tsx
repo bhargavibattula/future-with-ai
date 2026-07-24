@@ -147,6 +147,8 @@ export interface AICourse {
   glowColor: string;
   tileBg: string;
   tileShadow: string;
+    image: "/images/courses/claude.png",
+  image?: string;
 }
 
 export const COURSES: AICourse[] = [
@@ -164,6 +166,7 @@ export const COURSES: AICourse[] = [
     glowColor: "rgba(245, 158, 11, 0.25)",
     tileBg: "linear-gradient(145deg, #E08226, #A6570A)",
     tileShadow: "0 16px 32px rgba(166, 87, 10, 0.4)",
+    image: "/images/courses/claude.png",
   },
   {
     id: "course-claude-deep-dive",
@@ -179,6 +182,7 @@ export const COURSES: AICourse[] = [
     glowColor: "rgba(107, 33, 168, 0.25)",
     tileBg: "linear-gradient(145deg, #7E22CE, #581C87)",
     tileShadow: "0 16px 32px rgba(88, 28, 135, 0.4)",
+    image: "/images/courses/claude_deep_dive.png",
   },
   {
     id: "course-claude-code",
@@ -194,6 +198,7 @@ export const COURSES: AICourse[] = [
     glowColor: "rgba(5, 150, 105, 0.25)",
     tileBg: "linear-gradient(145deg, #10B981, #047857)",
     tileShadow: "0 16px 32px rgba(4, 120, 87, 0.4)",
+    image: "/images/courses/claude_code.png",
   },
   {
     id: "course-lovable",
@@ -209,6 +214,7 @@ export const COURSES: AICourse[] = [
     glowColor: "rgba(249, 115, 22, 0.25)",
     tileBg: "linear-gradient(145deg, #F97316, #EA580C)",
     tileShadow: "0 16px 32px rgba(234, 88, 12, 0.4)",
+    image: "/images/courses/lovable.png",
   },
   {
     id: "course-deepseek",
@@ -224,6 +230,7 @@ export const COURSES: AICourse[] = [
     glowColor: "rgba(29, 78, 216, 0.25)",
     tileBg: "linear-gradient(145deg, #2563EB, #1E40AF)",
     tileShadow: "0 16px 32px rgba(30, 64, 175, 0.4)",
+    image: "/images/courses/deepseek.png",
   },
   {
     id: "course-chatgpt",
@@ -239,6 +246,7 @@ export const COURSES: AICourse[] = [
     glowColor: "rgba(16, 185, 129, 0.25)",
     tileBg: "linear-gradient(145deg, #26BA92, #0E8566)",
     tileShadow: "0 16px 32px rgba(14, 133, 102, 0.4)",
+    image: "/images/courses/chatgpt.png",
   },
   {
     id: "course-chatgpt-deep-dive",
@@ -254,6 +262,7 @@ export const COURSES: AICourse[] = [
     glowColor: "rgba(15, 118, 110, 0.25)",
     tileBg: "linear-gradient(145deg, #0D9488, #115E59)",
     tileShadow: "0 16px 32px rgba(17, 94, 89, 0.4)",
+    image: "/images/courses/chatgpt_deep_dive.png",
   },
   {
     id: "course-gemini",
@@ -269,6 +278,7 @@ export const COURSES: AICourse[] = [
     glowColor: "rgba(59, 130, 246, 0.25)",
     tileBg: "linear-gradient(145deg, #3B82F6, #1D4ED8)",
     tileShadow: "0 16px 32px rgba(29, 78, 216, 0.4)",
+    image: "/images/courses/gemini.png",
   },
   {
     id: "course-midjourney",
@@ -284,6 +294,7 @@ export const COURSES: AICourse[] = [
     glowColor: "rgba(147, 51, 234, 0.25)",
     tileBg: "linear-gradient(145deg, #1E1B2E, #0F172A)",
     tileShadow: "0 16px 32px rgba(30, 27, 46, 0.5)",
+    image: "/images/courses/midjourney.png",
   },
   {
     id: "course-stable-diffusion",
@@ -299,6 +310,7 @@ export const COURSES: AICourse[] = [
     glowColor: "rgba(190, 24, 93, 0.25)",
     tileBg: "linear-gradient(145deg, #E11D48, #9F1239)",
     tileShadow: "0 16px 32px rgba(159, 18, 57, 0.4)",
+    image: "/images/courses/stable_diffusion.png",
   },
   {
     id: "course-canva",
@@ -314,6 +326,7 @@ export const COURSES: AICourse[] = [
     glowColor: "rgba(125, 42, 232, 0.25)",
     tileBg: "linear-gradient(145deg, #00C4CC, #7D2AE8)",
     tileShadow: "0 16px 32px rgba(125, 42, 232, 0.4)",
+    image: "/images/courses/canva.png",
   },
   {
     id: "course-jasper",
@@ -329,6 +342,7 @@ export const COURSES: AICourse[] = [
     glowColor: "rgba(225, 29, 72, 0.25)",
     tileBg: "linear-gradient(145deg, #2A1F45, #150F23)",
     tileShadow: "0 16px 32px rgba(21, 15, 35, 0.4)",
+    image: "/images/courses/jasper.png",
   },
   {
     id: "course-omni",
@@ -344,6 +358,7 @@ export const COURSES: AICourse[] = [
     glowColor: "rgba(139, 127, 232, 0.25)",
     tileBg: "linear-gradient(145deg, #8B7FE8, #4F46E5)",
     tileShadow: "0 16px 32px rgba(79, 70, 229, 0.4)",
+    image: "/images/courses/omni.png",
   },
   {
     id: "course-kling",
@@ -359,6 +374,7 @@ export const COURSES: AICourse[] = [
     glowColor: "rgba(6, 182, 212, 0.25)",
     tileBg: "linear-gradient(145deg, #06B6D4, #0284C7)",
     tileShadow: "0 16px 32px rgba(2, 132, 199, 0.4)",
+    image: "/images/courses/kling.png",
   },
   {
     id: "course-perplexity",
@@ -374,6 +390,7 @@ export const COURSES: AICourse[] = [
     glowColor: "rgba(17, 24, 39, 0.25)",
     tileBg: "linear-gradient(145deg, #374151, #111827)",
     tileShadow: "0 16px 32px rgba(17, 24, 39, 0.4)",
+    image: "/images/courses/perplexity.png",
   },
   {
     id: "course-communicating-ai",
@@ -389,6 +406,7 @@ export const COURSES: AICourse[] = [
     glowColor: "rgba(99, 102, 241, 0.25)",
     tileBg: "linear-gradient(145deg, #6366F1, #4338CA)",
     tileShadow: "0 16px 32px rgba(67, 56, 202, 0.4)",
+    image: "/images/courses/claude_deep_dive.png",
   },
   {
     id: "course-claude-cowork",
@@ -404,6 +422,7 @@ export const COURSES: AICourse[] = [
     glowColor: "rgba(99, 102, 241, 0.25)",
     tileBg: "linear-gradient(145deg, #6366F1, #4338CA)",
     tileShadow: "0 16px 32px rgba(67, 56, 202, 0.4)",
+    image: "/images/courses/claude_code.png",
   },
   {
     id: "course-28-days-ai-cert",
@@ -419,6 +438,7 @@ export const COURSES: AICourse[] = [
     glowColor: "rgba(99, 102, 241, 0.25)",
     tileBg: "linear-gradient(145deg, #6366F1, #4338CA)",
     tileShadow: "0 16px 32px rgba(67, 56, 202, 0.4)",
+    image: "/images/courses/lovable.png",
   },
   {
     id: "course-junior-ai-challenge",
@@ -434,6 +454,7 @@ export const COURSES: AICourse[] = [
     glowColor: "rgba(99, 102, 241, 0.25)",
     tileBg: "linear-gradient(145deg, #6366F1, #4338CA)",
     tileShadow: "0 16px 32px rgba(67, 56, 202, 0.4)",
+    image: "/images/courses/deepseek.png",
   },
   {
     id: "course-14-days-ai-side-gigs",
@@ -449,6 +470,7 @@ export const COURSES: AICourse[] = [
     glowColor: "rgba(99, 102, 241, 0.25)",
     tileBg: "linear-gradient(145deg, #6366F1, #4338CA)",
     tileShadow: "0 16px 32px rgba(67, 56, 202, 0.4)",
+    image: "/images/courses/chatgpt.png",
   },
   {
     id: "course-22-days-ai-challenge",
@@ -464,6 +486,7 @@ export const COURSES: AICourse[] = [
     glowColor: "rgba(99, 102, 241, 0.25)",
     tileBg: "linear-gradient(145deg, #6366F1, #4338CA)",
     tileShadow: "0 16px 32px rgba(67, 56, 202, 0.4)",
+    image: "/images/courses/chatgpt_deep_dive.png",
   },
   {
     id: "course-ai-essentials-project-managers",
@@ -479,6 +502,7 @@ export const COURSES: AICourse[] = [
     glowColor: "rgba(99, 102, 241, 0.25)",
     tileBg: "linear-gradient(145deg, #6366F1, #4338CA)",
     tileShadow: "0 16px 32px rgba(67, 56, 202, 0.4)",
+    image: "/images/courses/gemini.png",
   },
   {
     id: "course-ai-product-development",
@@ -494,6 +518,7 @@ export const COURSES: AICourse[] = [
     glowColor: "rgba(99, 102, 241, 0.25)",
     tileBg: "linear-gradient(145deg, #6366F1, #4338CA)",
     tileShadow: "0 16px 32px rgba(67, 56, 202, 0.4)",
+    image: "/images/courses/midjourney.png",
   },
   {
     id: "course-build-portfolio",
@@ -509,6 +534,7 @@ export const COURSES: AICourse[] = [
     glowColor: "rgba(99, 102, 241, 0.25)",
     tileBg: "linear-gradient(145deg, #6366F1, #4338CA)",
     tileShadow: "0 16px 32px rgba(67, 56, 202, 0.4)",
+    image: "/images/courses/stable_diffusion.png",
   },
   {
     id: "course-turbocharge-productivity",
@@ -524,6 +550,7 @@ export const COURSES: AICourse[] = [
     glowColor: "rgba(99, 102, 241, 0.25)",
     tileBg: "linear-gradient(145deg, #6366F1, #4338CA)",
     tileShadow: "0 16px 32px rgba(67, 56, 202, 0.4)",
+    image: "/images/courses/canva.png",
   },
   {
     id: "course-ai-smm",
@@ -539,6 +566,7 @@ export const COURSES: AICourse[] = [
     glowColor: "rgba(99, 102, 241, 0.25)",
     tileBg: "linear-gradient(145deg, #6366F1, #4338CA)",
     tileShadow: "0 16px 32px rgba(67, 56, 202, 0.4)",
+    image: "/images/courses/jasper.png",
   },
   {
     id: "course-ai-social-influence-blogging",
@@ -554,6 +582,7 @@ export const COURSES: AICourse[] = [
     glowColor: "rgba(99, 102, 241, 0.25)",
     tileBg: "linear-gradient(145deg, #6366F1, #4338CA)",
     tileShadow: "0 16px 32px rgba(67, 56, 202, 0.4)",
+    image: "/images/courses/omni.png",
   },
   {
     id: "course-ai-performance-marketing",
@@ -569,6 +598,7 @@ export const COURSES: AICourse[] = [
     glowColor: "rgba(99, 102, 241, 0.25)",
     tileBg: "linear-gradient(145deg, #6366F1, #4338CA)",
     tileShadow: "0 16px 32px rgba(67, 56, 202, 0.4)",
+    image: "/images/courses/kling.png",
   },
   {
     id: "course-ai-seo",
@@ -584,6 +614,7 @@ export const COURSES: AICourse[] = [
     glowColor: "rgba(99, 102, 241, 0.25)",
     tileBg: "linear-gradient(145deg, #6366F1, #4338CA)",
     tileShadow: "0 16px 32px rgba(67, 56, 202, 0.4)",
+    image: "/images/courses/perplexity.png",
   },
   {
     id: "course-managing-finances-ai",
@@ -599,6 +630,7 @@ export const COURSES: AICourse[] = [
     glowColor: "rgba(99, 102, 241, 0.25)",
     tileBg: "linear-gradient(145deg, #6366F1, #4338CA)",
     tileShadow: "0 16px 32px rgba(67, 56, 202, 0.4)",
+    image: "/images/courses/communicating_ai.png",
   },
   {
     id: "course-ai-accountants",
@@ -614,6 +646,7 @@ export const COURSES: AICourse[] = [
     glowColor: "rgba(99, 102, 241, 0.25)",
     tileBg: "linear-gradient(145deg, #6366F1, #4338CA)",
     tileShadow: "0 16px 32px rgba(67, 56, 202, 0.4)",
+    image: "/images/courses/claude_cowork.png",
   },
   {
     id: "course-ai-real-estate",
@@ -629,6 +662,7 @@ export const COURSES: AICourse[] = [
     glowColor: "rgba(99, 102, 241, 0.25)",
     tileBg: "linear-gradient(145deg, #6366F1, #4338CA)",
     tileShadow: "0 16px 32px rgba(67, 56, 202, 0.4)",
+    image: "/images/courses/28_days_ai_cert.png",
   },
   {
     id: "course-ai-copywriting",
@@ -644,6 +678,7 @@ export const COURSES: AICourse[] = [
     glowColor: "rgba(99, 102, 241, 0.25)",
     tileBg: "linear-gradient(145deg, #6366F1, #4338CA)",
     tileShadow: "0 16px 32px rgba(67, 56, 202, 0.4)",
+    image: "/images/courses/claude.png",
   },
   {
     id: "course-ai-side-hustle",
@@ -659,5 +694,6 @@ export const COURSES: AICourse[] = [
     glowColor: "rgba(99, 102, 241, 0.25)",
     tileBg: "linear-gradient(145deg, #6366F1, #4338CA)",
     tileShadow: "0 16px 32px rgba(67, 56, 202, 0.4)",
+    image: "/images/courses/claude_deep_dive.png",
   }
 ];

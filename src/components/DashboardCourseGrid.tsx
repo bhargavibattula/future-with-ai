@@ -16,33 +16,44 @@ import Link from "next/link";
 function CourseVisualHeader({ course }: { course: AICourse }) {
   const Logo = course.LogoComponent;
   return (
-    <div className={`relative h-44 w-full overflow-hidden bg-gradient-to-b ${course.gradient} flex items-center justify-center p-6 border-b border-[#EAE6FE]`}>
-      <div className="absolute -top-10 -right-10 w-36 h-36 rounded-full bg-white/50 blur-2xl pointer-events-none" />
-      <div className="absolute -bottom-10 -left-10 w-36 h-36 rounded-full bg-[#8B7FE8]/25 blur-2xl pointer-events-none" />
-      <div className="absolute inset-0 bg-[radial-gradient(#1E1B2E_1px,transparent_1px)] [background-size:16px_16px] opacity-[0.05] pointer-events-none" />
-      
-      <div className="absolute bottom-6 w-24 h-4 rounded-full bg-black/20 blur-md pointer-events-none transition-transform duration-300 group-hover:scale-90 opacity-70" />
-
-      <div
-        className="relative z-10 w-24 h-24 rounded-[24px] flex items-center justify-center transition-all duration-300 group-hover:-translate-y-2 group-hover:scale-105 select-none"
-        style={{
-          background: course.tileBg,
-          boxShadow: `${course.tileShadow}, inset 0 2px 5px rgba(255, 255, 255, 0.7), inset 0 -3px 6px rgba(0, 0, 0, 0.25)`,
-          borderTop: "2px solid rgba(255, 255, 255, 0.65)",
-          borderLeft: "2px solid rgba(255, 255, 255, 0.65)",
-          borderBottom: "2px solid rgba(0, 0, 0, 0.25)",
-          borderRight: "2px solid rgba(0, 0, 0, 0.25)",
-        }}
-      >
-        <div
-          className="absolute inset-0 rounded-[24px] pointer-events-none"
-          style={{ background: "linear-gradient(135deg, rgba(255,255,255,0.65) 0%, rgba(255,255,255,0.08) 50%, transparent 100%)" }}
+    <div className={`relative h-44 w-full overflow-hidden bg-gradient-to-b ${course.gradient} flex items-center justify-center border-b border-[#EAE6FE]`}>
+      {course.image ? (
+        <img
+          src={course.image}
+          alt={course.title}
+          className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
         />
-        <div className="relative z-10 drop-shadow-md">
-          <Logo className="w-12 h-12" />
-        </div>
-      </div>
+      ) : (
+        <>
+          <div className="absolute -top-10 -right-10 w-36 h-36 rounded-full bg-white/50 blur-2xl pointer-events-none" />
+          <div className="absolute -bottom-10 -left-10 w-36 h-36 rounded-full bg-[#8B7FE8]/25 blur-2xl pointer-events-none" />
+          <div className="absolute inset-0 bg-[radial-gradient(#1E1B2E_1px,transparent_1px)] [background-size:16px_16px] opacity-[0.05] pointer-events-none" />
+          
+          <div className="absolute bottom-6 w-24 h-4 rounded-full bg-black/20 blur-md pointer-events-none transition-transform duration-300 group-hover:scale-90 opacity-70" />
 
+          <div
+            className="relative z-10 w-24 h-24 rounded-[24px] flex items-center justify-center transition-all duration-300 group-hover:-translate-y-2 group-hover:scale-105 select-none"
+            style={{
+              background: course.tileBg,
+              boxShadow: `${course.tileShadow}, inset 0 2px 5px rgba(255, 255, 255, 0.7), inset 0 -3px 6px rgba(0, 0, 0, 0.25)`,
+              borderTop: "2px solid rgba(255, 255, 255, 0.65)",
+              borderLeft: "2px solid rgba(255, 255, 255, 0.65)",
+              borderBottom: "2px solid rgba(0, 0, 0, 0.25)",
+              borderRight: "2px solid rgba(0, 0, 0, 0.25)",
+            }}
+          >
+            <div
+              className="absolute inset-0 rounded-[24px] pointer-events-none"
+              style={{ background: "linear-gradient(135deg, rgba(255,255,255,0.65) 0%, rgba(255,255,255,0.08) 50%, transparent 100%)" }}
+            />
+            <div className="relative z-10 drop-shadow-md">
+              <Logo className="w-12 h-12" />
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* Badges on top of image/gradient */}
       <div className="absolute top-3.5 left-3.5 z-20">
         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-extrabold bg-[#FFC9DE] text-[#1E1B2E] border border-[#FFB0CC] shadow-sm">
           <Sparkles className="w-3 h-3 text-[#8B7FE8]" />
