@@ -31,13 +31,16 @@ export default function GSAPHero() {
         // 1. Eyebrow fade in
         tl.to(".hero-eyebrow", { opacity: 1, duration: 0.6 });
 
-        // 2. Word reveals — set initial position via GSAP (not Tailwind, to avoid transform conflicts)
-        gsap.set(".hero-word-inner", { yPercent: 115 });
-        tl.to(".hero-word-inner", {
-          yPercent: 0,
-          duration: 1.1,
-          stagger: 0.08,
-        }, "-=0.4");
+        // 2. Word reveals — use fromTo to guarantee initial and final states without conflicting on re-mounts
+        tl.fromTo(".hero-word-inner", 
+          { yPercent: 115 },
+          {
+            yPercent: 0,
+            duration: 1.1,
+            stagger: 0.08,
+          }, 
+          "-=0.4"
+        );
 
         // 3. Paragraph fade
         tl.to(".hero-para", { opacity: 1, duration: 0.8 }, "-=0.5");
