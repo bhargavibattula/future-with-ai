@@ -57,6 +57,8 @@ export default function DashboardNavbar() {
     { name: "Courses", href: "/dashboard/courses", icon: BookOpen },
     { name: "AI Tools", href: "/dashboard/tools", icon: Wrench },
     { name: "Games", href: "/dashboard/games", icon: Gamepad2 },
+    { name: "Streak", href: "/dashboard/streak", icon: Flame },
+    { name: "Leaderboard", href: "/dashboard/leaderboard", icon: Sparkles },
   ];
 
   return (
@@ -103,10 +105,13 @@ export default function DashboardNavbar() {
         <div className="hidden md:flex items-center space-x-4">
           <DarkModeToggle />
           {/* Flame / Points Badge */}
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#FFF0F5] border border-[#FFC9DE] text-[#C0336A] font-bold text-sm shadow-sm cursor-pointer hover:bg-[#FFE5EF] transition-colors">
+          <Link 
+            href="/dashboard/streak"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#FFF0F5] border border-[#FFC9DE] text-[#C0336A] font-bold text-sm shadow-sm cursor-pointer hover:bg-[#FFE5EF] transition-colors"
+          >
             <Flame className="w-4 h-4 text-orange-500 fill-orange-500" />
             <span>1</span>
-          </div>
+          </Link>
 
           {/* User Profile Avatar & Dropdown */}
           <div className="relative" ref={dropdownRef}>
@@ -190,10 +195,13 @@ export default function DashboardNavbar() {
         {/* Mobile menu button */}
         <div className="md:hidden flex items-center gap-2">
            <DarkModeToggle />
-           <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-[#FFF0F5] border border-[#FFC9DE] text-[#C0336A] font-bold text-xs shadow-sm">
+           <Link 
+             href="/dashboard/streak"
+             className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-[#FFF0F5] border border-[#FFC9DE] text-[#C0336A] font-bold text-xs shadow-sm"
+           >
              <Flame className="w-3.5 h-3.5 text-orange-500 fill-orange-500" />
              <span>1</span>
-           </div>
+           </Link>
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="p-2 text-[#1E1B2E] hover:bg-[#D8D2FA]/30 rounded-xl transition-colors"

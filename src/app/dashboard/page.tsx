@@ -2,7 +2,6 @@
 
 import { useAuth } from "@/lib/auth";
 import DashboardCourseGrid from "@/components/DashboardCourseGrid";
-import WeeklyStreaks from "@/components/dashboard/WeeklyStreaks";
 import { Sparkles, Target, PenTool, Layers, Briefcase, Award } from "lucide-react";
 import Link from "next/link";
 
@@ -123,8 +122,6 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Weekly Streaks Widget */}
-        <WeeklyStreaks />
 
       </div>
 
@@ -143,6 +140,8 @@ export default function DashboardPage() {
 
         <DashboardCourseGrid />
       </div>
+
+
     </div>
   );
 }
