@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useSession, signOut as nextAuthSignOut } from "next-auth/react";
 
 export interface UserProfile {
   name: string;
@@ -41,17 +42,16 @@ export function removeStoredUser() {
 }
 
 export function useAuth() {
-  const [user, setUser] = useState<UserProfile | null>(null);
+  const { data: session, status } = useSession();
+  const [localUser, setLocalUser] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    // Initial fetch
-    setUser(getStoredUser());
+    setLocalUser(getStoredUser());
     setLoading(false);
 
-    // Listen for custom auth-state-change event across components
     const handleAuthChange = () => {
-      setUser(getStoredUser());
+      setLocalUser(getStoredUser());
     };
 
     window.addEventListener("auth-state-change", handleAuthChange);
@@ -63,19 +63,34 @@ export function useAuth() {
     };
   }, []);
 
+  // Compute active user: prioritize NextAuth OAuth session if present, fallback to local session
+  const activeUser: UserProfile | null = session?.user
+    ? {
+        name: session.user.name || session.user.email?.split("@")[0] || "Learner",
+        email: session.user.email || "",
+        avatarUrl: session.user.image || undefined,
+      }
+    : localUser;
+
   const login = (name: string, email: string) => {
     const profile: UserProfile = {
       name: name.trim() || email.split("@")[0],
       email: email.trim(),
     };
     setStoredUser(profile);
-    setUser(profile);
+    setLocalUser(profile);
   };
 
   const logout = () => {
     removeStoredUser();
-    setUser(null);
+    setLocalUser(null);
+    nextAuthSignOut({ callbackUrl: "/login" });
   };
 
-  return { user, login, logout, loading };
+  return {
+    user: activeUser,
+    login,
+    logout,
+    loading: loading || status === "loading",
+  };
 }
