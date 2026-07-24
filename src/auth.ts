@@ -5,14 +5,11 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { otpStore } from "@/lib/email";
+import { authConfig } from "@/auth.config";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  ...authConfig,
   adapter: PrismaAdapter(prisma),
-  session: { strategy: "jwt" },
-  pages: {
-    signIn: "/login",
-    error: "/login",
-  },
   providers: [
     GoogleProvider({
       clientId: process.env.AUTH_GOOGLE_ID || "",
@@ -40,7 +37,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         });
 
         if (!user || !user.password) {
-          // If no password set or user doesn't exist
           return null;
         }
 
@@ -81,26 +77,4 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
     }),
   ],
-  callbacks: {
-    async jwt({ token, user, account }) {
-      if (user) {
-        token.id = user.id;
-        token.role = (user as any).role || "Learner";
-        token.coins = (user as any).coins || 0;
-        token.xp = (user as any).xp || 0;
-        token.twoFactorVerified = true;
-      }
-      return token;
-    },
-    async session({ session, token }) {
-      if (token && session.user) {
-        session.user.id = token.id as string;
-        (session.user as any).role = token.role as string;
-        (session.user as any).coins = token.coins as number;
-        (session.user as any).xp = token.xp as number;
-        (session.user as any).twoFactorVerified = token.twoFactorVerified as boolean;
-      }
-      return session;
-    },
-  },
 });
