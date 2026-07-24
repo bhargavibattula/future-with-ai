@@ -14,7 +14,7 @@ const buttonVariants = cva(
         default:
           "btn-gsap-primary",
         primaryLight:
-          "bg-[#D8D2FA] text-[#8B7FE8] hover:bg-[#8B7FE8] hover:text-white shadow-soft-sm",
+          "bg-[var(--primary-soft)] text-[var(--primary)] hover:bg-[var(--primary)] hover:text-white shadow-soft-sm",
         accentPink:
           "btn-gsap-pink",
         mint:
@@ -22,8 +22,8 @@ const buttonVariants = cva(
         outline:
           "btn-gsap-outline",
         ghost:
-          "text-[#6B6785] hover:text-[#1E1B2E] hover:bg-[#D8D2FA]/30",
-        link: "text-[#8B7FE8] underline-offset-4 hover:underline",
+          "text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--primary-soft)]/30",
+        link: "text-[var(--primary)] underline-offset-4 hover:underline",
       },
       size: {
         default: "h-11 px-6 py-2.5",
