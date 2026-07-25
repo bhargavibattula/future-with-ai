@@ -147,7 +147,6 @@ export interface AICourse {
   glowColor: string;
   tileBg: string;
   tileShadow: string;
-    image: "/images/courses/claude.png",
   image?: string;
 }
 
