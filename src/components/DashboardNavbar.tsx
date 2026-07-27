@@ -28,8 +28,40 @@ export default function DashboardNavbar() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+  const [streakCount, setStreakCount] = useState<number>(14);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Sync streak count dynamically from localStorage & custom events
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("future_ai_streak_count");
+      if (stored) {
+        const parsed = parseInt(stored, 10);
+        if (!isNaN(parsed)) setStreakCount(parsed);
+      }
+    }
+
+    const handleStreakUpdate = (e: Event) => {
+      const customEvt = e as CustomEvent<number>;
+      if (customEvt.detail !== undefined && typeof customEvt.detail === "number") {
+        setStreakCount(customEvt.detail);
+      } else {
+        const stored = localStorage.getItem("future_ai_streak_count");
+        if (stored) {
+          const parsed = parseInt(stored, 10);
+          if (!isNaN(parsed)) setStreakCount(parsed);
+        }
+      }
+    };
+
+    window.addEventListener("streak-updated", handleStreakUpdate);
+    window.addEventListener("storage", handleStreakUpdate);
+    return () => {
+      window.removeEventListener("streak-updated", handleStreakUpdate);
+      window.removeEventListener("storage", handleStreakUpdate);
+    };
+  }, []);
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -62,7 +94,7 @@ export default function DashboardNavbar() {
   ];
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-white border-b border-[#EAE6FE] shadow-sm transition-all duration-300">
+    <header className="sticky top-0 z-40 w-full bg-[var(--card)] border-b border-[var(--border)] shadow-sm transition-all duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Brand Logo */}
         <Link href="/dashboard" className="flex items-center gap-2.5 group">
@@ -70,7 +102,7 @@ export default function DashboardNavbar() {
             <Sparkles className="w-4 h-4 text-white" />
           </div>
           <div className="flex items-baseline">
-            <span className="text-xl font-extrabold tracking-tight text-[#1E1B2E]">
+            <span className="text-xl font-extrabold tracking-tight text-[var(--foreground)]">
               future
             </span>
             <span className="text-xl font-extrabold text-[#8B7FE8]">
@@ -88,7 +120,7 @@ export default function DashboardNavbar() {
                 key={link.name}
                 href={link.href}
                 className={`flex items-center gap-2 py-1 text-sm font-semibold transition-colors relative ${
-                  isActive ? "text-[#8B7FE8]" : "text-[#6B6785] hover:text-[#1E1B2E]"
+                  isActive ? "text-[#8B7FE8]" : "text-[var(--foreground-secondary)] hover:text-[var(--foreground)]"
                 }`}
               >
                 <link.icon className="w-4 h-4" />
@@ -107,10 +139,10 @@ export default function DashboardNavbar() {
           {/* Flame / Points Badge */}
           <Link 
             href="/dashboard/streak"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#FFF0F5] border border-[#FFC9DE] text-[#C0336A] font-bold text-sm shadow-sm cursor-pointer hover:bg-[#FFE5EF] transition-colors"
+            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#FFF0F5] dark:bg-[#2A1520] border border-[#FFC9DE] dark:border-[#F0879B]/40 text-[#C0336A] dark:text-[#FFC9DE] font-black text-sm shadow-soft-sm cursor-pointer hover:scale-105 transition-all duration-200"
           >
-            <Flame className="w-4 h-4 text-orange-500 fill-orange-500" />
-            <span>1</span>
+            <Flame className="w-4 h-4 text-orange-500 fill-orange-500 animate-pulse-subtle" />
+            <span>{streakCount}</span>
           </Link>
 
           {/* User Profile Avatar & Dropdown */}
@@ -195,13 +227,13 @@ export default function DashboardNavbar() {
         {/* Mobile menu button */}
         <div className="md:hidden flex items-center gap-2">
            <DarkModeToggle />
-           <Link 
-             href="/dashboard/streak"
-             className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-[#FFF0F5] border border-[#FFC9DE] text-[#C0336A] font-bold text-xs shadow-sm"
-           >
-             <Flame className="w-3.5 h-3.5 text-orange-500 fill-orange-500" />
-             <span>1</span>
-           </Link>
+            <Link 
+              href="/dashboard/streak"
+              className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#FFF0F5] dark:bg-[#2A1520] border border-[#FFC9DE] dark:border-[#F0879B]/40 text-[#C0336A] dark:text-[#FFC9DE] font-black text-xs shadow-soft-sm"
+            >
+              <Flame className="w-3.5 h-3.5 text-orange-500 fill-orange-500" />
+              <span>{streakCount}</span>
+            </Link>
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="p-2 text-[#1E1B2E] hover:bg-[#D8D2FA]/30 rounded-xl transition-colors"

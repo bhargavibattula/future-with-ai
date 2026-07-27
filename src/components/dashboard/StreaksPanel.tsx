@@ -108,10 +108,10 @@ const mockMilestones: MilestoneItem[] = [
 ];
 
 const mockRewards: RewardItem[] = [
-  { id: "1", title: "Consistency Master", category: "Streak", iconBg: "#F3F0FE", unlocked: true },
-  { id: "2", title: "Early Learner", category: "Habit", iconBg: "#EDF9F5", unlocked: true },
-  { id: "3", title: "Fast Finisher", category: "Speed", iconBg: "#FFF0F5", unlocked: true },
-  { id: "4", title: "Weekly Goal Hit", category: "Target", iconBg: "#D8D2FA", unlocked: true },
+  { id: "1", title: "Consistency Master", category: "Streak", iconBg: "rgba(139, 127, 232, 0.15)", unlocked: true },
+  { id: "2", title: "Early Learner", category: "Habit", iconBg: "rgba(92, 191, 160, 0.15)", unlocked: true },
+  { id: "3", title: "Fast Finisher", category: "Speed", iconBg: "rgba(240, 135, 155, 0.15)", unlocked: true },
+  { id: "4", title: "Weekly Goal Hit", category: "Target", iconBg: "rgba(216, 210, 250, 0.15)", unlocked: true },
 ];
 
 const motivationalQuotes = [
@@ -151,10 +151,10 @@ const mock90HeatmapDays: HeatmapDay[] = Array.from({ length: 90 }, (_, i) => {
 });
 
 const mockDifficultyMetrics: DifficultyMetric[] = [
-  { tier: "Easy", color: "#5CBFA0", bgSoft: "#EDF9F5", completed: 254, total: 956, pct: 27 },
-  { tier: "Medium", color: "#8B7FE8", bgSoft: "#F3F0FE", completed: 251, total: 2091, pct: 12 },
-  { tier: "Hard", color: "#F0879B", bgSoft: "#FFF0F5", completed: 40, total: 956, pct: 4 },
-  { tier: "Challenge", color: "#8B7FE8", bgSoft: "#D8D2FA", completed: 15, total: 300, pct: 5 },
+  { tier: "Easy", color: "#5CBFA0", bgSoft: "rgba(92, 191, 160, 0.1)", completed: 254, total: 956, pct: 27 },
+  { tier: "Medium", color: "#8B7FE8", bgSoft: "rgba(139, 127, 232, 0.1)", completed: 251, total: 2091, pct: 12 },
+  { tier: "Hard", color: "#F0879B", bgSoft: "rgba(240, 135, 155, 0.1)", completed: 40, total: 956, pct: 4 },
+  { tier: "Challenge", color: "#8B7FE8", bgSoft: "rgba(216, 210, 250, 0.1)", completed: 15, total: 300, pct: 5 },
 ];
 
 const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -193,9 +193,25 @@ export default function StreaksPanel() {
   const [hoveredHeatmapSquare, setHoveredHeatmapSquare] = useState<HeatmapDay | null>(null);
   const [hoveredRing, setHoveredRing] = useState<DifficultyMetric | null>(null);
 
-  // Selected 365 Tile for Dedicated Details Panel
   const [selected365Tile, setSelected365Tile] = useState<Day365Tile | null>(null);
   const [focusedTileIndex, setFocusedTileIndex] = useState<number>(210);
+
+  // Sync initial streak count with localStorage & dispatch
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("future_ai_streak_count");
+      if (stored) {
+        const parsed = parseInt(stored, 10);
+        if (!isNaN(parsed)) {
+          setStreakCount(parsed);
+          window.dispatchEvent(new CustomEvent("streak-updated", { detail: parsed }));
+        }
+      } else {
+        localStorage.setItem("future_ai_streak_count", "14");
+        window.dispatchEvent(new CustomEvent("streak-updated", { detail: 14 }));
+      }
+    }
+  }, []);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const quoteRef = useRef<HTMLParagraphElement>(null);
@@ -209,7 +225,6 @@ export default function StreaksPanel() {
   const consistencyRingRef = useRef<SVGCircleElement>(null);
   const energyFillRef = useRef<HTMLDivElement>(null);
 
-  // Rotating Motivational Quotes GSAP Text Reveal
   useEffect(() => {
     const interval = setInterval(() => {
       if (!quoteRef.current) return;
@@ -232,7 +247,6 @@ export default function StreaksPanel() {
     return () => clearInterval(interval);
   }, []);
 
-  // GSAP Animations on Mount
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (prefersReducedMotion) return;
@@ -313,7 +327,6 @@ export default function StreaksPanel() {
     return () => ctx.revert();
   }, []);
 
-  // Keyboard Navigation (Arrow Keys, Enter/Space, Escape) & Click Outside
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -346,7 +359,6 @@ export default function StreaksPanel() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [focusedTileIndex]);
 
-  // Animate Details Panel Entrance / Cross-Fade on Selection
   const handleTileClick = (tile: Day365Tile) => {
     setSelected365Tile(tile);
     setFocusedTileIndex(tile.index);
@@ -360,11 +372,15 @@ export default function StreaksPanel() {
     }
   };
 
-  // Trigger celebration & digit-by-digit count animation
   const triggerCelebration = () => {
     setIsCelebrating(true);
     const nextVal = streakCount + 1;
     setStreakCount(nextVal);
+
+    if (typeof window !== "undefined") {
+      localStorage.setItem("future_ai_streak_count", nextVal.toString());
+      window.dispatchEvent(new CustomEvent("streak-updated", { detail: nextVal }));
+    }
 
     const digitStr = nextVal.toString().padStart(2, "0");
     if (digit1Ref.current) {
@@ -410,11 +426,11 @@ export default function StreaksPanel() {
             />
 
             <div>
-              <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-white/15 backdrop-blur-md text-xs font-extrabold mb-2 border border-white/20">
+              <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-white/15 backdrop-blur-md text-xs font-extrabold mb-2 border border-white/20 text-white">
                 <Flame className="w-4 h-4 text-[#FFC9DE] fill-[#FFC9DE]" />
                 Daily Streak Status
               </div>
-              <h2 className="text-3xl sm:text-4xl font-black tracking-tight">
+              <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-white">
                 Well done! 🔥
               </h2>
 
@@ -454,24 +470,24 @@ export default function StreaksPanel() {
         </div>
       </div>
 
-      {/* 2. ORIGINAL 365-DAY LEETCODE-INSPIRED LEARNING ACTIVITY HEATMAP */}
-      <Card className="bg-white border-[#EAE6FE] shadow-soft-sm p-6">
+      {/* 2. 365-DAY LEETCODE-INSPIRED LEARNING ACTIVITY HEATMAP */}
+      <Card className="bg-[var(--card)] border-[var(--border)] shadow-soft-sm p-6">
         <CardHeader className="p-0 mb-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <CardTitle className="text-lg sm:text-xl font-black text-[#1E1B2E] flex items-center gap-2">
+              <CardTitle className="text-lg sm:text-xl font-black text-[var(--foreground)] flex items-center gap-2">
                 <Flame className="w-5 h-5 text-[#8B7FE8] fill-[#8B7FE8]" />
                 Learning Consistency
               </CardTitle>
-              <CardDescription className="text-xs text-[#6B6785]">
+              <CardDescription className="text-xs text-[var(--foreground-secondary)]">
                 Click any tile below to view detailed daily activity metrics.
               </CardDescription>
             </div>
 
             {/* Heatmap Legend */}
-            <div className="flex items-center gap-2 text-xs font-bold text-[#6B6785]">
+            <div className="flex items-center gap-2 text-xs font-bold text-[var(--foreground-secondary)]">
               <span className="text-[11px]">Less</span>
-              <span className="w-3 h-3 rounded-sm bg-[#F3F0FE] border border-[#EAE6FE]" title="No Activity" />
+              <span className="w-3 h-3 rounded-sm bg-[var(--background-secondary)] border border-[var(--border)]" title="No Activity" />
               <span className="w-3 h-3 rounded-sm bg-[#D8D2FA]" title="Very Low" />
               <span className="w-3 h-3 rounded-sm bg-[#8B7FE8]" title="Medium" />
               <span className="w-3 h-3 rounded-sm bg-[#786BD6]" title="High" />
@@ -482,24 +498,20 @@ export default function StreaksPanel() {
         </CardHeader>
 
         <CardContent className="p-0 space-y-6">
-          {/* 365-DAY HEATMAP CONTAINER (52 WEEKS x 7 DAYS) */}
           <div className="overflow-x-auto pb-4 pt-2">
-            {/* Top Month Labels Header */}
-            <div className="flex justify-between text-[11px] font-extrabold text-[#6B6785] mb-3 min-w-[720px] px-8">
+            <div className="flex justify-between text-[11px] font-extrabold text-[var(--foreground-secondary)] mb-3 min-w-[720px] px-8">
               {monthNames.map((m, idx) => (
                 <span key={idx}>{m}</span>
               ))}
             </div>
 
             <div className="flex items-start gap-3 min-w-[720px]">
-              {/* Day Labels Column */}
-              <div className="flex flex-col justify-between text-[10px] font-bold text-[#6B6785] h-24 py-1 shrink-0">
+              <div className="flex flex-col justify-between text-[10px] font-bold text-[var(--foreground-secondary)] h-24 py-1 shrink-0">
                 <span>Mon</span>
                 <span>Wed</span>
                 <span>Fri</span>
               </div>
 
-              {/* 52 Columns Grid */}
               <div ref={heatmap365GridRef} className="flex-1 flex gap-1.5 justify-between">
                 {Array.from({ length: 52 }, (_, colIdx) => (
                   <div key={colIdx} className="heatmap-365-col flex flex-col gap-1.5">
@@ -509,7 +521,7 @@ export default function StreaksPanel() {
                       const isSelected = selected365Tile?.index === tile.index;
                       const isFocused = focusedTileIndex === tile.index;
 
-                      let bgClass = "bg-[#F3F0FE] border border-[#EAE6FE]";
+                      let bgClass = "bg-[var(--background-secondary)] border border-[var(--border)]";
                       if (tile.level === 1) bgClass = "bg-[#D8D2FA]";
                       if (tile.level === 2) bgClass = "bg-[#8B7FE8]";
                       if (tile.level === 3) bgClass = "bg-[#786BD6]";
@@ -523,9 +535,9 @@ export default function StreaksPanel() {
                             isSelected
                               ? "scale-140 shadow-glow-primary ring-2 ring-[#8B7FE8] z-20 animate-pulse"
                               : isFocused
-                              ? "ring-2 ring-[#1E1B2E]"
+                              ? "ring-2 ring-[var(--foreground)]"
                               : tile.isToday
-                              ? "ring-2 ring-[#1E1B2E]"
+                              ? "ring-2 ring-[var(--foreground)]"
                               : ""
                           }`}
                           aria-label={`Select ${tile.dateStr}`}
@@ -542,19 +554,18 @@ export default function StreaksPanel() {
           {selected365Tile && (
             <div
               ref={detailsPanelRef}
-              className="p-5 sm:p-6 rounded-3xl bg-gradient-to-br from-[#F3F0FE] via-white to-[#FCFBFF] border-2 border-[#8B7FE8]/50 shadow-soft-md space-y-4"
+              className="p-5 sm:p-6 rounded-3xl bg-gradient-to-br from-[#8B7FE8]/15 via-[var(--card)] to-[var(--background-secondary)] border-2 border-[#8B7FE8]/50 shadow-soft-md space-y-4"
             >
-              {/* Header Row */}
-              <div className="flex items-center justify-between border-b border-[#EAE6FE] pb-3">
+              <div className="flex items-center justify-between border-b border-[var(--border)] pb-3">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-2xl bg-[#8B7FE8] text-white flex items-center justify-center font-black shadow-soft-sm">
                     <Calendar className="w-5 h-5" />
                   </div>
                   <div>
-                    <h4 className="text-base font-black text-[#1E1B2E]">
+                    <h4 className="text-base font-black text-[var(--foreground)]">
                       {selected365Tile.dateStr} Details
                     </h4>
-                    <span className="text-xs font-bold text-[#6B6785]">
+                    <span className="text-xs font-bold text-[var(--foreground-secondary)]">
                       Day {selected365Tile.index + 1} of 365
                     </span>
                   </div>
@@ -566,7 +577,7 @@ export default function StreaksPanel() {
                   </Badge>
                   <button
                     onClick={() => setSelected365Tile(null)}
-                    className="p-1.5 rounded-full hover:bg-[#F3F0FE] text-[#6B6785] transition-colors"
+                    className="p-1.5 rounded-full hover:bg-[var(--background-secondary)] text-[var(--foreground-secondary)] transition-colors"
                     aria-label="Close details panel"
                   >
                     <X className="w-4 h-4" />
@@ -574,28 +585,27 @@ export default function StreaksPanel() {
                 </div>
               </div>
 
-              {/* 8-Grid Metrics Breakdown */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                <div className="p-3 rounded-2xl bg-white border border-[#EAE6FE] flex flex-col justify-between">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B6785]">
+                <div className="p-3 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)] flex flex-col justify-between">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--foreground-secondary)]">
                     📚 Lessons Completed
                   </span>
-                  <span className="text-base font-black text-[#1E1B2E] mt-1">
+                  <span className="text-base font-black text-[var(--foreground)] mt-1">
                     {selected365Tile.lessonsDone} Lessons
                   </span>
                 </div>
 
-                <div className="p-3 rounded-2xl bg-white border border-[#EAE6FE] flex flex-col justify-between">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B6785]">
+                <div className="p-3 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)] flex flex-col justify-between">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--foreground-secondary)]">
                     📝 Quiz Attempts
                   </span>
-                  <span className="text-base font-black text-[#1E1B2E] mt-1">
+                  <span className="text-base font-black text-[var(--foreground)] mt-1">
                     {selected365Tile.quizAttempts} Quizzes
                   </span>
                 </div>
 
-                <div className="p-3 rounded-2xl bg-white border border-[#EAE6FE] flex flex-col justify-between">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B6785]">
+                <div className="p-3 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)] flex flex-col justify-between">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--foreground-secondary)]">
                     ⏱ Study Time
                   </span>
                   <span className="text-base font-black text-[#5CBFA0] mt-1">
@@ -603,8 +613,8 @@ export default function StreaksPanel() {
                   </span>
                 </div>
 
-                <div className="p-3 rounded-2xl bg-white border border-[#EAE6FE] flex flex-col justify-between">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B6785]">
+                <div className="p-3 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)] flex flex-col justify-between">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--foreground-secondary)]">
                     ⭐ XP Earned
                   </span>
                   <span className="text-base font-black text-[#8B7FE8] mt-1">
@@ -612,8 +622,8 @@ export default function StreaksPanel() {
                   </span>
                 </div>
 
-                <div className="p-3 rounded-2xl bg-white border border-[#EAE6FE] flex flex-col justify-between">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B6785]">
+                <div className="p-3 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)] flex flex-col justify-between">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--foreground-secondary)]">
                     🔥 Daily Streak
                   </span>
                   <span className="text-base font-black text-[#FFC9DE] mt-1">
@@ -621,17 +631,17 @@ export default function StreaksPanel() {
                   </span>
                 </div>
 
-                <div className="p-3 rounded-2xl bg-white border border-[#EAE6FE] flex flex-col justify-between">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B6785]">
+                <div className="p-3 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)] flex flex-col justify-between">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--foreground-secondary)]">
                     🎯 Completion Rate
                   </span>
-                  <span className="text-base font-black text-[#1E1B2E] mt-1">
+                  <span className="text-base font-black text-[var(--foreground)] mt-1">
                     {selected365Tile.level > 0 ? `${75 + selected365Tile.level * 5}%` : "0%"}
                   </span>
                 </div>
 
-                <div className="p-3 rounded-2xl bg-white border border-[#EAE6FE] flex flex-col justify-between sm:col-span-2">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B6785]">
+                <div className="p-3 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)] flex flex-col justify-between sm:col-span-2">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--foreground-secondary)]">
                     🏆 Achievements Earned
                   </span>
                   <span className="text-xs font-extrabold text-[#8B7FE8] mt-1 truncate">
@@ -640,8 +650,7 @@ export default function StreaksPanel() {
                 </div>
               </div>
 
-              {/* AI Daily Insight Message */}
-              <div className="p-3.5 rounded-2xl bg-white border border-[#EAE6FE] flex items-center gap-3 text-xs font-semibold text-[#1E1B2E]">
+              <div className="p-3.5 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)] flex items-center gap-3 text-xs font-semibold text-[var(--foreground)]">
                 <Brain className="w-5 h-5 text-[#8B7FE8] shrink-0" />
                 <div>
                   {selected365Tile.level > 0 ? (
@@ -659,64 +668,64 @@ export default function StreaksPanel() {
           )}
 
           {/* SUMMARY PANEL WITH 92% CONSISTENCY SCORE RING */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 pt-4 border-t border-[#EAE6FE] items-center">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 pt-4 border-t border-[var(--border)] items-center">
             <div className="md:col-span-8 grid grid-cols-2 sm:grid-cols-3 gap-3">
-              <div className="p-3 rounded-2xl bg-[#FCFBFF] border border-[#EAE6FE]">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B6785] block">
+              <div className="p-3 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)]">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--foreground-secondary)] block">
                   Current Streak
                 </span>
                 <span className="text-lg font-black text-[#8B7FE8]">14 Days</span>
               </div>
 
-              <div className="p-3 rounded-2xl bg-[#FCFBFF] border border-[#EAE6FE]">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B6785] block">
+              <div className="p-3 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)]">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--foreground-secondary)] block">
                   Longest Streak
                 </span>
-                <span className="text-lg font-black text-[#1E1B2E]">18 Days</span>
+                <span className="text-lg font-black text-[var(--foreground)]">18 Days</span>
               </div>
 
-              <div className="p-3 rounded-2xl bg-[#FCFBFF] border border-[#EAE6FE]">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B6785] block">
+              <div className="p-3 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)]">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--foreground-secondary)] block">
                   Learning Days
                 </span>
                 <span className="text-lg font-black text-[#5CBFA0]">268 Days</span>
               </div>
 
-              <div className="p-3 rounded-2xl bg-[#FCFBFF] border border-[#EAE6FE]">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B6785] block">
+              <div className="p-3 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)]">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--foreground-secondary)] block">
                   Study Hours
                 </span>
                 <span className="text-lg font-black text-[#8B7FE8]">142 Hours</span>
               </div>
 
-              <div className="p-3 rounded-2xl bg-[#FCFBFF] border border-[#EAE6FE]">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B6785] block">
+              <div className="p-3 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)]">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--foreground-secondary)] block">
                   Total XP Earned
                 </span>
-                <span className="text-lg font-black text-[#1E1B2E]">3,420 XP</span>
+                <span className="text-lg font-black text-[var(--foreground)]">3,420 XP</span>
               </div>
 
-              <div className="p-3 rounded-2xl bg-[#FCFBFF] border border-[#EAE6FE]">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B6785] block">
+              <div className="p-3 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)]">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--foreground-secondary)] block">
                   Perfect Days
                 </span>
                 <span className="text-lg font-black text-[#F0879B]">34 Days</span>
               </div>
             </div>
 
-            <div className="md:col-span-4 p-4 rounded-2xl bg-gradient-to-br from-[#F3F0FE] to-white border border-[#D8D2FA] flex items-center justify-between gap-4">
+            <div className="md:col-span-4 p-4 rounded-2xl bg-gradient-to-br from-[#8B7FE8]/15 via-[var(--card)] to-[var(--background-secondary)] border border-[#D8D2FA]/40 flex items-center justify-between gap-4">
               <div>
-                <span className="text-xs font-black text-[#1E1B2E] block">
+                <span className="text-xs font-black text-[var(--foreground)] block">
                   AI Consistency Score
                 </span>
-                <span className="text-[10px] text-[#6B6785] font-semibold">
+                <span className="text-[10px] text-[var(--foreground-secondary)] font-semibold">
                   Top 5% among all active AI platform learners.
                 </span>
               </div>
 
               <div className="relative w-20 h-20 flex items-center justify-center shrink-0">
                 <svg className="w-20 h-20 transform -rotate-90">
-                  <circle cx="40" cy="40" r="32" stroke="#F3F0FE" strokeWidth="7" fill="transparent" />
+                  <circle cx="40" cy="40" r="32" stroke="rgba(139, 127, 232, 0.15)" strokeWidth="7" fill="transparent" />
                   <circle
                     ref={consistencyRingRef}
                     cx="40"
@@ -734,25 +743,24 @@ export default function StreaksPanel() {
             </div>
           </div>
 
-          {/* AI-Generated Learning Insights */}
-          <div className="p-4 rounded-2xl bg-[#FCFBFF] border border-[#EAE6FE] space-y-2">
+          <div className="p-4 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)] space-y-2">
             <div className="text-xs font-black text-[#8B7FE8] flex items-center gap-1.5">
               <Brain className="w-4 h-4" /> AI Consistency Insights
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs font-semibold text-[#1E1B2E]">
-              <div className="p-2.5 rounded-xl bg-white border border-[#EAE6FE] flex items-center gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs font-semibold text-[var(--foreground)]">
+              <div className="p-2.5 rounded-xl bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
                 <Flame className="w-4 h-4 text-[#8B7FE8] shrink-0" />
                 <span>You've studied 18 consecutive days.</span>
               </div>
-              <div className="p-2.5 rounded-xl bg-white border border-[#EAE6FE] flex items-center gap-2">
+              <div className="p-2.5 rounded-xl bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
                 <TrendingUp className="w-4 h-4 text-[#5CBFA0] shrink-0" />
                 <span>Most productive day: Wednesday.</span>
               </div>
-              <div className="p-2.5 rounded-xl bg-white border border-[#EAE6FE] flex items-center gap-2">
+              <div className="p-2.5 rounded-xl bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
                 <Target className="w-4 h-4 text-[#F0879B] shrink-0" />
                 <span>34% more quizzes solved on weekends.</span>
               </div>
-              <div className="p-2.5 rounded-xl bg-white border border-[#EAE6FE] flex items-center gap-2">
+              <div className="p-2.5 rounded-xl bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-[#8B7FE8] shrink-0" />
                 <span>Improving consistently this month.</span>
               </div>
@@ -762,15 +770,15 @@ export default function StreaksPanel() {
       </Card>
 
       {/* 3. WEEKLY STREAK ANALYTICS BAR GRAPH */}
-      <Card className="bg-white border-[#EAE6FE] shadow-soft-sm p-6">
+      <Card className="bg-[var(--card)] border-[var(--border)] shadow-soft-sm p-6">
         <CardHeader className="p-0 mb-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
-              <CardTitle className="text-lg font-black text-[#1E1B2E] flex items-center gap-2">
+              <CardTitle className="text-lg font-black text-[var(--foreground)] flex items-center gap-2">
                 <BarChart3 className="w-5 h-5 text-[#8B7FE8]" />
                 Weekly Streak Analytics
               </CardTitle>
-              <CardDescription className="text-xs text-[#6B6785]">
+              <CardDescription className="text-xs text-[var(--foreground-secondary)]">
                 Hover over daily bars to view detailed lessons, study time, and XP metrics.
               </CardDescription>
             </div>
@@ -783,7 +791,7 @@ export default function StreaksPanel() {
         <CardContent className="p-0">
           <div
             ref={barsContainerRef}
-            className="h-64 flex items-end justify-between gap-3 sm:gap-6 pt-8 pb-4 border-b border-[#EAE6FE] relative"
+            className="h-64 flex items-end justify-between gap-3 sm:gap-6 pt-8 pb-4 border-b border-[var(--border)] relative"
           >
             {mockAnalyticsBars.map((bar, idx) => {
               const heightPct = (bar.completedLessons / 7) * 100;
@@ -819,7 +827,7 @@ export default function StreaksPanel() {
                     </div>
                   )}
 
-                  <div className="w-full max-w-[40px] bg-[#F3F0FE] rounded-2xl overflow-hidden h-full flex flex-col justify-end p-1">
+                  <div className="w-full max-w-[40px] bg-[var(--background-secondary)] rounded-2xl overflow-hidden h-full flex flex-col justify-end p-1">
                     <div
                       className={`w-full rounded-xl bg-gradient-to-t from-[#8B7FE8] via-[#786BD6] to-[#5CBFA0] analytics-bar transition-all duration-300 ${
                         isHovered ? "shadow-glow-primary scale-105" : ""
@@ -830,7 +838,7 @@ export default function StreaksPanel() {
 
                   <span
                     className={`text-xs font-black mt-2 transition-colors ${
-                      isHovered ? "text-[#8B7FE8]" : "text-[#6B6785]"
+                      isHovered ? "text-[#8B7FE8]" : "text-[var(--foreground-secondary)]"
                     }`}
                   >
                     {bar.day}
@@ -843,15 +851,15 @@ export default function StreaksPanel() {
       </Card>
 
       {/* 4. 90-DAY HEATMAP */}
-      <Card className="bg-white border-[#EAE6FE] shadow-soft-sm p-6">
+      <Card className="bg-[var(--card)] border-[var(--border)] shadow-soft-sm p-6">
         <CardHeader className="p-0 mb-5">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
-              <CardTitle className="text-lg font-black text-[#1E1B2E] flex items-center gap-2">
+              <CardTitle className="text-lg font-black text-[var(--foreground)] flex items-center gap-2">
                 <CalendarIcon className="w-5 h-5 text-[#8B7FE8]" />
                 90-Day Activity Log
               </CardTitle>
-              <CardDescription className="text-xs text-[#6B6785]">
+              <CardDescription className="text-xs text-[var(--foreground-secondary)]">
                 Recent 90-day learning activity breakdown.
               </CardDescription>
             </div>
@@ -864,7 +872,7 @@ export default function StreaksPanel() {
             className="grid grid-cols-10 sm:grid-cols-15 gap-2 pt-2 pb-2"
           >
             {mock90HeatmapDays.map((day) => {
-              let bgClass = "bg-[#F3F0FE] border border-[#EAE6FE]";
+              let bgClass = "bg-[var(--background-secondary)] border border-[var(--border)]";
               if (day.level === 1) bgClass = "bg-[#D8D2FA]";
               if (day.level === 2) bgClass = "bg-[#8B7FE8]";
               if (day.level === 3) bgClass = "bg-[#786BD6]";
@@ -879,7 +887,7 @@ export default function StreaksPanel() {
                   onMouseLeave={() => setHoveredHeatmapSquare(null)}
                   className={`heatmap-90-square h-8 sm:h-9 rounded-xl flex items-center justify-center text-[10px] font-extrabold cursor-pointer transition-all duration-200 hover:scale-125 hover:z-20 relative ${bgClass}`}
                 >
-                  <span className={day.level >= 2 ? "text-white" : "text-[#6B6785]"}>
+                  <span className={day.level >= 2 ? "text-white" : "text-[var(--foreground-secondary)]"}>
                     {day.dayNum}
                   </span>
 
@@ -905,15 +913,15 @@ export default function StreaksPanel() {
       </Card>
 
       {/* 5. STREAK PERFORMANCE ANALYTICS (CONCENTRIC RINGS) */}
-      <Card className="bg-white border-[#EAE6FE] shadow-soft-sm p-6">
+      <Card className="bg-[var(--card)] border-[var(--border)] shadow-soft-sm p-6">
         <CardHeader className="p-0 mb-6">
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle className="text-lg font-black text-[#1E1B2E] flex items-center gap-2">
+              <CardTitle className="text-lg font-black text-[var(--foreground)] flex items-center gap-2">
                 <PieChart className="w-5 h-5 text-[#8B7FE8]" />
                 Learning Performance
               </CardTitle>
-              <CardDescription className="text-xs text-[#6B6785]">
+              <CardDescription className="text-xs text-[var(--foreground-secondary)]">
                 Difficulty-wise completion progress across quiz tiers.
               </CardDescription>
             </div>
@@ -929,10 +937,10 @@ export default function StreaksPanel() {
                 viewBox="0 0 160 160"
                 className="w-48 h-48 sm:w-56 sm:h-56 transform -rotate-90"
               >
-                <circle cx="80" cy="80" r="62" stroke="#EDF9F5" strokeWidth="9" fill="transparent" />
-                <circle cx="80" cy="80" r="48" stroke="#F3F0FE" strokeWidth="9" fill="transparent" />
-                <circle cx="80" cy="80" r="34" stroke="#FFF0F5" strokeWidth="9" fill="transparent" />
-                <circle cx="80" cy="80" r="20" stroke="#F3F0FE" strokeWidth="9" fill="transparent" />
+                <circle cx="80" cy="80" r="62" stroke="rgba(92, 191, 160, 0.15)" strokeWidth="9" fill="transparent" />
+                <circle cx="80" cy="80" r="48" stroke="rgba(139, 127, 232, 0.15)" strokeWidth="9" fill="transparent" />
+                <circle cx="80" cy="80" r="34" stroke="rgba(240, 135, 155, 0.15)" strokeWidth="9" fill="transparent" />
+                <circle cx="80" cy="80" r="20" stroke="rgba(216, 210, 250, 0.15)" strokeWidth="9" fill="transparent" />
 
                 <circle
                   className="radial-ring-circle transition-all duration-300 cursor-pointer"
@@ -1000,10 +1008,10 @@ export default function StreaksPanel() {
               </svg>
 
               <div className="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
-                <span className="text-xl font-black text-[#1E1B2E]">
+                <span className="text-xl font-black text-[var(--foreground)]">
                   {hoveredRing ? `${hoveredRing.pct}%` : "Overall"}
                 </span>
-                <span className="text-[10px] font-extrabold uppercase text-[#6B6785]">
+                <span className="text-[10px] font-extrabold uppercase text-[var(--foreground-secondary)]">
                   {hoveredRing ? hoveredRing.tier : "Difficulty"}
                 </span>
               </div>
@@ -1013,7 +1021,7 @@ export default function StreaksPanel() {
               {mockDifficultyMetrics.map((item, idx) => (
                 <div
                   key={idx}
-                  className="p-3.5 rounded-2xl border border-[#EAE6FE] bg-[#FCFBFF] flex items-center justify-between gap-4 hover:border-[#8B7FE8]/50 transition-all"
+                  className="p-3.5 rounded-2xl border border-[var(--border)] bg-[var(--background-secondary)] flex items-center justify-between gap-4 hover:border-[#8B7FE8]/50 transition-all"
                 >
                   <div className="flex items-center gap-3">
                     <span
@@ -1021,23 +1029,23 @@ export default function StreaksPanel() {
                       style={{ backgroundColor: item.color }}
                     />
                     <div>
-                      <span className="text-xs font-black text-[#1E1B2E] block">
+                      <span className="text-xs font-black text-[var(--foreground)] block">
                         {item.tier} Difficulty
                       </span>
-                      <span className="text-[10px] font-bold text-[#6B6785]">
+                      <span className="text-[10px] font-bold text-[var(--foreground-secondary)]">
                         {item.completed} / {item.total.toLocaleString()} Completed
                       </span>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-3 text-right">
-                    <div className="w-24 h-2 bg-[#F3F0FE] rounded-full overflow-hidden hidden sm:block">
+                    <div className="w-24 h-2 bg-[var(--card)] rounded-full overflow-hidden hidden sm:block">
                       <div
                         className="h-full rounded-full transition-all duration-500"
                         style={{ width: `${item.pct}%`, backgroundColor: item.color }}
                       />
                     </div>
-                    <span className="text-xs font-black text-[#1E1B2E] w-10">
+                    <span className="text-xs font-black text-[var(--foreground)] w-10">
                       {item.pct}%
                     </span>
                   </div>
@@ -1049,23 +1057,23 @@ export default function StreaksPanel() {
       </Card>
 
       {/* 6. STREAK JOURNEY PATH */}
-      <Card className="bg-white border-[#EAE6FE] shadow-soft-sm p-6">
+      <Card className="bg-[var(--card)] border-[var(--border)] shadow-soft-sm p-6">
         <CardHeader className="p-0 mb-4">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-lg font-black text-[#1E1B2E] flex items-center gap-2">
+            <CardTitle className="text-lg font-black text-[var(--foreground)] flex items-center gap-2">
               <MapPin className="w-5 h-5 text-[#8B7FE8]" />
               Daily Streak Journey Path
             </CardTitle>
             <Badge variant="mint">Active Trail</Badge>
           </div>
-          <CardDescription className="text-xs text-[#6B6785]">
+          <CardDescription className="text-xs text-[var(--foreground-secondary)]">
             Progress through streak waypoints to reach your 20-day goal.
           </CardDescription>
         </CardHeader>
 
         <CardContent className="p-0">
           <div className="relative py-6 flex items-center justify-between overflow-x-auto gap-4">
-            <div className="absolute top-1/2 left-8 right-8 h-1 bg-[#F3F0FE] -translate-y-1/2 z-0" />
+            <div className="absolute top-1/2 left-8 right-8 h-1 bg-[var(--background-secondary)] -translate-y-1/2 z-0" />
             <div className="absolute top-1/2 left-8 w-[70%] h-1 bg-[#8B7FE8] -translate-y-1/2 z-0 shadow-glow-primary" />
 
             {journeyNodes.map((node, idx) => {
@@ -1080,12 +1088,12 @@ export default function StreaksPanel() {
                         ? "bg-[#8B7FE8] text-white ring-4 ring-[#D8D2FA] shadow-glow-primary scale-110 animate-bounce"
                         : isCompleted
                         ? "bg-[#5CBFA0] text-white shadow-soft-sm"
-                        : "bg-white border-2 border-[#EAE6FE] text-[#6B6785]"
+                        : "bg-[var(--card)] border-2 border-[var(--border)] text-[var(--foreground-secondary)]"
                     }`}
                   >
                     {isCompleted ? <Check className="w-5 h-5 stroke-[3]" /> : node.day}
                   </div>
-                  <span className="text-[11px] font-extrabold text-[#1E1B2E] mt-2">
+                  <span className="text-[11px] font-extrabold text-[var(--foreground)] mt-2">
                     {node.label}
                   </span>
                 </div>
@@ -1097,13 +1105,13 @@ export default function StreaksPanel() {
 
       {/* 7. STREAK MILESTONES & REWARDS ROW */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <Card className="lg:col-span-7 bg-white border-[#EAE6FE] shadow-soft-sm">
+        <Card className="lg:col-span-7 bg-[var(--card)] border-[var(--border)] shadow-soft-sm">
           <CardHeader>
-            <CardTitle className="text-lg font-black text-[#1E1B2E] flex items-center gap-2">
+            <CardTitle className="text-lg font-black text-[var(--foreground)] flex items-center gap-2">
               <Trophy className="w-5 h-5 text-[#8B7FE8]" />
               Streak Milestones
             </CardTitle>
-            <CardDescription className="text-xs text-[#6B6785]">
+            <CardDescription className="text-xs text-[var(--foreground-secondary)]">
               Reach streak thresholds to unlock permanent badges & XP boosts.
             </CardDescription>
           </CardHeader>
@@ -1115,21 +1123,21 @@ export default function StreaksPanel() {
                   key={idx}
                   className={`p-4 rounded-2xl border flex flex-col items-center text-center transition-all duration-300 ${
                     m.unlocked
-                      ? "bg-gradient-to-b from-[#F3F0FE] to-white border-[#8B7FE8] shadow-soft-sm hover:-translate-y-1 hover:shadow-glow-primary"
-                      : "bg-[#FCFBFF] border-[#EAE6FE] opacity-60 backdrop-blur-sm"
+                      ? "bg-gradient-to-b from-[#8B7FE8]/15 via-[var(--card)] to-[var(--background-secondary)] border-[#8B7FE8] shadow-soft-sm hover:-translate-y-1 hover:shadow-glow-primary"
+                      : "bg-[var(--background-secondary)] border-[var(--border)] opacity-60 backdrop-blur-sm"
                   }`}
                 >
                   <div
                     className={`w-12 h-12 rounded-2xl flex items-center justify-center text-lg font-black mb-2 ${
                       m.unlocked
                         ? "bg-[#8B7FE8] text-white shadow-soft-md"
-                        : "bg-[#F3F0FE] text-[#6B6785]"
+                        : "bg-[var(--card)] text-[var(--foreground-secondary)]"
                     }`}
                   >
                     {m.unlocked ? <Trophy className="w-6 h-6" /> : <Lock className="w-5 h-5" />}
                   </div>
 
-                  <span className="text-xs font-black text-[#1E1B2E]">{m.label}</span>
+                  <span className="text-xs font-black text-[var(--foreground)]">{m.label}</span>
                   <span className="text-[10px] font-bold text-[#8B7FE8] mt-1">
                     +{m.rewardXP} XP Bonus
                   </span>
@@ -1139,13 +1147,13 @@ export default function StreaksPanel() {
           </CardContent>
         </Card>
 
-        <Card className="lg:col-span-5 bg-white border-[#EAE6FE] shadow-soft-sm">
+        <Card className="lg:col-span-5 bg-[var(--card)] border-[var(--border)] shadow-soft-sm">
           <CardHeader>
-            <CardTitle className="text-lg font-black text-[#1E1B2E] flex items-center gap-2">
+            <CardTitle className="text-lg font-black text-[var(--foreground)] flex items-center gap-2">
               <Award className="w-5 h-5 text-[#8B7FE8]" />
               Unlocked Streak Rewards
             </CardTitle>
-            <CardDescription className="text-xs text-[#6B6785]">
+            <CardDescription className="text-xs text-[var(--foreground-secondary)]">
               Achievements earned for consistent study habits.
             </CardDescription>
           </CardHeader>
@@ -1154,7 +1162,7 @@ export default function StreaksPanel() {
             {mockRewards.map((reward) => (
               <div
                 key={reward.id}
-                className="p-3 rounded-2xl bg-[#FCFBFF] border border-[#EAE6FE] flex items-center justify-between hover:border-[#8B7FE8]/50 hover:shadow-soft-sm transition-all"
+                className="p-3 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)] flex items-center justify-between hover:border-[#8B7FE8]/50 hover:shadow-soft-sm transition-all"
               >
                 <div className="flex items-center gap-3">
                   <div
@@ -1164,10 +1172,10 @@ export default function StreaksPanel() {
                     <Sparkles className="w-4.5 h-4.5" />
                   </div>
                   <div>
-                    <span className="text-xs font-black text-[#1E1B2E] block">
+                    <span className="text-xs font-black text-[var(--foreground)] block">
                       {reward.title}
                     </span>
-                    <span className="text-[10px] text-[#6B6785] font-bold">
+                    <span className="text-[10px] text-[var(--foreground-secondary)] font-bold">
                       Category: {reward.category}
                     </span>
                   </div>

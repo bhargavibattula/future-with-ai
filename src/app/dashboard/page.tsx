@@ -330,21 +330,21 @@ export default function DashboardPage() {
           </Card>
 
           {/* FLAME MASCOT STREAK CARD PREVIEW (5 Cols) */}
-          <Card className="lg:col-span-5 bg-gradient-to-br from-[#1E1B2E] to-[#2A2540] text-white border border-[#D8D2FA]/30 shadow-glow-primary flex flex-col justify-between">
+          <Card className="lg:col-span-5 bg-[var(--card)] border border-[var(--border)] shadow-soft-sm flex flex-col justify-between">
             <CardHeader className="pb-2">
               <div className="flex items-center justify-between">
-                <Badge variant="mint" className="text-[10px]">
+                <Badge variant="primary" className="text-[10px]">
                   Daily Streak
                 </Badge>
-                <span className="text-xs font-bold text-[#FFC9DE]">14 Days Active</span>
+                <span className="text-xs font-bold text-[#8B7FE8]">14 Days Active</span>
               </div>
-              <CardTitle className="text-xl font-black text-white mt-2">
+              <CardTitle className="text-xl font-black text-[var(--foreground)] mt-2">
                 Streak Flame Mascot
               </CardTitle>
             </CardHeader>
 
             <CardContent className="space-y-4 pt-2">
-              <div className="flex items-center justify-center">
+              <div className="flex items-center justify-center p-3 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)]">
                 <FlameMascot
                   isCelebrating={isMascotCelebrating}
                   onCelebrationComplete={() => setIsMascotCelebrating(false)}
@@ -352,8 +352,8 @@ export default function DashboardPage() {
               </div>
 
               <div className="text-center space-y-2">
-                <h4 className="text-sm font-black text-white">Keep the Flame Alive! 🔥</h4>
-                <p className="text-xs text-white/70">
+                <h4 className="text-sm font-black text-[var(--foreground)]">Keep the Flame Alive! 🔥</h4>
+                <p className="text-xs text-[var(--foreground-secondary)]">
                   Complete today's quiz to extend your streak and unlock milestone badges.
                 </p>
 
@@ -363,11 +363,11 @@ export default function DashboardPage() {
                     onClick={() => setIsMascotCelebrating(true)}
                     className="bg-[#8B7FE8] hover:bg-[#786BD6] text-white font-extrabold text-xs shadow-soft-sm"
                   >
-                    <Sparkles className="w-3.5 h-3.5 mr-1 text-[#FFC9DE]" /> Boost Flame
+                    <Sparkles className="w-3.5 h-3.5 mr-1 text-white" /> Boost Flame
                   </Button>
 
                   <Link href="/dashboard/streak">
-                    <Button size="sm" variant="outline" className="text-xs font-extrabold border-white/20 text-white hover:bg-white/10">
+                    <Button size="sm" variant="outline" className="text-xs font-extrabold border-[var(--border)] text-[var(--foreground)] hover:bg-[var(--background-secondary)]">
                       Full Streak Hub ➔
                     </Button>
                   </Link>

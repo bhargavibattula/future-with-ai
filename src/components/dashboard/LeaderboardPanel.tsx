@@ -48,36 +48,36 @@ export interface AchievementItem {
 const mockTopPerformers: Record<"daily" | "week" | "month" | "allTime", LeaderboardUser[]> = {
   daily: [
     { rank: 1, name: "Aarav Sharma", avatarInitials: "AS", avatarBg: "#8B7FE8", level: 12, xp: 950, accuracy: "98%", streak: 18, coursesCompleted: 6, sparklineData: [20, 35, 45, 60, 80, 95] },
-    { rank: 2, name: "Ananya Rao", avatarInitials: "AR", avatarBg: "#B8E8D8", level: 10, xp: 820, accuracy: "95%", streak: 14, coursesCompleted: 5, sparklineData: [15, 30, 40, 55, 70, 82] },
+    { rank: 2, name: "Ananya Rao", avatarInitials: "AR", avatarBg: "#5CBFA0", level: 10, xp: 820, accuracy: "95%", streak: 14, coursesCompleted: 5, sparklineData: [15, 30, 40, 55, 70, 82] },
     { rank: 3, name: "Vikram Patel", avatarInitials: "VP", avatarBg: "#FFC9DE", level: 9, xp: 750, accuracy: "94%", streak: 12, coursesCompleted: 4, sparklineData: [10, 25, 35, 50, 65, 75] },
     { rank: 4, name: "You (Bhargavi)", avatarInitials: "BB", avatarBg: "#8B7FE8", level: 8, xp: 680, accuracy: "96%", streak: 14, coursesCompleted: 4, sparklineData: [12, 28, 38, 52, 60, 68], isCurrentUser: true },
     { rank: 5, name: "Sneha Reddy", avatarInitials: "SR", avatarBg: "#D8D2FA", level: 8, xp: 610, accuracy: "92%", streak: 9, coursesCompleted: 3, sparklineData: [10, 20, 30, 45, 55, 61] },
   ],
   week: [
     { rank: 1, name: "Aarav Sharma", avatarInitials: "AS", avatarBg: "#8B7FE8", level: 12, xp: 4850, accuracy: "98%", streak: 18, coursesCompleted: 6, sparklineData: [200, 350, 450, 600, 800, 950] },
-    { rank: 2, name: "Ananya Rao", avatarInitials: "AR", avatarBg: "#B8E8D8", level: 10, xp: 4210, accuracy: "95%", streak: 14, coursesCompleted: 5, sparklineData: [150, 300, 400, 550, 700, 820] },
+    { rank: 2, name: "Ananya Rao", avatarInitials: "AR", avatarBg: "#5CBFA0", level: 10, xp: 4210, accuracy: "95%", streak: 14, coursesCompleted: 5, sparklineData: [150, 300, 400, 550, 700, 820] },
     { rank: 3, name: "Vikram Patel", avatarInitials: "VP", avatarBg: "#FFC9DE", level: 9, xp: 3950, accuracy: "94%", streak: 12, coursesCompleted: 4, sparklineData: [100, 250, 350, 500, 650, 750] },
     { rank: 4, name: "You (Bhargavi)", avatarInitials: "BB", avatarBg: "#8B7FE8", level: 8, xp: 3420, accuracy: "96%", streak: 14, coursesCompleted: 4, sparklineData: [120, 280, 380, 520, 600, 680], isCurrentUser: true },
     { rank: 5, name: "Sneha Reddy", avatarInitials: "SR", avatarBg: "#D8D2FA", level: 8, xp: 3200, accuracy: "92%", streak: 9, coursesCompleted: 3, sparklineData: [100, 200, 300, 450, 550, 610] },
   ],
   month: [
-    { rank: 1, name: "Ananya Rao", avatarInitials: "AR", avatarBg: "#B8E8D8", level: 14, xp: 16400, accuracy: "97%", streak: 28, coursesCompleted: 8, sparklineData: [1200, 2500, 4000, 8000, 12000, 16400] },
+    { rank: 1, name: "Ananya Rao", avatarInitials: "AR", avatarBg: "#5CBFA0", level: 14, xp: 16400, accuracy: "97%", streak: 28, coursesCompleted: 8, sparklineData: [1200, 2500, 4000, 8000, 12000, 16400] },
     { rank: 2, name: "Aarav Sharma", avatarInitials: "AS", avatarBg: "#8B7FE8", level: 13, xp: 15200, accuracy: "96%", streak: 25, coursesCompleted: 7, sparklineData: [1000, 2200, 3800, 7500, 11000, 15200] },
     { rank: 3, name: "You (Bhargavi)", avatarInitials: "BB", avatarBg: "#8B7FE8", level: 8, xp: 13800, accuracy: "96%", streak: 14, coursesCompleted: 4, sparklineData: [900, 2000, 3500, 7000, 10000, 13800], isCurrentUser: true },
     { rank: 4, name: "Vikram Patel", avatarInitials: "VP", avatarBg: "#FFC9DE", level: 11, xp: 12900, accuracy: "93%", streak: 20, coursesCompleted: 5, sparklineData: [800, 1800, 3200, 6500, 9500, 12900] },
   ],
   allTime: [
     { rank: 1, name: "Aarav Sharma", avatarInitials: "AS", avatarBg: "#8B7FE8", level: 24, xp: 48900, accuracy: "99%", streak: 64, coursesCompleted: 15, sparklineData: [5000, 12000, 22000, 35000, 42000, 48900] },
-    { rank: 2, name: "Ananya Rao", avatarInitials: "AR", avatarBg: "#B8E8D8", level: 22, xp: 44200, accuracy: "98%", streak: 52, coursesCompleted: 14, sparklineData: [4500, 11000, 20000, 32000, 39000, 44200] },
+    { rank: 2, name: "Ananya Rao", avatarInitials: "AR", avatarBg: "#5CBFA0", level: 22, xp: 44200, accuracy: "98%", streak: 52, coursesCompleted: 14, sparklineData: [4500, 11000, 20000, 32000, 39000, 44200] },
     { rank: 3, name: "Vikram Patel", avatarInitials: "VP", avatarBg: "#FFC9DE", level: 19, xp: 38100, accuracy: "95%", streak: 41, coursesCompleted: 11, sparklineData: [4000, 9500, 17000, 27000, 33000, 38100] },
     { rank: 4, name: "You (Bhargavi)", avatarInitials: "BB", avatarBg: "#8B7FE8", level: 8, xp: 31800, accuracy: "96%", streak: 14, coursesCompleted: 4, sparklineData: [3500, 8000, 15000, 22000, 27000, 31800], isCurrentUser: true },
   ],
 };
 
 const mockRecentAchievements: AchievementItem[] = [
-  { title: "Streak Master II (14 Days)", timeAgo: "2h ago", iconBg: "#F3F0FE", iconColor: "#8B7FE8" },
-  { title: "Prompt Engineering Quiz Perfect 100%", timeAgo: "1d ago", iconBg: "#EDF9F5", iconColor: "#5CBFA0" },
-  { title: "Level 8 Advancement Badge", timeAgo: "3d ago", iconBg: "#FFF0F5", iconColor: "#FFC9DE" },
+  { title: "Streak Master II (14 Days)", timeAgo: "2h ago", iconBg: "rgba(139, 127, 232, 0.15)", iconColor: "#8B7FE8" },
+  { title: "Prompt Engineering Quiz Perfect 100%", timeAgo: "1d ago", iconBg: "rgba(92, 191, 160, 0.15)", iconColor: "#5CBFA0" },
+  { title: "Level 8 Advancement Badge", timeAgo: "3d ago", iconBg: "rgba(240, 135, 155, 0.15)", iconColor: "#FFC9DE" },
 ];
 
 export default function LeaderboardPanel() {
@@ -164,19 +164,19 @@ export default function LeaderboardPanel() {
   return (
     <div ref={containerRef} className="space-y-8">
       {/* 1. WELCOME HEADER & ANIMATED FILTER TABS */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-3xl border border-[#EAE6FE] shadow-soft-sm">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[var(--card)] p-6 rounded-3xl border border-[var(--border)] shadow-soft-sm">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <Badge variant="default" className="gap-1">
               <Trophy className="w-3.5 h-3.5 text-[#8B7FE8]" />
               Gamified Leaderboard
             </Badge>
-            <span className="text-xs font-bold text-[#6B6785]">Global Ranks</span>
+            <span className="text-xs font-bold text-[var(--foreground-secondary)]">Global Ranks</span>
           </div>
-          <h3 className="text-xl sm:text-2xl font-black text-[#1E1B2E]">
+          <h3 className="text-xl sm:text-2xl font-black text-[var(--foreground)]">
             🏆 Top Performers & Community Ranks
           </h3>
-          <p className="text-xs sm:text-sm text-[#6B6785] mt-0.5">
+          <p className="text-xs sm:text-sm text-[var(--foreground-secondary)] mt-0.5">
             Rankings updated in real time based on XP, quiz accuracy & daily consistency.
           </p>
         </div>
@@ -191,12 +191,12 @@ export default function LeaderboardPanel() {
               placeholder="Search user..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-3 py-1.5 rounded-full text-xs font-bold bg-[#FCFBFF] border border-[#EAE6FE] text-[#1E1B2E] outline-none focus:border-[#8B7FE8] focus:ring-2 focus:ring-[#8B7FE8]/20 transition-all"
+              className="w-full pl-9 pr-3 py-1.5 rounded-full text-xs font-bold bg-[var(--background-secondary)] border border-[var(--border)] text-[var(--foreground)] outline-none focus:border-[#8B7FE8] focus:ring-2 focus:ring-[#8B7FE8]/20 transition-all"
             />
           </div>
 
           {/* Filter Tabs */}
-          <div className="inline-flex p-1.5 rounded-full bg-[#FCFBFF] border border-[#EAE6FE] shadow-soft-sm gap-1">
+          <div className="inline-flex p-1.5 rounded-full bg-[var(--background-secondary)] border border-[var(--border)] shadow-soft-sm gap-1">
             {(["daily", "week", "month", "allTime"] as const).map((t) => (
               <button
                 key={t}
@@ -204,7 +204,7 @@ export default function LeaderboardPanel() {
                 className={`px-3 py-1.5 rounded-full text-xs font-extrabold transition-all capitalize ${
                   timeframe === t
                     ? "bg-[#8B7FE8] text-white shadow-glow-primary"
-                    : "text-[#6B6785] hover:text-[#1E1B2E]"
+                    : "text-[var(--foreground-secondary)] hover:text-[var(--foreground)]"
                 }`}
               >
                 {t}
@@ -219,9 +219,9 @@ export default function LeaderboardPanel() {
         {/* LEFT COLUMN: PODIUM & RANKED TABLE (8 Cols) */}
         <div className="lg:col-span-8 space-y-6">
           {/* SECTION A: 3D FLOATING PODIUM FOR TOP 3 */}
-          <Card className="bg-white border-[#EAE6FE] shadow-soft-sm overflow-hidden p-6">
+          <Card className="bg-[var(--card)] border-[var(--border)] shadow-soft-sm overflow-hidden p-6">
             <CardHeader className="p-0 mb-4">
-              <CardTitle className="text-lg font-black text-[#1E1B2E] flex items-center gap-2">
+              <CardTitle className="text-lg font-black text-[var(--foreground)] flex items-center gap-2">
                 <Crown className="w-5 h-5 text-[#8B7FE8]" />
                 Top 3 Champions Podium
               </CardTitle>
@@ -233,22 +233,22 @@ export default function LeaderboardPanel() {
                 {second && (
                   <div className="podium-block w-full sm:w-1/3 flex flex-col items-center order-2 sm:order-1">
                     <div className="relative mb-3 flex flex-col items-center">
-                      <div className="w-16 h-16 rounded-full bg-[#B8E8D8] text-[#1E1B2E] font-black flex items-center justify-center text-xl border-4 border-white shadow-soft-md hover:scale-110 transition-transform">
+                      <div className="w-16 h-16 rounded-full bg-[#5CBFA0] text-white font-black flex items-center justify-center text-xl border-4 border-[var(--card)] shadow-soft-md hover:scale-110 transition-transform">
                         {second.avatarInitials}
                       </div>
-                      <span className="absolute -bottom-2 bg-[#1E1B2E] text-white text-[10px] font-black px-2.5 py-0.5 rounded-full border border-white">
+                      <span className="absolute -bottom-2 bg-[var(--foreground)] text-[var(--card)] text-[10px] font-black px-2.5 py-0.5 rounded-full border border-[var(--card)]">
                         #2 Silver
                       </span>
                     </div>
-                    <div className="text-sm font-black text-[#1E1B2E] truncate max-w-[130px]">
+                    <div className="text-sm font-black text-[var(--foreground)] truncate max-w-[130px]">
                       {second.name}
                     </div>
                     <div className="text-xs font-bold text-[#8B7FE8]">{second.xp.toLocaleString()} XP</div>
 
                     {/* Platform Base */}
-                    <div className="w-full h-28 bg-gradient-to-b from-[#EDF9F5] to-[#B8E8D8]/50 border-2 border-[#B8E8D8] rounded-t-2xl mt-3 flex flex-col items-center justify-center p-3 text-center shadow-soft-sm">
-                      <span className="text-xs font-black text-[#1E1B2E]">{second.accuracy} Acc</span>
-                      <span className="text-[10px] font-bold text-[#6B6785]">🔥 {second.streak} Day Streak</span>
+                    <div className="w-full h-28 bg-gradient-to-b from-[#5CBFA0]/20 via-[var(--card)] to-[var(--background-secondary)] border-2 border-[#5CBFA0] rounded-t-2xl mt-3 flex flex-col items-center justify-center p-3 text-center shadow-soft-sm">
+                      <span className="text-xs font-black text-[var(--foreground)]">{second.accuracy} Acc</span>
+                      <span className="text-[10px] font-bold text-[var(--foreground-secondary)]">🔥 {second.streak} Day Streak</span>
                     </div>
                   </div>
                 )}
@@ -268,17 +268,17 @@ export default function LeaderboardPanel() {
                         #1 Champion
                       </span>
                     </div>
-                    <div className="text-base font-black text-[#1E1B2E] truncate max-w-[140px] mt-1">
+                    <div className="text-base font-black text-[var(--foreground)] truncate max-w-[140px] mt-1">
                       {first.name}
                     </div>
                     <div className="text-sm font-black text-[#8B7FE8]">{first.xp.toLocaleString()} XP</div>
 
                     {/* Platform Base */}
-                    <div className="w-full h-40 bg-gradient-to-b from-[#F3F0FE] via-white to-[#D8D2FA]/50 border-2 border-[#8B7FE8] rounded-t-2xl mt-3 flex flex-col items-center justify-center p-3 text-center shadow-glow-primary">
+                    <div className="w-full h-40 bg-gradient-to-b from-[#8B7FE8]/25 via-[var(--card)] to-[var(--background-secondary)] border-2 border-[#8B7FE8] rounded-t-2xl mt-3 flex flex-col items-center justify-center p-3 text-center shadow-glow-primary">
                       <Badge variant="primary" className="mb-1 text-[10px]">
                         Level {first.level}
                       </Badge>
-                      <span className="text-sm font-black text-[#1E1B2E]">{first.accuracy} Acc</span>
+                      <span className="text-sm font-black text-[var(--foreground)]">{first.accuracy} Acc</span>
                       <span className="text-xs font-extrabold text-[#8B7FE8]">🔥 {first.streak} Day Streak</span>
                     </div>
                   </div>
@@ -288,22 +288,22 @@ export default function LeaderboardPanel() {
                 {third && (
                   <div className="podium-block w-full sm:w-1/3 flex flex-col items-center order-3">
                     <div className="relative mb-3 flex flex-col items-center">
-                      <div className="w-16 h-16 rounded-full bg-[#FFC9DE] text-[#1E1B2E] font-black flex items-center justify-center text-xl border-4 border-white shadow-soft-md hover:scale-110 transition-transform">
+                      <div className="w-16 h-16 rounded-full bg-[#FFC9DE] text-[#1E1B2E] font-black flex items-center justify-center text-xl border-4 border-[var(--card)] shadow-soft-md hover:scale-110 transition-transform">
                         {third.avatarInitials}
                       </div>
-                      <span className="absolute -bottom-2 bg-[#1E1B2E] text-white text-[10px] font-black px-2.5 py-0.5 rounded-full border border-white">
+                      <span className="absolute -bottom-2 bg-[var(--foreground)] text-[var(--card)] text-[10px] font-black px-2.5 py-0.5 rounded-full border border-[var(--card)]">
                         #3 Bronze
                       </span>
                     </div>
-                    <div className="text-sm font-black text-[#1E1B2E] truncate max-w-[130px]">
+                    <div className="text-sm font-black text-[var(--foreground)] truncate max-w-[130px]">
                       {third.name}
                     </div>
                     <div className="text-xs font-bold text-[#8B7FE8]">{third.xp.toLocaleString()} XP</div>
 
                     {/* Platform Base */}
-                    <div className="w-full h-24 bg-gradient-to-b from-[#FFF0F5] to-[#FFC9DE]/50 border-2 border-[#FFC9DE] rounded-t-2xl mt-3 flex flex-col items-center justify-center p-3 text-center shadow-soft-sm">
-                      <span className="text-xs font-black text-[#1E1B2E]">{third.accuracy} Acc</span>
-                      <span className="text-[10px] font-bold text-[#6B6785]">🔥 {third.streak} Day Streak</span>
+                    <div className="w-full h-24 bg-gradient-to-b from-[#FFC9DE]/20 via-[var(--card)] to-[var(--background-secondary)] border-2 border-[#FFC9DE] rounded-t-2xl mt-3 flex flex-col items-center justify-center p-3 text-center shadow-soft-sm">
+                      <span className="text-xs font-black text-[var(--foreground)]">{third.accuracy} Acc</span>
+                      <span className="text-[10px] font-bold text-[var(--foreground-secondary)]">🔥 {third.streak} Day Streak</span>
                     </div>
                   </div>
                 )}
@@ -312,9 +312,9 @@ export default function LeaderboardPanel() {
           </Card>
 
           {/* SECTION B: COMPLETE RANKING TABLE FOR RANKS 4+ */}
-          <Card className="bg-white border-[#EAE6FE] shadow-soft-sm p-6">
+          <Card className="bg-[var(--card)] border-[var(--border)] shadow-soft-sm p-6">
             <CardHeader className="p-0 mb-4">
-              <CardTitle className="text-lg font-black text-[#1E1B2E]">
+              <CardTitle className="text-lg font-black text-[var(--foreground)]">
                 Leaderboard Rankings (Ranks 4+)
               </CardTitle>
             </CardHeader>
@@ -325,12 +325,12 @@ export default function LeaderboardPanel() {
                   key={user.rank}
                   className={`p-4 rounded-2xl border flex flex-col sm:flex-row items-center justify-between gap-4 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft-md ${
                     user.isCurrentUser
-                      ? "bg-[#F3F0FE] border-[#8B7FE8] ring-2 ring-[#8B7FE8]/30 font-black"
-                      : "bg-[#FCFBFF] border-[#EAE6FE] hover:border-[#8B7FE8]"
+                      ? "bg-[var(--background-secondary)] border-[#8B7FE8] ring-2 ring-[#8B7FE8]/30 font-black"
+                      : "bg-[var(--card)] border-[var(--border)] hover:border-[#8B7FE8]"
                   }`}
                 >
                   <div className="flex items-center gap-3 w-full sm:w-auto">
-                    <span className="text-sm font-black text-[#1E1B2E] w-6">#{user.rank}</span>
+                    <span className="text-sm font-black text-[var(--foreground)] w-6">#{user.rank}</span>
                     <div
                       className="w-10 h-10 rounded-full flex items-center justify-center text-xs font-black text-white shrink-0 shadow-soft-sm"
                       style={{ backgroundColor: user.avatarBg }}
@@ -338,7 +338,7 @@ export default function LeaderboardPanel() {
                       {user.avatarInitials}
                     </div>
                     <div>
-                      <div className="text-xs font-black text-[#1E1B2E] flex items-center gap-2">
+                      <div className="text-xs font-black text-[var(--foreground)] flex items-center gap-2">
                         {user.name}
                         {user.isCurrentUser && (
                           <Badge variant="primary" className="text-[9px] py-0 px-1.5">
@@ -346,7 +346,7 @@ export default function LeaderboardPanel() {
                           </Badge>
                         )}
                       </div>
-                      <div className="text-[10px] text-[#6B6785] font-bold">
+                      <div className="text-[10px] text-[var(--foreground-secondary)] font-bold">
                         Level {user.level} • {user.accuracy} Accuracy • {user.coursesCompleted} Courses
                       </div>
                     </div>
@@ -355,7 +355,7 @@ export default function LeaderboardPanel() {
                   {/* Sparkline Mini Trend Graph */}
                   <div className="flex items-center gap-4">
                     <div className="flex flex-col items-end">
-                      <span className="text-[10px] font-bold text-[#6B6785]">Weekly Trend</span>
+                      <span className="text-[10px] font-bold text-[var(--foreground-secondary)]">Weekly Trend</span>
                       <svg className="w-16 h-6 overflow-visible">
                         <polyline
                           fill="none"
@@ -370,7 +370,7 @@ export default function LeaderboardPanel() {
                       <div className="text-xs font-black text-[#8B7FE8]">
                         {user.xp.toLocaleString()} XP
                       </div>
-                      <div className="text-[10px] font-extrabold text-[#6B6785] flex items-center justify-end gap-1">
+                      <div className="text-[10px] font-extrabold text-[var(--foreground-secondary)] flex items-center justify-end gap-1">
                         <Flame className="w-3.5 h-3.5 text-[#8B7FE8] fill-[#8B7FE8]" />
                         {user.streak} Days
                       </div>
@@ -385,34 +385,34 @@ export default function LeaderboardPanel() {
         {/* RIGHT SIDEBAR (4 Cols) */}
         <div className="lg:col-span-4 space-y-6">
           {/* SIDEBAR CARD 1: YOUR STATS SUMMARY */}
-          <Card className="bg-white border-[#EAE6FE] shadow-soft-sm">
+          <Card className="bg-[var(--card)] border-[var(--border)] shadow-soft-sm">
             <CardHeader className="pb-3">
-              <CardTitle className="text-base font-black text-[#1E1B2E] flex items-center gap-2">
+              <CardTitle className="text-base font-black text-[var(--foreground)] flex items-center gap-2">
                 <Zap className="w-4 h-4 text-[#8B7FE8]" />
                 Your Stats Summary
               </CardTitle>
             </CardHeader>
 
             <CardContent className="space-y-3 text-xs">
-              <div className="p-3 rounded-2xl bg-[#FCFBFF] border border-[#EAE6FE] flex items-center justify-between">
-                <span className="font-extrabold text-[#6B6785]">Total XP Earned</span>
+              <div className="p-3 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)] flex items-center justify-between">
+                <span className="font-extrabold text-[var(--foreground-secondary)]">Total XP Earned</span>
                 <span className="font-black text-[#8B7FE8] text-sm">3,420 XP</span>
               </div>
 
-              <div className="p-3 rounded-2xl bg-[#FCFBFF] border border-[#EAE6FE] flex items-center justify-between">
-                <span className="font-extrabold text-[#6B6785]">Avg Quiz Accuracy</span>
-                <span className="font-black text-[#1E1B2E] text-sm">96%</span>
+              <div className="p-3 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)] flex items-center justify-between">
+                <span className="font-extrabold text-[var(--foreground-secondary)]">Avg Quiz Accuracy</span>
+                <span className="font-black text-[var(--foreground)] text-sm">96%</span>
               </div>
 
-              <div className="p-3 rounded-2xl bg-[#FCFBFF] border border-[#EAE6FE] flex items-center justify-between">
-                <span className="font-extrabold text-[#6B6785]">Current Day Streak</span>
-                <span className="font-black text-[#1E1B2E] text-sm flex items-center gap-1">
+              <div className="p-3 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)] flex items-center justify-between">
+                <span className="font-extrabold text-[var(--foreground-secondary)]">Current Day Streak</span>
+                <span className="font-black text-[var(--foreground)] text-sm flex items-center gap-1">
                   <Flame className="w-4 h-4 text-[#8B7FE8] fill-[#8B7FE8]" /> 14 Days
                 </span>
               </div>
 
-              <div className="p-3 rounded-2xl bg-[#FCFBFF] border border-[#EAE6FE] flex items-center justify-between">
-                <span className="font-extrabold text-[#6B6785]">Courses Completed</span>
+              <div className="p-3 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)] flex items-center justify-between">
+                <span className="font-extrabold text-[var(--foreground-secondary)]">Courses Completed</span>
                 <span className="font-black text-[#8B7FE8] text-sm flex items-center gap-1">
                   <BookOpen className="w-4 h-4 text-[#8B7FE8]" /> 4 / 6
                 </span>
@@ -421,9 +421,9 @@ export default function LeaderboardPanel() {
           </Card>
 
           {/* SIDEBAR CARD 2: RECENT ACHIEVEMENTS */}
-          <Card className="bg-white border-[#EAE6FE] shadow-soft-sm">
+          <Card className="bg-[var(--card)] border-[var(--border)] shadow-soft-sm">
             <CardHeader className="pb-3">
-              <CardTitle className="text-base font-black text-[#1E1B2E] flex items-center gap-2">
+              <CardTitle className="text-base font-black text-[var(--foreground)] flex items-center gap-2">
                 <Award className="w-4 h-4 text-[#8B7FE8]" />
                 Recent Achievements
               </CardTitle>
@@ -433,7 +433,7 @@ export default function LeaderboardPanel() {
               {mockRecentAchievements.map((ach, idx) => (
                 <div
                   key={idx}
-                  className="flex items-center gap-3 p-3 rounded-2xl bg-[#FCFBFF] border border-[#EAE6FE] hover:border-[#8B7FE8]/40 transition-colors"
+                  className="flex items-center gap-3 p-3 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)] hover:border-[#8B7FE8]/40 transition-colors"
                 >
                   <div
                     className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 shadow-soft-sm"
@@ -442,10 +442,10 @@ export default function LeaderboardPanel() {
                     <Star className="w-4 h-4" style={{ color: ach.iconColor }} />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="text-xs font-black text-[#1E1B2E] truncate">
+                    <div className="text-xs font-black text-[var(--foreground)] truncate">
                       {ach.title}
                     </div>
-                    <div className="text-[10px] font-bold text-[#6B6785]">
+                    <div className="text-[10px] font-bold text-[var(--foreground-secondary)]">
                       Unlocked {ach.timeAgo}
                     </div>
                   </div>
@@ -454,25 +454,25 @@ export default function LeaderboardPanel() {
             </CardContent>
           </Card>
 
-          {/* SIDEBAR CARD 3: AI INSIGHT CARD */}
-          <Card className="bg-gradient-to-br from-[#F3F0FE] via-white to-[#EDF9F5] border border-[#D8D2FA] shadow-soft-md">
+          {/* SIDEBAR CARD 3: AI INSIGHT CARD (PERFECT IN BOTH LIGHT & DARK THEMES) */}
+          <Card className="bg-gradient-to-br from-[#8B7FE8]/15 via-[var(--card)] to-[#5CBFA0]/15 border border-[#8B7FE8]/30 shadow-soft-md">
             <CardHeader className="pb-2">
               <div className="flex items-center gap-2">
                 <Badge variant="primary" className="text-[10px]">
                   <Sparkles className="w-3 h-3 text-white" /> AI Insight
                 </Badge>
               </div>
-              <CardTitle className="text-base font-black text-[#1E1B2E] mt-1">
+              <CardTitle className="text-base font-black text-[var(--foreground)] mt-1">
                 You're in the top 5% this week! 🎉
               </CardTitle>
             </CardHeader>
 
             <CardContent className="space-y-3">
-              <p className="text-xs text-[#6B6785] leading-relaxed">
-                Completing <strong>1 more lesson today</strong> will move you from <strong>Rank #4</strong> into the <strong>Top 3 Podium</strong> on the weekly leaderboard!
+              <p className="text-xs text-[var(--foreground-secondary)] leading-relaxed">
+                Completing <strong className="text-[var(--foreground)]">1 more lesson today</strong> will move you from <strong className="text-[var(--foreground)]">Rank #4</strong> into the <strong className="text-[var(--foreground)]">Top 3 Podium</strong> on the weekly leaderboard!
               </p>
 
-              <Button size="sm" className="w-full text-xs font-extrabold justify-center gap-1.5 shadow-soft-sm">
+              <Button size="sm" className="w-full text-xs font-extrabold justify-center gap-1.5 shadow-soft-sm bg-[#8B7FE8] hover:bg-[#786BD6] text-white">
                 Start Next Lesson Now
                 <ChevronRight className="w-4 h-4" />
               </Button>
