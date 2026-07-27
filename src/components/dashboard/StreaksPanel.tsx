@@ -414,9 +414,9 @@ export default function StreaksPanel() {
   return (
     <div ref={containerRef} className="space-y-8">
       {/* 1. MAIN MASCOT CARD WITH FIRE AURA & ROTATING QUOTE */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-[#1E1B2E] via-[#2A2540] to-[#1A1830] text-white p-6 sm:p-10 rounded-3xl border border-[#D8D2FA]/40 shadow-glow-primary">
-        <div className="absolute top-0 right-1/4 w-80 h-80 bg-[#8B7FE8]/25 rounded-full blur-3xl pointer-events-none animate-pulse-subtle" />
-        <div className="absolute bottom-0 left-0 w-72 h-72 bg-[#FFC9DE]/20 rounded-full blur-3xl pointer-events-none" />
+      <div className="relative overflow-hidden bg-[var(--card)] text-[var(--foreground)] p-6 sm:p-10 rounded-3xl border border-[var(--border)] shadow-soft-md">
+        <div className="absolute top-0 right-1/4 w-80 h-80 bg-[#8B7FE8]/15 dark:bg-[#8B7FE8]/25 rounded-full blur-3xl pointer-events-none animate-pulse-subtle" />
+        <div className="absolute bottom-0 left-0 w-72 h-72 bg-[#FFC9DE]/30 dark:bg-[#FFC9DE]/15 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left">
@@ -426,17 +426,17 @@ export default function StreaksPanel() {
             />
 
             <div>
-              <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-white/15 backdrop-blur-md text-xs font-extrabold mb-2 border border-white/20 text-white">
-                <Flame className="w-4 h-4 text-[#FFC9DE] fill-[#FFC9DE]" />
+              <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[var(--background-secondary)] text-xs font-extrabold mb-2 border border-[var(--border)] text-[#8B7FE8]">
+                <Flame className="w-4 h-4 text-[#8B7FE8] fill-[#8B7FE8]" />
                 Daily Streak Status
               </div>
-              <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-white">
+              <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-[var(--foreground)]">
                 Well done! 🔥
               </h2>
 
               <p
                 ref={quoteRef}
-                className="text-xs sm:text-sm text-[#FFC9DE] font-black mt-1 max-w-md h-6"
+                className="text-xs sm:text-sm text-[#8B7FE8] dark:text-[#FFC9DE] font-black mt-1 max-w-md h-6"
               >
                 {motivationalQuotes[quoteIndex]}
               </p>
@@ -444,8 +444,8 @@ export default function StreaksPanel() {
           </div>
 
           <div className="flex flex-col sm:flex-row items-center gap-4 shrink-0">
-            <div className="bg-white/10 backdrop-blur-md border border-white/20 p-5 rounded-2xl text-center min-w-[150px] shadow-soft-md flex flex-col items-center">
-              <div className="flex items-center justify-center gap-1 text-4xl sm:text-5xl font-black text-[#FFC9DE]">
+            <div className="bg-[var(--background-secondary)] border border-[var(--border)] p-5 rounded-2xl text-center min-w-[150px] shadow-soft-sm flex flex-col items-center">
+              <div className="flex items-center justify-center gap-1 text-4xl sm:text-5xl font-black text-[#8B7FE8] dark:text-[#FFC9DE]">
                 <span ref={digit1Ref} className="inline-block transition-transform">
                   {digits[0]}
                 </span>
@@ -453,7 +453,7 @@ export default function StreaksPanel() {
                   {digits[1]}
                 </span>
               </div>
-              <span className="text-[11px] font-extrabold uppercase tracking-widest text-white/70 mt-1">
+              <span className="text-[11px] font-extrabold uppercase tracking-widest text-[var(--foreground-secondary)] mt-1">
                 Days Streak
               </span>
             </div>
@@ -461,7 +461,7 @@ export default function StreaksPanel() {
             <Button
               size="lg"
               onClick={triggerCelebration}
-              className="bg-gradient-to-r from-[#8B7FE8] to-[#786BD6] hover:from-[#786BD6] hover:to-[#8B7FE8] text-white font-black shadow-glow-primary border border-white/20"
+              className="bg-[#8B7FE8] hover:bg-[#786BD6] text-white font-black shadow-glow-primary border-none"
             >
               <Sparkles className="w-5 h-5 mr-1 text-[#FFC9DE]" />
               Celebrate Streak
