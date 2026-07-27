@@ -15,6 +15,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import StreaksPanel from "@/components/dashboard/StreaksPanel";
+import LeaderboardPanel from "@/components/dashboard/LeaderboardPanel";
 
 export default function InteractiveLearningDashboard() {
   const [activeRoleTab, setActiveRoleTab] = useState<"learner" | "instructor" | "admin">("learner");
@@ -76,10 +78,17 @@ export default function InteractiveLearningDashboard() {
         <div className="space-y-8 animate-in fade-in duration-300">
           {/* Top Banner Stats */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            <Card className="bg-white hover:border-[#8B7FE8]/40">
+            <Card
+              className="bg-white hover:border-[#8B7FE8]/60 cursor-pointer group transition-all"
+              onClick={() => {
+                document.getElementById("streaks-panel-section")?.scrollIntoView({ behavior: "smooth" });
+              }}
+            >
               <CardContent className="p-6 flex items-center justify-between">
                 <div>
-                  <span className="text-xs font-bold text-[#6B6785]">Daily Streak</span>
+                  <span className="text-xs font-bold text-[#6B6785] group-hover:text-[#8B7FE8] transition-colors">
+                    Daily Streak Overview ➔
+                  </span>
                   <div className="text-2xl font-black text-[#1E1B2E] mt-1 flex items-center gap-1.5">
                     <Flame className="w-6 h-6 text-[#8B7FE8] fill-[#8B7FE8]" />
                     <span>14 Days</span>
@@ -215,6 +224,16 @@ export default function InteractiveLearningDashboard() {
               </div>
             </CardContent>
           </Card>
+
+          {/* STREAKS SECTION */}
+          <div id="streaks-panel-section" className="pt-4">
+            <StreaksPanel />
+          </div>
+
+          {/* LEADERBOARD SECTION */}
+          <div id="leaderboard-panel-section" className="pt-4">
+            <LeaderboardPanel />
+          </div>
         </div>
       )}
 
