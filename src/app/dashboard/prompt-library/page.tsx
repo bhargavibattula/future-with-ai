@@ -17,6 +17,7 @@ import {
   GraduationCap,
   Briefcase,
   Activity,
+  SearchX,
 } from "lucide-react";
 
 interface CategoryItem {
@@ -58,10 +59,13 @@ export default function PromptLibraryHomePage() {
     fetchCategories();
   }, []);
 
+  // TASK 12: Advanced Search (trimmed, case-insensitive, responsive)
+  const cleanSearchQuery = searchQuery.trim().toLowerCase();
   const filteredCategories = categories.filter(
     (cat) =>
-      cat.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (cat.description && cat.description.toLowerCase().includes(searchQuery.toLowerCase()))
+      !cleanSearchQuery ||
+      cat.name.toLowerCase().includes(cleanSearchQuery) ||
+      (cat.description && cat.description.toLowerCase().includes(cleanSearchQuery))
   );
 
   // Helper icon assignment based on category name
@@ -137,21 +141,53 @@ export default function PromptLibraryHomePage() {
         </div>
       )}
 
-      {/* LOADING STATE */}
+      {/* TASK 14: LOADING SKELETON STATE */}
       {loading ? (
-        <div className="bg-white rounded-3xl p-12 border border-[#E8E3FF] text-center text-xs font-bold text-[#8B7FE8] flex items-center justify-center gap-2">
-          <RefreshCw className="w-5 h-5 animate-spin" />
-          <span>Loading Prompt Library Domains...</span>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            <div
+              key={i}
+              className="bg-white rounded-3xl p-6 border border-[#E8E3FF] shadow-soft space-y-4 animate-pulse"
+            >
+              <div className="flex items-center justify-between">
+                <div className="w-12 h-12 rounded-2xl bg-[#F5F2FF]" />
+                <div className="w-20 h-6 rounded-full bg-[#F5F2FF]" />
+              </div>
+              <div className="h-5 bg-[#F5F2FF] rounded-full w-2/3" />
+              <div className="h-3 bg-[#F5F2FF] rounded-full w-full" />
+              <div className="h-3 bg-[#F5F2FF] rounded-full w-4/5" />
+              <div className="pt-4 border-t border-[#F5F2FF] flex justify-between">
+                <div className="h-4 bg-[#F5F2FF] rounded-full w-1/3" />
+                <div className="h-4 bg-[#F5F2FF] rounded-full w-6" />
+              </div>
+            </div>
+          ))}
         </div>
       ) : (
         <>
-          {filteredCategories.length === 0 ? (
-            <div className="bg-white rounded-3xl p-12 border border-[#E8E3FF] text-center">
-              <FolderOpen className="w-12 h-12 text-[#8B7FE8]/50 mx-auto mb-3" />
-              <p className="text-sm font-extrabold text-[#1E1B2E]">No Categories Found</p>
-              <p className="text-xs text-[#6B6785] mt-1">
-                Try refining your search keyword above.
+          {/* TASK 13: POLISHED EMPTY STATES */}
+          {categories.length === 0 ? (
+            <div className="bg-white rounded-3xl p-12 border border-[#E8E3FF] text-center shadow-soft">
+              <FolderOpen className="w-14 h-14 text-[#8B7FE8]/50 mx-auto mb-3" />
+              <p className="text-base font-extrabold text-[#1E1B2E]">No Categories Found</p>
+              <p className="text-xs text-[#6B6785] mt-1 max-w-md mx-auto">
+                No prompt categories are currently available in the library. Please check back later.
               </p>
+            </div>
+          ) : filteredCategories.length === 0 ? (
+            <div className="bg-white rounded-3xl p-12 border border-[#E8E3FF] text-center shadow-soft">
+              <SearchX className="w-14 h-14 text-[#8B7FE8]/50 mx-auto mb-3" />
+              <p className="text-base font-extrabold text-[#1E1B2E]">No Search Results</p>
+              <p className="text-xs text-[#6B6785] mt-1 max-w-md mx-auto">
+                No categories matched your search term "{searchQuery.trim()}".
+              </p>
+              <button
+                type="button"
+                onClick={() => setSearchQuery("")}
+                className="mt-4 px-5 py-2.5 rounded-2xl text-xs font-extrabold text-[#8B7FE8] bg-[#F5F2FF] border border-[#E8E3FF] hover:bg-[#8B7FE8] hover:text-white transition-all cursor-pointer shadow-soft-sm"
+              >
+                Clear Search
+              </button>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

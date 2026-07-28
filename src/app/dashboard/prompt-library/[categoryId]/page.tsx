@@ -13,6 +13,7 @@ import {
   CheckCircle2,
   RefreshCw,
   ArrowRight,
+  SearchX,
 } from "lucide-react";
 
 interface CategoryData {
@@ -75,11 +76,14 @@ export default function CategoryDetailsPage({
     }
   }, [categoryId]);
 
+  // TASK 12: Advanced Search (trimmed, case-insensitive, responsive)
+  const cleanSearchQuery = searchQuery.trim().toLowerCase();
   const filteredPrompts = prompts.filter(
     (p) =>
-      p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      p.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      p.type.toLowerCase().includes(searchQuery.toLowerCase())
+      !cleanSearchQuery ||
+      p.title.toLowerCase().includes(cleanSearchQuery) ||
+      p.content.toLowerCase().includes(cleanSearchQuery) ||
+      p.type.toLowerCase().includes(cleanSearchQuery)
   );
 
   const renderTypeBadge = (type: string, isClaimed?: boolean) => {
@@ -171,21 +175,52 @@ export default function CategoryDetailsPage({
         </div>
       )}
 
-      {/* LOADING OR PROMPTS GRID */}
+      {/* TASK 14: LOADING SKELETON OR PROMPTS GRID */}
       {loading ? (
-        <div className="bg-white rounded-3xl p-12 border border-[#E8E3FF] text-center text-xs font-bold text-[#8B7FE8] flex items-center justify-center gap-2">
-          <RefreshCw className="w-5 h-5 animate-spin" />
-          <span>Loading Category Prompts...</span>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {[1, 2, 3, 4].map((i) => (
+            <div
+              key={i}
+              className="bg-white rounded-3xl p-6 border border-[#E8E3FF] shadow-soft space-y-4 animate-pulse"
+            >
+              <div className="flex justify-between items-center">
+                <div className="w-24 h-5 rounded-full bg-[#F5F2FF]" />
+                <div className="w-16 h-5 rounded-full bg-[#F5F2FF]" />
+              </div>
+              <div className="h-5 bg-[#F5F2FF] rounded-full w-3/4" />
+              <div className="h-20 bg-[#FCFBFF] rounded-2xl border border-[#E8E3FF]" />
+              <div className="pt-3 border-t border-[#F5F2FF] flex justify-between items-center">
+                <div className="h-4 bg-[#F5F2FF] rounded-full w-20" />
+                <div className="h-8 bg-[#F5F2FF] rounded-2xl w-28" />
+              </div>
+            </div>
+          ))}
         </div>
       ) : (
         <>
-          {filteredPrompts.length === 0 ? (
-            <div className="bg-white rounded-3xl p-12 border border-[#E8E3FF] text-center">
-              <Terminal className="w-12 h-12 text-[#8B7FE8]/50 mx-auto mb-3" />
-              <p className="text-sm font-extrabold text-[#1E1B2E]">No Prompts Found</p>
+          {/* TASK 13: POLISHED EMPTY STATES */}
+          {prompts.length === 0 ? (
+            <div className="bg-white rounded-3xl p-12 border border-[#E8E3FF] text-center shadow-soft">
+              <Terminal className="w-14 h-14 text-[#8B7FE8]/50 mx-auto mb-3" />
+              <p className="text-base font-extrabold text-[#1E1B2E]">No Prompts Found</p>
               <p className="text-xs text-[#6B6785] mt-1">
-                No matching prompts in this category.
+                No prompts are available in this category yet.
               </p>
+            </div>
+          ) : filteredPrompts.length === 0 ? (
+            <div className="bg-white rounded-3xl p-12 border border-[#E8E3FF] text-center shadow-soft">
+              <SearchX className="w-14 h-14 text-[#8B7FE8]/50 mx-auto mb-3" />
+              <p className="text-base font-extrabold text-[#1E1B2E]">No Search Results</p>
+              <p className="text-xs text-[#6B6785] mt-1 max-w-md mx-auto">
+                No prompts matched your search query "{searchQuery.trim()}".
+              </p>
+              <button
+                type="button"
+                onClick={() => setSearchQuery("")}
+                className="mt-4 px-5 py-2.5 rounded-2xl text-xs font-extrabold text-[#8B7FE8] bg-[#F5F2FF] border border-[#E8E3FF] hover:bg-[#8B7FE8] hover:text-white transition-all cursor-pointer shadow-soft-sm"
+              >
+                Clear Search
+              </button>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

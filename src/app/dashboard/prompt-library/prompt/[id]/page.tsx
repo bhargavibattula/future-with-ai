@@ -42,7 +42,7 @@ export default function PromptDetailPage({
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Copy feedback state
+  // TASK 15: Copy feedback state
   const [copied, setCopied] = useState<boolean>(false);
   const [copying, setCopying] = useState<boolean>(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -73,6 +73,7 @@ export default function PromptDetailPage({
     }
   }, [promptId]);
 
+  // TASK 15: Handle Copy Prompt with Feedback
   const handleCopyPrompt = async () => {
     if (!prompt) return;
 
@@ -87,7 +88,7 @@ export default function PromptDetailPage({
       if (navigator.clipboard && navigator.clipboard.writeText) {
         await navigator.clipboard.writeText(prompt.content);
       } else {
-        // Fallback for older browsers/contexts
+        // Fallback for older browsers
         const textArea = document.createElement("textarea");
         textArea.value = prompt.content;
         document.body.appendChild(textArea);
@@ -109,13 +110,16 @@ export default function PromptDetailPage({
 
         if (claimData.success || claimData.isClaimed) {
           setIsClaimed(true);
-          setToastMessage("Prompt copied and claimed successfully! It is now locked for your account.");
+          setToastMessage("Prompt copied successfully! It is now claimed and locked for your account.");
         } else {
-          setToastMessage(claimData.error || "Prompt copied to clipboard!");
+          setToastMessage(claimData.error || "Prompt copied successfully to clipboard!");
         }
       } else {
-        setToastMessage("Prompt copied to clipboard!");
+        setToastMessage("Prompt copied successfully to clipboard!");
       }
+
+      // Auto-clear toast feedback after 4 seconds
+      setTimeout(() => setToastMessage(null), 4000);
     } catch (err: any) {
       console.error("Error copying prompt:", err);
       setToastMessage("Failed to copy prompt text.");
@@ -147,20 +151,30 @@ export default function PromptDetailPage({
     }
   };
 
+  // TASK 14: LOADING SKELETON STATE
   if (loading) {
     return (
-      <div className="max-w-4xl mx-auto px-4 py-16 text-center select-none">
-        <div className="bg-white rounded-3xl p-12 border border-[#E8E3FF] text-xs font-bold text-[#8B7FE8] flex items-center justify-center gap-2 shadow-soft">
-          <RefreshCw className="w-5 h-5 animate-spin" />
-          <span>Loading Prompt Reader...</span>
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-6 select-none font-sans">
+        <div className="w-36 h-4 bg-[#F5F2FF] rounded-full animate-pulse" />
+        <div className="bg-white rounded-3xl p-8 border border-[#E8E3FF] shadow-soft space-y-4 animate-pulse">
+          <div className="w-28 h-6 rounded-full bg-[#F5F2FF]" />
+          <div className="h-8 bg-[#F5F2FF] rounded-full w-2/3" />
+        </div>
+        <div className="bg-white rounded-3xl p-8 border border-[#E8E3FF] shadow-soft space-y-4 animate-pulse">
+          <div className="h-4 bg-[#F5F2FF] rounded-full w-1/4" />
+          <div className="h-40 bg-[#FCFBFF] rounded-2xl border border-[#E8E3FF]" />
+          <div className="flex justify-end">
+            <div className="h-10 bg-[#F5F2FF] rounded-2xl w-36" />
+          </div>
         </div>
       </div>
     );
   }
 
+  // TASK 13: POLISHED EMPTY / ERROR STATE
   if (error || !prompt) {
     return (
-      <div className="max-w-4xl mx-auto px-4 py-12 select-none">
+      <div className="max-w-4xl mx-auto px-4 py-12 select-none font-sans">
         <Link
           href="/dashboard/prompt-library"
           className="inline-flex items-center gap-2 text-xs font-bold text-[#8B7FE8] hover:underline mb-6"
@@ -168,8 +182,10 @@ export default function PromptDetailPage({
           <ArrowLeft className="w-4 h-4" />
           <span>Back to Prompt Library</span>
         </Link>
-        <div className="bg-white rounded-3xl p-8 border border-red-200 text-center text-red-600 text-xs font-bold shadow-soft">
-          {error || "Prompt not found."}
+        <div className="bg-white rounded-3xl p-8 border border-red-200 text-center shadow-soft">
+          <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-3" />
+          <p className="text-base font-extrabold text-[#1E1B2E]">Prompt Not Found</p>
+          <p className="text-xs text-[#6B6785] mt-1">{error || "The requested prompt could not be loaded."}</p>
         </div>
       </div>
     );
@@ -213,16 +229,16 @@ export default function PromptDetailPage({
           </div>
         )}
 
-        {/* SUCCESS TOAST MESSAGE */}
+        {/* TASK 15: SUCCESS TOAST MESSAGE */}
         {toastMessage && (
-          <div className="mt-4 p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold flex items-center justify-between gap-2.5">
+          <div className="mt-4 p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold flex items-center justify-between gap-2.5 animate-in fade-in duration-200">
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
               <span>{toastMessage}</span>
             </div>
             <button
               onClick={() => setToastMessage(null)}
-              className="text-emerald-700 hover:text-emerald-900 text-xs font-extrabold"
+              className="text-emerald-700 hover:text-emerald-900 text-xs font-extrabold cursor-pointer"
             >
               Dismiss
             </button>
