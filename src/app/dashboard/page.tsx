@@ -24,6 +24,7 @@ import {
   Check,
   ShieldCheck,
   ChevronRight,
+  Gamepad2,
 } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -175,6 +176,12 @@ export default function DashboardPage() {
             <Link href="/courses/claude">
               <Button size="sm" className="bg-[#8B7FE8] hover:bg-[#786BD6] text-white shadow-soft-sm font-extrabold gap-1.5">
                 <Play className="w-4 h-4 fill-white" /> Continue Learning
+              </Button>
+            </Link>
+
+            <Link href="/dashboard/games">
+              <Button size="sm" variant="accentPink" className="font-extrabold gap-1.5">
+                <Gamepad2 className="w-4 h-4 text-[#1E1B2E]" /> AI Games
               </Button>
             </Link>
 
