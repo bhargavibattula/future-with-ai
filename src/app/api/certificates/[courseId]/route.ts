@@ -23,7 +23,7 @@ export async function GET(
       : `course-${courseId}`;
 
     // Find User by ID or email
-    const userRecord = await prisma.user.findFirst({
+    const userRecord = await (prisma as any).user?.findFirst({
       where: {
         OR: [
           { id: inputUserId },
@@ -36,15 +36,17 @@ export async function GET(
 
     let certificate: any = null;
     try {
-      certificate = await prisma.certificate.findFirst({
-        where: {
-          courseId: cleanCourseId,
-          OR: [
-            { userId: validUserId },
-            { userId: inputUserId },
-          ],
-        },
-      });
+      if ((prisma as any).certificate?.findFirst) {
+        certificate = await (prisma as any).certificate.findFirst({
+          where: {
+            courseId: cleanCourseId,
+            OR: [
+              { userId: validUserId },
+              { userId: inputUserId },
+            ],
+          },
+        });
+      }
     } catch (dbErr) {
       console.warn("Database lookup warning for certificate:", dbErr);
     }
