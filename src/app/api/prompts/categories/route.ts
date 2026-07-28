@@ -16,12 +16,12 @@ export async function GET() {
       success: true,
       categories,
     });
-  } catch (error) {
-    console.error("PROMPT CATEGORY ERROR:", error);
+  } catch (error: any) {
+    console.error("Error fetching prompt categories:", error);
 
-    return NextResponse.json({
-      success: false,
-      error: String(error)
-    }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: "Failed to fetch prompt categories." },
+      { status: 500 }
+    );
   }
 }
