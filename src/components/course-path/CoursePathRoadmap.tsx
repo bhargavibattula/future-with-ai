@@ -55,12 +55,15 @@ export default function CoursePathRoadmap({
     <div ref={containerRef} className="relative w-full py-2 select-none">
       {/* RIGHT COLUMN CANVAS CONTAINER (Generous Whitespace, 70% Column) */}
       <div className="relative w-full overflow-x-auto pb-8">
-        {/* DESKTOP CANVAS (ViewBox 700 x 840) */}
-        <div className="hidden md:block relative w-[700px] h-[840px] mx-auto">
-          {/* 6PX SOLID ROUNDED SVG CONNECTOR PATHS */}
+        {/* DESKTOP CANVAS (Dynamic Height) */}
+        <div
+          className="hidden md:block relative w-[700px] mx-auto"
+          style={{ height: `${modules.length * 140}px` }}
+        >
+          {/* DYNAMIC 6PX SOLID ROUNDED SVG CONNECTOR PATHS */}
           <svg
             className="absolute inset-0 w-full h-full pointer-events-none z-0 overflow-visible"
-            viewBox="0 0 700 840"
+            viewBox={`0 0 700 ${modules.length * 140}`}
           >
             <defs>
               {/* Flowing Active Gradient for Current Connector */}
@@ -77,89 +80,54 @@ export default function CoursePathRoadmap({
               </filter>
             </defs>
 
-            {/*
-              GEOMETRY MATH (700 x 840 Canvas):
-              Tile size = 78px x 78px (Radius = 39px)
-              Col 1 Center X = 160 (Left Edge = 121, Right Edge = 199)
-              Col 2 Center X = 540 (Left Edge = 501, Right Edge = 579)
+            {modules.map((mod, idx) => {
+              if (idx === modules.length - 1) return null;
 
-              Row 1 Y = 70  (Top = 31,  Bottom = 109) -> Mod 1 (Col 1)
-              Row 2 Y = 210 (Top = 171, Bottom = 249) -> Mod 2 (Col 2)
-              Row 3 Y = 350 (Top = 311, Bottom = 389) -> Mod 3 (Col 1)
-              Row 4 Y = 490 (Top = 451, Bottom = 529) -> Mod 4 (Col 2)
-              Row 5 Y = 630 (Top = 591, Bottom = 669) -> Mod 5 (Col 1)
-              Row 6 Y = 770 (Top = 731, Bottom = 809) -> Mod 6 (Col 2 - Certificate)
-            */}
+              const isEven = idx % 2 === 0;
+              const currentY = 70 + idx * 140;
+              const nextY = 70 + (idx + 1) * 140;
 
-            {/* Connector 1: Mod 1 Right (199, 70) -> Mod 2 Top (540, 171) [COMPLETED: Mint #74D99F] */}
-            <path
-              d="M 199 70 L 515 70 Q 540 70 540 95 L 540 171"
-              fill="none"
-              stroke="#74D99F"
-              strokeWidth="6"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="connector-path"
-            />
+              // Path starting and ending coordinates
+              const startX = isEven ? 199 : 501;
+              const endX = isEven ? 540 : 160;
 
-            {/* Connector 2: Mod 2 Left (501, 210) -> Mod 3 Top (160, 311) [CURRENT: Animated Lavender Gradient] */}
-            <path
-              d="M 501 210 L 185 210 Q 160 210 160 235 L 160 311"
-              fill="none"
-              stroke="url(#activeFlowGrad)"
-              strokeWidth="6"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="connector-path"
-              filter="url(#pathGlow)"
-            />
+              // SVG serpentine curve path
+              const d = isEven
+                ? `M 199 ${currentY} L 515 ${currentY} Q 540 ${currentY} 540 ${currentY + 25} L 540 ${nextY}`
+                : `M 501 ${currentY} L 185 ${currentY} Q 160 ${currentY} 160 ${currentY + 25} L 160 ${nextY}`;
 
-            {/* Connector 3: Mod 3 Right (199, 350) -> Mod 4 Top (540, 451) [UPCOMING: Light Lavender #E9E2FF] */}
-            <path
-              d="M 199 350 L 515 350 Q 540 350 540 375 L 540 451"
-              fill="none"
-              stroke="#E9E2FF"
-              strokeWidth="6"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="connector-path"
-            />
+              const isCompletedPath = mod.status === "completed";
+              const isCurrentPath = mod.status === "current";
 
-            {/* Connector 4: Mod 4 Left (501, 490) -> Mod 5 Top (160, 591) [UPCOMING: Light Lavender #E9E2FF] */}
-            <path
-              d="M 501 490 L 185 490 Q 160 490 160 515 L 160 591"
-              fill="none"
-              stroke="#E9E2FF"
-              strokeWidth="6"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="connector-path"
-            />
-
-            {/* Connector 5: Mod 5 Right (199, 630) -> Mod 6 Top (540, 731) [UPCOMING: Light Lavender #E9E2FF] */}
-            <path
-              d="M 199 630 L 515 630 Q 540 630 540 655 L 540 731"
-              fill="none"
-              stroke="#E9E2FF"
-              strokeWidth="6"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="connector-path"
-            />
+              return (
+                <path
+                  key={`path-${mod.id}`}
+                  d={d}
+                  fill="none"
+                  stroke={
+                    isCompletedPath
+                      ? "#74D99F"
+                      : isCurrentPath
+                      ? "url(#activeFlowGrad)"
+                      : "#E9E2FF"
+                  }
+                  strokeWidth="6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="connector-path"
+                  filter={isCurrentPath ? "url(#pathGlow)" : undefined}
+                />
+              );
+            })}
           </svg>
 
-          {/* 6 MODULE SQUARE TILES + TITLE UNDERNEATH */}
+          {/* DYNAMIC MODULE SQUARE TILES + TITLE UNDERNEATH */}
           {modules.map((mod, idx) => {
-            const positions = [
-              { left: 160, top: 70 },  // Mod 1 (Top Left)
-              { left: 540, top: 210 }, // Mod 2 (Top Right)
-              { left: 160, top: 350 }, // Mod 3 (Middle Left)
-              { left: 540, top: 490 }, // Mod 4 (Middle Right)
-              { left: 160, top: 630 }, // Mod 5 (Bottom Left)
-              { left: 540, top: 770 }, // Mod 6 (Bottom Right - Certificate)
-            ];
-
-            const pos = positions[idx] || positions[0];
+            const isEven = idx % 2 === 0;
+            const pos = {
+              left: isEven ? 160 : 540,
+              top: 70 + idx * 140,
+            };
 
             return (
               <div
@@ -177,10 +145,11 @@ export default function CoursePathRoadmap({
                 <SquareModuleTile
                   module={mod}
                   isHovered={hoveredModuleId === mod.id}
+                  totalModules={modules.length}
                 />
 
                 {/* Module Title Directly Below Square (No descriptions, no cards) */}
-                <div className="mt-2.5 text-center max-w-[150px] select-none">
+                <div className="mt-2.5 text-center max-w-[170px] select-none">
                   <h4 className="text-xs sm:text-sm font-extrabold text-[#1E1B2E] tracking-tight group-hover:text-[#8B7FE8] transition-colors leading-tight">
                     {mod.title}
                   </h4>
@@ -201,7 +170,11 @@ export default function CoursePathRoadmap({
               className="roadmap-module-node relative z-10 flex flex-col items-center cursor-pointer group"
               onClick={() => onSelectModule(mod)}
             >
-              <SquareModuleTile module={mod} isHovered={false} />
+              <SquareModuleTile
+                module={mod}
+                isHovered={false}
+                totalModules={modules.length}
+              />
 
               <div className="mt-2.5 text-center max-w-[170px]">
                 <h4 className="text-sm font-extrabold text-[#1E1B2E] tracking-tight group-hover:text-[#8B7FE8] transition-colors leading-tight">
@@ -222,14 +195,16 @@ export default function CoursePathRoadmap({
 function SquareModuleTile({
   module,
   isHovered,
+  totalModules = 6,
 }: {
   module: CourseModule;
   isHovered: boolean;
+  totalModules?: number;
 }) {
   const isCompleted = module.status === "completed";
   const isCurrent = module.status === "current";
   const isLocked = module.status === "locked";
-  const isAssessment = module.number === 6;
+  const isAssessment = module.number === totalModules;
 
   // Exact state styling matching reference:
   // Completed: Soft mint green gradient + white check icon
