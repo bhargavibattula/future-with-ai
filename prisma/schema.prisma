@@ -21,11 +21,12 @@ model User {
   certificatesCount Int           @default(0)
   twoFactorEnabled  Boolean       @default(true)
   twoFactorSecret   String?
-  accounts          Account[]
-  sessions          Session[]
-  certificates      Certificate[]
   createdAt         DateTime      @default(now())
   updatedAt         DateTime      @updatedAt
+  accounts          Account[]
+  promptClaims      PromptClaim[]
+  sessions          Session[]
+  certificates      Certificate[]
 }
 
 model Account {
@@ -34,15 +35,14 @@ model Account {
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String?
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -84,3 +84,44 @@ model Certificate {
   @@unique([userId, courseId])
 }
 
+model PromptCategory {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  prompts     Prompt[]
+}
+
+model Prompt {
+  id         String         @id @default(cuid())
+  title      String
+  content    String         @db.Text
+  type       PromptType     @default(FREE)
+  categoryId String
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+  category   PromptCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  claims     PromptClaim[]
+
+  @@index([categoryId])
+}
+
+model PromptClaim {
+  id        String   @id @default(cuid())
+  userId    String
+  promptId  String
+  claimedAt DateTime @default(now())
+  prompt    Prompt   @relation(fields: [promptId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, promptId])
+  @@index([userId])
+  @@index([promptId])
+}
+
+enum PromptType {
+  FREE
+  PREMIUM
+  ONE_TIME_PREMIUM
+}

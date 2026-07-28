@@ -23,6 +23,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Sparkles,
+  Terminal,
 } from "lucide-react";
 
 export type AdminTab =
@@ -36,6 +37,7 @@ export type AdminTab =
   | "certificates"
   | "gamification"
   | "ai"
+  | "prompts"
   | "subscriptions"
   | "analytics"
   | "notifications"
@@ -68,6 +70,7 @@ const MENU_ITEMS: MenuItem[] = [
   { id: "certificates", label: "Certificates", icon: Award },
   { id: "gamification", label: "Gamification", icon: Zap, badge: "XP", badgeColor: "bg-[#FFF0F5] text-[#C0336A]" },
   { id: "ai", label: "AI Management", icon: Bot, badge: "AI", badgeColor: "bg-[#EBF8FF] text-[#2B6CB0]" },
+  { id: "prompts", label: "Prompt Library", icon: Terminal, badge: "New", badgeColor: "bg-[#F5F2FF] text-[#8B7FE8]" },
   { id: "subscriptions", label: "Subscriptions", icon: CreditCard },
   { id: "analytics", label: "Analytics", icon: BarChart3 },
   { id: "notifications", label: "Notifications", icon: Bell },

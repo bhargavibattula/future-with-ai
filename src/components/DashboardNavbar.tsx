@@ -16,7 +16,8 @@ import {
   Flame,
   Bookmark,
   ShieldCheck,
-  LayoutDashboard
+  LayoutDashboard,
+  Terminal,
 } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { useRouter, usePathname } from "next/navigation";
@@ -90,6 +91,7 @@ export default function DashboardNavbar() {
     { name: "AI Tools", href: "/dashboard/tools", icon: Wrench },
     { name: "Games", href: "/dashboard/games", icon: Gamepad2 },
     { name: "Streak", href: "/dashboard/streak", icon: Flame },
+    { name: "Prompt Library", href: "/dashboard/prompt-library", icon: Terminal },
     { name: "Leaderboard", href: "/dashboard/leaderboard", icon: Sparkles },
   ];
 
