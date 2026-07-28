@@ -13,6 +13,7 @@ import AdminQuizSection from "@/components/admin/sections/AdminQuizSection";
 import AdminCertificatesSection from "@/components/admin/sections/AdminCertificatesSection";
 import AdminGamificationSection from "@/components/admin/sections/AdminGamificationSection";
 import AdminAIManagementSection from "@/components/admin/sections/AdminAIManagementSection";
+import AdminPromptLibrarySection from "@/components/admin/sections/AdminPromptLibrarySection";
 import AdminGenericSection from "@/components/admin/sections/AdminGenericSection";
 
 export default function AdminPage() {
@@ -72,6 +73,8 @@ export default function AdminPage() {
         return <AdminGamificationSection />;
       case "ai":
         return <AdminAIManagementSection />;
+      case "prompts":
+        return <AdminPromptLibrarySection />;
       default:
         return <AdminGenericSection tab={activeTab} />;
     }
