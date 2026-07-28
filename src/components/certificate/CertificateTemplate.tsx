@@ -24,6 +24,8 @@ export default function CertificateTemplate({
   verificationUrl = `https://futurewithai.com/verify/${certificateId}`,
   className = "",
 }: CertificateTemplateProps) {
+  const displayName = (studentName && studentName.trim()) ? studentName.trim() : "Valued Learner";
+
   return (
     <div
       className={`relative w-full max-w-4xl mx-auto rounded-[32px] bg-white text-[#1E1B2E] border-2 border-[#EAE6FE] shadow-2xl p-6 sm:p-10 md:p-12 overflow-hidden font-sans ${className}`}
@@ -77,7 +79,7 @@ export default function CertificateTemplate({
         {/* Recipient Name */}
         <div className="py-1">
           <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-[#1E1B2E] uppercase font-serif">
-            {studentName}
+            {displayName}
           </h1>
           <div className="w-56 h-1 bg-gradient-to-r from-[#8B7FE8] via-[#C5A059] to-[#B8E8D8] mx-auto mt-3 rounded-full shadow-sm" />
         </div>

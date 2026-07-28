@@ -19,6 +19,7 @@ import {
   ArrowLeft,
   RefreshCw,
   ExternalLink,
+  UserCheck,
 } from "lucide-react";
 
 function LinkedinIcon({ className = "w-4 h-4" }: { className?: string }) {
@@ -49,7 +50,6 @@ export default function CertificatePage({ params }: CertificatePageProps) {
     : `course-${rawCourseId}`;
 
   const { user } = useAuth();
-  const studentName = user?.name || "Shanmukha Rani";
   const userEmail = user?.email || "";
 
   const course = COURSES.find(
@@ -64,11 +64,24 @@ export default function CertificatePage({ params }: CertificatePageProps) {
   const [errorMsg, setErrorMsg] = useState<string>("");
   const [origin, setOrigin] = useState<string>("https://futurewithai.com");
 
+  // Editable Student Name state
+  const [inputStudentName, setInputStudentName] = useState<string>("");
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       setOrigin(window.location.origin);
     }
   }, []);
+
+  // Sync user name when user loads
+  useEffect(() => {
+    if (user?.name) {
+      setInputStudentName(user.name);
+    } else if (user?.email) {
+      const emailPrefix = user.email.split("@")[0];
+      setInputStudentName(emailPrefix.charAt(0).toUpperCase() + emailPrefix.slice(1));
+    }
+  }, [user]);
 
   useEffect(() => {
     let isSubscribed = true;
@@ -83,6 +96,9 @@ export default function CertificatePage({ params }: CertificatePageProps) {
         if (isSubscribed) {
           if (data.success && data.certificate) {
             setCertificate(data.certificate);
+            if (data.certificate.studentName) {
+              setInputStudentName(data.certificate.studentName);
+            }
           }
         }
       } catch (err) {
@@ -106,6 +122,7 @@ export default function CertificatePage({ params }: CertificatePageProps) {
     setErrorMsg("");
     try {
       const currentOrigin = typeof window !== "undefined" ? window.location.origin : origin;
+      const finalName = inputStudentName.trim() || (user?.name || user?.email?.split("@")[0] || "Valued Learner");
 
       const res = await fetch("/api/certificates/generate", {
         method: "POST",
@@ -113,7 +130,8 @@ export default function CertificatePage({ params }: CertificatePageProps) {
         body: JSON.stringify({
           courseId: rawCourseId,
           userId: userEmail || "usr_demo_learner",
-          userName: studentName,
+          studentName: finalName,
+          userName: finalName,
           progressPercent: 100,
           forceRegenerate: force,
           appUrl: currentOrigin,
@@ -133,6 +151,8 @@ export default function CertificatePage({ params }: CertificatePageProps) {
       setGenerating(false);
     }
   };
+
+  const currentStudentName = certificate?.studentName || inputStudentName || user?.name || "Valued Learner";
 
   const verificationUrl = certificate?.certificateId
     ? `${origin}/verify/${certificate.certificateId}`
@@ -223,9 +243,22 @@ export default function CertificatePage({ params }: CertificatePageProps) {
             </h2>
             <p className="text-sm text-[#6B6785] dark:text-[#B3B3B3] font-medium mb-6 max-w-md mx-auto">
               Congratulations on reaching 100% completion in{" "}
-              <strong className="text-[#1E1B2E] dark:text-white">{course.title}</strong>. Click
-              below to generate your official shareable credential and PDF document.
+              <strong className="text-[#1E1B2E] dark:text-white">{course.title}</strong>. Enter your full name as you would like it to appear on your official credential:
             </p>
+
+            {/* Student Name Input */}
+            <div className="max-w-md mx-auto mb-6 text-left">
+              <label className="block text-xs font-extrabold text-[#6B6785] uppercase tracking-wider mb-2">
+                Full Name for Certificate
+              </label>
+              <input
+                type="text"
+                value={inputStudentName}
+                onChange={(e) => setInputStudentName(e.target.value)}
+                placeholder="Enter your full name"
+                className="w-full px-4 py-3 rounded-2xl bg-[#FCFBFF] dark:bg-[#1E1E1E] border border-[#D8D2FA] dark:border-[#2A2540] text-sm font-bold text-[#1E1B2E] dark:text-white focus:outline-none focus:border-[#8B7FE8]"
+              />
+            </div>
 
             {errorMsg && (
               <div className="mb-4 p-3 rounded-xl bg-rose-50 text-rose-600 dark:bg-rose-950/40 dark:text-rose-400 text-xs font-bold border border-rose-200 dark:border-rose-900">
@@ -258,7 +291,7 @@ export default function CertificatePage({ params }: CertificatePageProps) {
             <div className="lg:col-span-8 w-full space-y-6">
               <CertificateTemplate
                 certificateId={certificate.certificateId}
-                studentName={certificate.studentName || studentName}
+                studentName={currentStudentName}
                 courseTitle={certificate.courseTitle || `${course.title} Mastery`}
                 issuedDate={
                   certificate.issuedDate
@@ -282,6 +315,30 @@ export default function CertificatePage({ params }: CertificatePageProps) {
                 <h3 className="text-base font-extrabold text-[#1E1B2E] dark:text-white border-b border-[#E8E3FF] dark:border-[#2A2540] pb-3">
                   Certificate Actions
                 </h3>
+
+                {/* Edit Student Name Form */}
+                <div className="space-y-2">
+                  <label className="block text-[11px] font-extrabold text-[#6B6785] uppercase tracking-wider">
+                    Name on Certificate
+                  </label>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={inputStudentName}
+                      onChange={(e) => setInputStudentName(e.target.value)}
+                      placeholder="Your full name"
+                      className="flex-1 px-3 py-2 rounded-xl bg-[#FCFBFF] dark:bg-[#1E1E1E] border border-[#D8D2FA] dark:border-[#2A2540] text-xs font-bold text-[#1E1B2E] dark:text-white focus:outline-none focus:border-[#8B7FE8]"
+                    />
+                    <button
+                      onClick={() => handleGenerateCertificate(true)}
+                      disabled={generating}
+                      className="px-3 py-2 rounded-xl bg-[#F3F0FE] text-[#8B7FE8] font-bold text-xs hover:bg-[#EAE6FE] transition-colors disabled:opacity-50 flex items-center gap-1"
+                    >
+                      <UserCheck className="w-3.5 h-3.5" />
+                      Update
+                    </button>
+                  </div>
+                </div>
 
                 {/* Main PDF Download */}
                 <button
@@ -317,7 +374,7 @@ export default function CertificatePage({ params }: CertificatePageProps) {
                   className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-[#F5F2FF] dark:bg-[#1A1830] border border-[#D8D2FA] dark:border-[#8B7FE8]/30 text-[#8B7FE8] font-bold text-xs hover:bg-[#EAE6FE] transition-colors disabled:opacity-50"
                 >
                   <RefreshCw className={`w-3.5 h-3.5 ${generating ? "animate-spin" : ""}`} />
-                  {generating ? "Updating QR..." : "Regenerate QR for Current Origin"}
+                  {generating ? "Updating..." : "Regenerate Certificate Assets"}
                 </button>
 
                 {/* Social Share Buttons */}
@@ -370,7 +427,7 @@ export default function CertificatePage({ params }: CertificatePageProps) {
       <WriteWithAIModal
         isOpen={isAIModalOpen}
         onClose={() => setIsAIModalOpen(false)}
-        studentName={studentName}
+        studentName={currentStudentName}
         courseName={course.title}
         verificationUrl={verificationUrl}
       />
