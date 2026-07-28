@@ -27,6 +27,31 @@ export default function CoursePathClient({ slug }: CoursePathClientProps) {
     setSelectedModule(currentModule);
   };
 
+  // Toggle 100% completion for testing & certificate generation trigger
+  const handleToggleCompleteAll = () => {
+    setPathData((prev) => {
+      const isCurrently100 = prev.progressPercent === 100;
+      if (isCurrently100) {
+        // Reset to initial 33% state
+        return getCoursePathData(slug);
+      }
+
+      // Mark all modules & lessons completed
+      const updatedModules = prev.modules.map((m) => ({
+        ...m,
+        status: "completed" as const,
+        lessons: m.lessons.map((l) => ({ ...l, completed: true })),
+      }));
+
+      return {
+        ...prev,
+        completedModulesCount: prev.totalModulesCount,
+        progressPercent: 100,
+        modules: updatedModules,
+      };
+    });
+  };
+
   return (
     <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] flex flex-col font-sans">
       {/* Navbar */}
@@ -50,6 +75,7 @@ export default function CoursePathClient({ slug }: CoursePathClientProps) {
               <CoursePathLeftPanel
                 data={pathData}
                 onContinueLearning={handleContinueLearning}
+                onToggleCompleteAll={handleToggleCompleteAll}
               />
             </div>
 

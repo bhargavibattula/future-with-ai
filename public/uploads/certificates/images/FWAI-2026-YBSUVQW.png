@@ -1,0 +1,77 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="50%" stop-color="#FCFBFF" />
+      <stop offset="100%" stop-color="#F5F2FF" />
+    </linearGradient>
+    <linearGradient id="borderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8B7FE8" />
+      <stop offset="50%" stop-color="#C5A059" />
+      <stop offset="100%" stop-color="#5CBFA0" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="800" fill="url(#bg)" />
+
+  <!-- Outer Border -->
+  <rect x="30" y="30" width="1140" height="740" rx="24" fill="none" stroke="url(#borderGrad)" stroke-width="4" />
+  <rect x="42" y="42" width="1116" height="716" rx="18" fill="none" stroke="#D8D2FA" stroke-width="1.5" />
+
+  <!-- Background Grid Pattern -->
+  <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
+    <circle cx="15" cy="15" r="1" fill="#8B7FE8" opacity="0.08" />
+  </pattern>
+  <rect x="45" y="45" width="1110" height="710" fill="url(#grid)" />
+
+  <!-- Top Logo -->
+  <text x="600" y="110" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-weight="900" font-size="26" fill="#8B7FE8" text-anchor="middle" letter-spacing="4">FUTURE WITH AI</text>
+  <text x="600" y="160" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-weight="900" font-size="34" fill="#1E1B2E" text-anchor="middle" letter-spacing="2">CERTIFICATE OF COMPLETION</text>
+
+  <!-- Subtitle -->
+  <text x="600" y="220" font-family="Arial, sans-serif" font-weight="700" font-size="14" fill="#6B6785" text-anchor="middle" letter-spacing="3">THIS IS PROUDLY PRESENTED TO</text>
+
+  <!-- Student Name -->
+  <text x="600" y="290" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-weight="900" font-size="44" fill="#1E1B2E" text-anchor="middle">SWEETY</text>
+  <line x1="400" y1="315" x2="800" y2="315" stroke="#C5A059" stroke-width="3" stroke-linecap="round" />
+
+  <!-- Description -->
+  <text x="600" y="365" font-family="Arial, sans-serif" font-size="18" fill="#6B6785" text-anchor="middle">for successfully completing 100% of the interactive curriculum for</text>
+
+  <!-- Course Title -->
+  <text x="600" y="425" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-weight="900" font-size="32" fill="#8B7FE8" text-anchor="middle">"ChatGPT Mastery"</text>
+
+  <!-- Metadata Cards -->
+  <g transform="translate(140, 500)">
+    <rect x="0" y="0" width="260" height="80" rx="16" fill="#FCFBFF" stroke="#EAE6FE" />
+    <text x="20" y="32" font-family="Arial, sans-serif" font-size="12" fill="#6B6785" font-weight="600">ISSUE DATE</text>
+    <text x="20" y="60" font-family="Arial, sans-serif" font-size="18" fill="#1E1B2E" font-weight="800">July 28, 2026</text>
+  </g>
+
+  <g transform="translate(470, 500)">
+    <rect x="0" y="0" width="260" height="80" rx="16" fill="#FCFBFF" stroke="#EAE6FE" />
+    <text x="20" y="32" font-family="Arial, sans-serif" font-size="12" fill="#6B6785" font-weight="600">COURSE DURATION</text>
+    <text x="20" y="60" font-family="Arial, sans-serif" font-size="18" fill="#1E1B2E" font-weight="800">13 lessons • 6 hrs</text>
+  </g>
+
+  <g transform="translate(800, 500)">
+    <rect x="0" y="0" width="260" height="80" rx="16" fill="#F3F0FE" stroke="#D8D2FA" />
+    <text x="20" y="32" font-family="Arial, sans-serif" font-size="12" fill="#8B7FE8" font-weight="600">CERTIFICATE ID</text>
+    <text x="20" y="60" font-family="Arial, sans-serif" font-size="18" fill="#8B7FE8" font-weight="800">#FWAI-2026-YBSUVQW</text>
+  </g>
+
+  <!-- Verified Badge & QR Code -->
+  <g transform="translate(980, 620)">
+    <image href="data:image/png;base64,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" x="0" y="0" width="110" height="110" />
+    <text x="55" y="125" font-family="Arial, sans-serif" font-size="11" fill="#6B6785" text-anchor="middle">Scan to Verify</text>
+  </g>
+
+  <!-- Signatures -->
+  <g transform="translate(140, 640)">
+    <line x1="0" y1="40" x2="260" y2="40" stroke="#D8D2FA" stroke-width="2" />
+    <text x="0" y="65" font-family="Arial, sans-serif" font-size="14" fill="#1E1B2E" font-weight="700">Future With AI Board</text>
+    <text x="0" y="85" font-family="Arial, sans-serif" font-size="12" fill="#6B6785">Official Verifiable Credential</text>
+  </g>
+</svg>

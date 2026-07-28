@@ -398,13 +398,13 @@ export function getCoursePathData(slug: string): DetailedCoursePath {
       title: topics[2].title,
       subtitle: topics[2].subtitle,
       description: topics[2].desc,
-      status: "current",
+      status: "completed",
       duration: "50 mins",
       xp: 250,
       lessons: [
-        { id: "l-301", title: "Building a Real Project Workflow", duration: "20 mins", completed: false, type: "project" },
-        { id: "l-302", title: "Handling Edge Cases & Errors", duration: "15 mins", completed: false, type: "video" },
-        { id: "l-303", title: "Interactive Challenge", duration: "15 mins", completed: false, type: "interactive" },
+        { id: "l-301", title: "Building a Real Project Workflow", duration: "20 mins", completed: true, type: "project" },
+        { id: "l-302", title: "Handling Edge Cases & Errors", duration: "15 mins", completed: true, type: "video" },
+        { id: "l-303", title: "Interactive Challenge", duration: "15 mins", completed: true, type: "interactive" },
       ],
     },
     {
@@ -413,12 +413,12 @@ export function getCoursePathData(slug: string): DetailedCoursePath {
       title: topics[3].title,
       subtitle: topics[3].subtitle,
       description: topics[3].desc,
-      status: "locked",
+      status: "completed",
       duration: "55 mins",
       xp: 300,
       lessons: [
-        { id: "l-401", title: "Advanced Automation Techniques", duration: "25 mins", completed: false, type: "video" },
-        { id: "l-402", title: "Custom Knowledge Base Integration", duration: "30 mins", completed: false, type: "project" },
+        { id: "l-401", title: "Advanced Automation Techniques", duration: "25 mins", completed: true, type: "video" },
+        { id: "l-402", title: "Custom Knowledge Base Integration", duration: "30 mins", completed: true, type: "project" },
       ],
     },
     {
@@ -427,11 +427,11 @@ export function getCoursePathData(slug: string): DetailedCoursePath {
       title: topics[4].title,
       subtitle: topics[4].subtitle,
       description: topics[4].desc,
-      status: "locked",
+      status: "completed",
       duration: "25 mins",
       xp: 200,
       lessons: [
-        { id: "l-501", title: "Comprehensive Knowledge Assessment", duration: "25 mins", completed: false, type: "quiz" },
+        { id: "l-501", title: "Comprehensive Knowledge Assessment", duration: "25 mins", completed: true, type: "quiz" },
       ],
     },
     {
@@ -440,11 +440,11 @@ export function getCoursePathData(slug: string): DetailedCoursePath {
       title: topics[5].title,
       subtitle: topics[5].subtitle,
       description: topics[5].desc,
-      status: "locked",
+      status: "completed",
       duration: "10 mins",
       xp: 500,
       lessons: [
-        { id: "l-601", title: "Final Capstone Verification & Certificate Claim", duration: "10 mins", completed: false, type: "project" },
+        { id: "l-601", title: "Final Capstone Verification & Certificate Claim", duration: "10 mins", completed: true, type: "project" },
       ],
     },
   ];
@@ -523,7 +523,7 @@ export function getCoursePathData(slug: string): DetailedCoursePath {
       bgColor: "#EBF8FF",
       borderColor: "#BEE3F8",
       textColor: "#2B6CB0",
-      unlocked: false,
+      unlocked: true,
     },
   ];
 
@@ -541,15 +541,16 @@ export function getCoursePathData(slug: string): DetailedCoursePath {
     fullTitle: `${course.title} Mastery: Interactive Learning Pathway`,
     lastUpdated: "July 2026",
     level: "Beginner to Advanced",
-    completedModulesCount: 2,
+    completedModulesCount: 6,
     totalModulesCount: 6,
-    progressPercent: 33,
-    timeSpent: "1h 15m",
-    currentStreak: "3 Days 🔥",
-    xpEarned: 350,
+    progressPercent: 100,
+    timeSpent: "4h 45m",
+    currentStreak: "7 Days 🔥",
+    xpEarned: 1600,
     modules,
     resources,
     badges,
     recommendedSlug,
   };
 }
+
