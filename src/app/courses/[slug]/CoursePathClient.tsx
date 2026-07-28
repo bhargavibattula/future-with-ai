@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CoursePathHeader from "@/components/course-path/CoursePathHeader";
@@ -8,48 +8,147 @@ import CoursePathLeftPanel from "@/components/course-path/CoursePathLeftPanel";
 import CoursePathRoadmap from "@/components/course-path/CoursePathRoadmap";
 import CourseModuleModal from "@/components/course-path/CourseModuleModal";
 import CoursePathBottomSections from "@/components/course-path/CoursePathBottomSections";
-import { DetailedCoursePath, CourseModule, getCoursePathData } from "@/data/coursePathData";
+import { useRouter } from "next/navigation";
+import {
+  DetailedCoursePath,
+  CourseModule,
+  getCoursePathData,
+  getStoredUserProgress,
+  saveUserProgress,
+  UserCourseProgressState
+} from "@/data/coursePathData";
 
 interface CoursePathClientProps {
   slug: string;
 }
 
 export default function CoursePathClient({ slug }: CoursePathClientProps) {
+  const router = useRouter();
+  const [progressState, setProgressState] = useState<UserCourseProgressState | null>(null);
+
+  // Load progress state on mount
+  useEffect(() => {
+    const saved = getStoredUserProgress(slug);
+    setProgressState(saved);
+  }, [slug]);
+
   const [pathData, setPathData] = useState<DetailedCoursePath>(() =>
-    getCoursePathData(slug)
+    getCoursePathData(slug, progressState || undefined)
   );
+
+  // Synchronize pathData when progressState changes
+  useEffect(() => {
+    if (progressState) {
+      setPathData(getCoursePathData(slug, progressState));
+    }
+  }, [progressState, slug]);
+
   const [selectedModule, setSelectedModule] = useState<CourseModule | null>(null);
 
-  // Continue Learning action (opens current module)
+  // Continue Learning action (navigates to first uncompleted lesson/module full page)
   const handleContinueLearning = () => {
     const currentModule =
       pathData.modules.find((m) => m.status === "current") || pathData.modules[0];
-    setSelectedModule(currentModule);
+    const uncompletedLesson = currentModule.lessons.find((l) => !l.completed) || currentModule.lessons[0];
+
+    if (uncompletedLesson) {
+      router.push(`/courses/${slug}/lessons/${uncompletedLesson.id}`);
+    } else {
+      setSelectedModule(currentModule);
+    }
   };
 
-  // Toggle 100% completion for testing & certificate generation trigger
-  const handleToggleCompleteAll = () => {
-    setPathData((prev) => {
-      const isCurrently100 = prev.progressPercent === 100;
-      if (isCurrently100) {
-        // Reset to initial 33% state
-        return getCoursePathData(slug);
+  // Mark lesson completed & award XP
+  const handleMarkLessonComplete = (moduleId: string, lessonId: string) => {
+    setProgressState((prev) => {
+      const state = prev || getStoredUserProgress(slug);
+      if (state.completedLessonIds.includes(lessonId)) return state;
+
+      const updatedCompletedLessons = [...state.completedLessonIds, lessonId];
+      const targetModule = pathData.modules.find((m) => m.id === moduleId);
+
+      let updatedCompletedModules = [...state.completedModuleIds];
+      let bonusXp = 50;
+
+      // Check if all lessons in module are now completed
+      if (targetModule) {
+        const allLessonsDone = targetModule.lessons.every(
+          (l) => l.id === lessonId || updatedCompletedLessons.includes(l.id)
+        );
+
+        if (allLessonsDone && !targetModule.quiz && !updatedCompletedModules.includes(moduleId)) {
+          updatedCompletedModules.push(moduleId);
+          bonusXp += targetModule.xp;
+        }
       }
 
-      // Mark all modules & lessons completed
-      const updatedModules = prev.modules.map((m) => ({
-        ...m,
-        status: "completed" as const,
-        lessons: m.lessons.map((l) => ({ ...l, completed: true })),
-      }));
-
-      return {
-        ...prev,
-        completedModulesCount: prev.totalModulesCount,
-        progressPercent: 100,
-        modules: updatedModules,
+      const newState: UserCourseProgressState = {
+        ...state,
+        completedLessonIds: updatedCompletedLessons,
+        completedModuleIds: updatedCompletedModules,
+        totalXp: state.totalXp + bonusXp,
+        lastActiveDate: new Date().toISOString(),
       };
+
+      saveUserProgress(slug, newState);
+      return newState;
     });
+
+    // Update active lesson state
+    if (selectedLesson && selectedLesson.id === lessonId) {
+      setSelectedLesson((prev) => prev ? { ...prev, completed: true } : null);
+    }
+  };
+
+  // Pass Quiz & Unlock Next Module
+  const handleQuizPassed = (moduleId: string, score: number, xpReward: number) => {
+    setProgressState((prev) => {
+      const state = prev || getStoredUserProgress(slug);
+      const updatedModuleIds = state.completedModuleIds.includes(moduleId)
+        ? state.completedModuleIds
+        : [...state.completedModuleIds, moduleId];
+
+      const newState: UserCourseProgressState = {
+        ...state,
+        completedModuleIds: updatedModuleIds,
+        quizScores: { ...state.quizScores, [moduleId]: score },
+        totalXp: state.totalXp + xpReward,
+        lastActiveDate: new Date().toISOString(),
+      };
+
+      saveUserProgress(slug, newState);
+      return newState;
+    });
+  };
+
+  // Toggle 100% completion for testing & simulation
+  const handleToggleCompleteAll = () => {
+    if (pathData.progressPercent === 100) {
+      const resetState: UserCourseProgressState = {
+        completedLessonIds: [],
+        completedModuleIds: [],
+        quizScores: {},
+        totalXp: 0,
+        currentStreakDays: 1,
+        lastActiveDate: new Date().toISOString(),
+      };
+      saveUserProgress(slug, resetState);
+      setProgressState(resetState);
+    } else {
+      const allLessonIds = pathData.modules.flatMap((m) => m.lessons.map((l) => l.id));
+      const allModuleIds = pathData.modules.map((m) => m.id);
+
+      const completeState: UserCourseProgressState = {
+        completedLessonIds: allLessonIds,
+        completedModuleIds: allModuleIds,
+        quizScores: pathData.modules.reduce((acc, m) => ({ ...acc, [m.id]: 100 }), {}),
+        totalXp: 3400,
+        currentStreakDays: 12,
+        lastActiveDate: new Date().toISOString(),
+      };
+      saveUserProgress(slug, completeState);
+      setProgressState(completeState);
+    }
   };
 
   return (
@@ -59,7 +158,7 @@ export default function CoursePathClient({ slug }: CoursePathClientProps) {
 
       {/* Main Content Area */}
       <main className="flex-1 w-full relative">
-        {/* Soft Ambient Radial Lighting Blobs (matching homepage palette) */}
+        {/* Soft Ambient Radial Lighting Blobs */}
         <div className="pointer-events-none fixed top-0 left-1/4 w-[500px] h-[500px] rounded-full bg-[#D8D2FA]/25 blur-[120px]" />
         <div className="pointer-events-none fixed bottom-1/4 right-1/4 w-[500px] h-[500px] rounded-full bg-[#FFC9DE]/25 blur-[120px]" />
         <div className="pointer-events-none fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[#B8E8D8]/15 blur-[140px]" />
@@ -95,7 +194,7 @@ export default function CoursePathClient({ slug }: CoursePathClientProps) {
         </div>
       </main>
 
-      {/* Module Detail Interactive Modal */}
+      {/* Module Overview Modal */}
       <CourseModuleModal
         module={selectedModule}
         onClose={() => setSelectedModule(null)}
