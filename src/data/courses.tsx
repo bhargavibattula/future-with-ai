@@ -154,6 +154,7 @@ export const COURSES: AICourse[] = [
   {
     id: "course-claude",
     title: "Claude",
+    price: 499,
     description: "Deep analysis, Long documents, Strategic work.",
     tags: ["Deep analysis", "Long documents", "Strategic work"],
     badge: "Top Rated",
@@ -170,6 +171,7 @@ export const COURSES: AICourse[] = [
   {
     id: "course-claude-deep-dive",
     title: "Claude: Deep Dive",
+    price: 499,
     description: "Long documents, Strategic work, Business automation.",
     tags: ["Long documents", "Strategic work", "Business automation"],
     badge: "Advanced",
@@ -186,6 +188,7 @@ export const COURSES: AICourse[] = [
   {
     id: "course-claude-code",
     title: "Claude Code",
+    price: 499,
     description: "Work & personal websites, No-code apps, Strategic work.",
     tags: ["Websites", "No-code apps", "Strategic work"],
     badge: "Coding",
@@ -202,6 +205,7 @@ export const COURSES: AICourse[] = [
   {
     id: "course-lovable",
     title: "Lovable",
+    price: 499,
     description: "Work & personal websites, Landing pages, No-code apps.",
     tags: ["Websites", "Landing pages", "No-code apps"],
     badge: "No-Code",
@@ -218,6 +222,7 @@ export const COURSES: AICourse[] = [
   {
     id: "course-deepseek",
     title: "DeepSeek",
+    price: 499,
     description: "Business automation, Learning, Multistep tasks.",
     tags: ["Business automation", "Learning", "Multistep tasks"],
     badge: "Trending",
@@ -234,6 +239,7 @@ export const COURSES: AICourse[] = [
   {
     id: "course-chatgpt",
     title: "ChatGPT",
+    price: 499,
     description: "Brainstorming, Quick answers, Everyday help.",
     tags: ["Brainstorming", "Quick answers", "Everyday help"],
     badge: "Most Popular",
@@ -250,6 +256,7 @@ export const COURSES: AICourse[] = [
   {
     id: "course-chatgpt-deep-dive",
     title: "ChatGPT: Deep Dive",
+    price: 499,
     description: "Advanced automation, API integrations, Complex reasoning.",
     tags: ["Advanced automation", "API integrations", "Complex reasoning"],
     badge: "Advanced",
@@ -266,6 +273,7 @@ export const COURSES: AICourse[] = [
   {
     id: "course-gemini",
     title: "Gemini",
+    price: 499,
     description: "Spreadsheet insights, Multimedia content, Careful reasoning.",
     tags: ["Spreadsheet insights", "Multimedia content", "Careful reasoning"],
     badge: "New",
@@ -282,6 +290,7 @@ export const COURSES: AICourse[] = [
   {
     id: "course-midjourney",
     title: "Midjourney",
+    price: 499,
     description: "Concept imagery, Illustrations, High-end visuals.",
     tags: ["Concept imagery", "Illustrations", "High-end visuals"],
     badge: "Design",
@@ -298,6 +307,7 @@ export const COURSES: AICourse[] = [
   {
     id: "course-stable-diffusion",
     title: "Stable Diffusion",
+    price: 499,
     description: "Detailed editing, Brand consistency, Custom images.",
     tags: ["Detailed editing", "Brand consistency", "Custom images"],
     badge: "Open Source",
@@ -314,6 +324,7 @@ export const COURSES: AICourse[] = [
   {
     id: "course-canva",
     title: "Canva AI",
+    price: 499,
     description: "Presentations, Visual templates, Marketing designs.",
     tags: ["Presentations", "Visual templates", "Marketing designs"],
     badge: "Essentials",
@@ -330,6 +341,7 @@ export const COURSES: AICourse[] = [
   {
     id: "course-jasper",
     title: "Jasper AI",
+    price: 499,
     description: "Brand voice, Content writing, Ad copy.",
     tags: ["Brand voice", "Content writing", "Ad copy"],
     badge: "Marketing",
@@ -346,6 +358,7 @@ export const COURSES: AICourse[] = [
   {
     id: "course-omni",
     title: "Omni",
+    price: 499,
     description: "Video ads, Social media, Realistic footage.",
     tags: ["Video ads", "Social media", "Realistic footage"],
     badge: "Enterprise",
@@ -362,6 +375,7 @@ export const COURSES: AICourse[] = [
   {
     id: "course-kling",
     title: "Kling AI",
+    price: 499,
     description: "Viral videos, AI characters, Short clips.",
     tags: ["Viral videos", "AI characters", "Short clips"],
     badge: "Featured",
@@ -378,6 +392,7 @@ export const COURSES: AICourse[] = [
   {
     id: "course-perplexity",
     title: "Perplexity",
+    price: 499,
     description: "Research, Verifying sources, Fact-checking.",
     tags: ["Research", "Verifying sources", "Fact-checking"],
     badge: "Research",
@@ -394,6 +409,7 @@ export const COURSES: AICourse[] = [
   {
     id: "course-communicating-ai",
     title: "Communicating With AI",
+    price: 499,
     description: "Quick answers, Everyday help, Learning.",
     tags: ["Quick answers", "Everyday help", "Learning"],
     badge: "Beginner",
@@ -410,6 +426,7 @@ export const COURSES: AICourse[] = [
   {
     id: "course-claude-cowork",
     title: "Claude Cowork",
+    price: 499,
     description: "Collaborative tasks, Team workflows.",
     tags: ["Collaboration", "Workflows", "Teams"],
     badge: "New",
@@ -426,6 +443,7 @@ export const COURSES: AICourse[] = [
   {
     id: "course-28-days-ai-cert",
     title: "28 Days AI Certification",
+    price: 499,
     description: "Comprehensive 28 days certification program.",
     tags: ["Certification", "Deep Learning", "Career"],
     badge: "Certification",
@@ -442,6 +460,7 @@ export const COURSES: AICourse[] = [
   {
     id: "course-junior-ai-challenge",
     title: "Junior AI Challenge",
+    price: 499,
     description: "Fun tasks and learning for junior AI enthusiasts.",
     tags: ["Beginner", "Challenge", "Fun"],
     badge: "Challenge",
@@ -458,6 +477,7 @@ export const COURSES: AICourse[] = [
   {
     id: "course-14-days-ai-side-gigs",
     title: "14 Days AI Side Gigs",
+    price: 499,
     description: "Learn how to monetize AI with side gigs in 14 days.",
     tags: ["Side Hustle", "Monetization", "Challenge"],
     badge: "Challenge",
@@ -474,6 +494,7 @@ export const COURSES: AICourse[] = [
   {
     id: "course-22-days-ai-challenge",
     title: "22 Days AI Challenge",
+    price: 499,
     description: "A 22-day intensive AI mastery challenge.",
     tags: ["Challenge", "Mastery", "Intensive"],
     badge: "Challenge",
@@ -490,6 +511,7 @@ export const COURSES: AICourse[] = [
   {
     id: "course-ai-essentials-project-managers",
     title: "AI Essentials for Project Managers",
+    price: 499,
     description: "Manage projects effectively using AI tools.",
     tags: ["Management", "Tools", "Efficiency"],
     badge: "Management",
@@ -506,6 +528,7 @@ export const COURSES: AICourse[] = [
   {
     id: "course-ai-product-development",
     title: "AI for Product Development",
+    price: 499,
     description: "Build and scale products using AI.",
     tags: ["Product", "Scale", "Development"],
     badge: "Product",
@@ -522,6 +545,7 @@ export const COURSES: AICourse[] = [
   {
     id: "course-build-portfolio",
     title: "Build a Strong Portfolio with AI",
+    price: 499,
     description: "Leverage AI to showcase your skills better.",
     tags: ["Portfolio", "Career", "Showcase"],
     badge: "Career",
@@ -538,6 +562,7 @@ export const COURSES: AICourse[] = [
   {
     id: "course-turbocharge-productivity",
     title: "Turbocharge Your Productivity with AI",
+    price: 499,
     description: "Get more done in less time.",
     tags: ["Productivity", "Time Management", "Automation"],
     badge: "Productivity",
@@ -554,6 +579,7 @@ export const COURSES: AICourse[] = [
   {
     id: "course-ai-smm",
     title: "AI in SMM",
+    price: 499,
     description: "Social media marketing powered by AI.",
     tags: ["Social Media", "Marketing", "SMM"],
     badge: "Marketing",
@@ -570,6 +596,7 @@ export const COURSES: AICourse[] = [
   {
     id: "course-ai-social-influence-blogging",
     title: "AI Social Influence and Blogging",
+    price: 499,
     description: "Grow your blog and influence using AI.",
     tags: ["Blogging", "Influence", "Content"],
     badge: "Content",
@@ -586,6 +613,7 @@ export const COURSES: AICourse[] = [
   {
     id: "course-ai-performance-marketing",
     title: "AI Performance & Marketing",
+    price: 499,
     description: "Optimize ad campaigns and performance.",
     tags: ["Ads", "Performance", "Marketing"],
     badge: "Marketing",
@@ -602,6 +630,7 @@ export const COURSES: AICourse[] = [
   {
     id: "course-ai-seo",
     title: "AI for SEO",
+    price: 499,
     description: "Rank higher on search engines with AI.",
     tags: ["SEO", "Ranking", "Search"],
     badge: "SEO",
@@ -618,6 +647,7 @@ export const COURSES: AICourse[] = [
   {
     id: "course-managing-finances-ai",
     title: "Managing Personal Finances Using AI",
+    price: 499,
     description: "Automate budgets and manage wealth.",
     tags: ["Finance", "Budget", "Wealth"],
     badge: "Finance",
@@ -634,6 +664,7 @@ export const COURSES: AICourse[] = [
   {
     id: "course-ai-accountants",
     title: "AI for Accountants",
+    price: 499,
     description: "Streamline accounting tasks with AI.",
     tags: ["Accounting", "Finance", "Efficiency"],
     badge: "Finance",
@@ -650,6 +681,7 @@ export const COURSES: AICourse[] = [
   {
     id: "course-ai-real-estate",
     title: "AI Powered Real Estate",
+    price: 499,
     description: "Transform real estate workflows.",
     tags: ["Real Estate", "Property", "Sales"],
     badge: "Real Estate",
@@ -666,6 +698,7 @@ export const COURSES: AICourse[] = [
   {
     id: "course-ai-copywriting",
     title: "AI Copy Writing",
+    price: 499,
     description: "Write copy that converts using AI.",
     tags: ["Copywriting", "Writing", "Conversion"],
     badge: "Writing",
@@ -682,6 +715,7 @@ export const COURSES: AICourse[] = [
   {
     id: "course-ai-side-hustle",
     title: "AI Side Hustle",
+    price: 499,
     description: "Start your side hustle powered by AI.",
     tags: ["Side Hustle", "Business", "Income"],
     badge: "Business",

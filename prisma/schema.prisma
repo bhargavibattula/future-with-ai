@@ -1,30 +1,38 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
-}
-
 model User {
-  id                String    @id @default(cuid())
+  id                String            @id @default(cuid())
   name              String?
-  email             String?   @unique
+  email             String?           @unique
   emailVerified     DateTime?
   image             String?
   password          String?
-  role              String    @default("Learner")
-  coins             Int       @default(0)
-  xp                Int       @default(0)
-  streak            Int       @default(0)
-  certificatesCount Int       @default(0)
-  twoFactorEnabled  Boolean   @default(true)
+  role              String            @default("Learner")
+  coins             Int               @default(0)
+  xp                Int               @default(0)
+  streak            Int               @default(0)
+  certificatesCount Int               @default(0)
+  twoFactorEnabled  Boolean           @default(true)
   twoFactorSecret   String?
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
   accounts          Account[]
+  ActivityLog       ActivityLog[]
+  Certificate       Certificate[]
+  DailyActivity     DailyActivity[]
+  PromptClaim       PromptClaim[]
   sessions          Session[]
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
+  UserAchievement   UserAchievement[]
+  UserMilestone     UserMilestone[]
+  UserProgress      UserProgress?
+  purchases         Purchase[]
 }
 
 model Account {
@@ -33,15 +41,14 @@ model Account {
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String?
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -61,3 +68,205 @@ model VerificationToken {
 
   @@unique([identifier, token])
 }
+
+model Prompt {
+  id             String         @id
+  title          String
+  content        String
+  type           PromptType     @default(FREE)
+  categoryId     String
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime
+  PromptCategory PromptCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  PromptClaim    PromptClaim[]
+
+  @@index([categoryId])
+}
+
+model PromptCategory {
+  id          String   @id
+  name        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+  Prompt      Prompt[]
+}
+
+model PromptClaim {
+  id        String   @id
+  userId    String
+  promptId  String
+  claimedAt DateTime @default(now())
+  Prompt    Prompt   @relation(fields: [promptId], references: [id], onDelete: Cascade)
+  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, promptId])
+  @@index([promptId])
+  @@index([userId])
+}
+
+model Achievement {
+  id              String            @id
+  code            String            @unique
+  title           String
+  description     String
+  category        String            @default("Streak")
+  iconBg          String?
+  createdAt       DateTime          @default(now())
+  UserAchievement UserAchievement[]
+}
+
+model ActivityLog {
+  id                   String         @id
+  userId               String
+  dailyActivityId      String?
+  activityType         String
+  activityId           String?
+  courseId             String?
+  lessonId             String?
+  xp                   Int            @default(0)
+  coins                Int            @default(0)
+  timeSpent            Int            @default(0)
+  completionPercentage Float          @default(100.0)
+  createdAt            DateTime       @default(now())
+  DailyActivity        DailyActivity? @relation(fields: [dailyActivityId], references: [id])
+  User                 User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([dailyActivityId])
+  @@index([userId])
+}
+
+model Certificate {
+  id                  String   @id
+  userId              String
+  courseId            String
+  studentName         String
+  courseTitle         String
+  certificateId       String   @unique
+  issuedDate          DateTime @default(now())
+  courseDuration      String
+  certificateImageUrl String
+  pdfUrl              String
+  qrCodeUrl           String
+  isGenerated         Boolean  @default(true)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime
+  User                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId])
+}
+
+model DailyActivity {
+  id                      String        @id
+  userId                  String
+  date                    String
+  lessonCompleted         Int           @default(0)
+  quizCompleted           Int           @default(0)
+  challengeCompleted      Int           @default(0)
+  assessmentCompleted     Int           @default(0)
+  practiceCompleted       Int           @default(0)
+  projectCompleted        Int           @default(0)
+  xpEarned                Int           @default(0)
+  coinsEarned             Int           @default(0)
+  studyMinutes            Int           @default(0)
+  dailyGoalCompleted      Boolean       @default(false)
+  perfectDay              Boolean       @default(false)
+  createdAt               DateTime      @default(now())
+  updatedAt               DateTime
+  dailyChallengeCompleted Boolean       @default(false)
+  dailyGoalRewardClaimed  Boolean       @default(false)
+  dailyLessonCompleted    Boolean       @default(false)
+  dailyQuizCompleted      Boolean       @default(false)
+  ActivityLog             ActivityLog[]
+  User                    User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+  @@index([userId, date])
+}
+
+model Milestone {
+  id            String          @id
+  title         String
+  description   String
+  requiredDays  Int             @unique
+  rewardXP      Int
+  rewardCoins   Int
+  badgeImage    String?
+  badgeColor    String?
+  createdAt     DateTime        @default(now())
+  UserMilestone UserMilestone[]
+}
+
+model UserAchievement {
+  id            String      @id
+  userId        String
+  achievementId String
+  unlockedAt    DateTime    @default(now())
+  Achievement   Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+  User          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, achievementId])
+  @@index([userId])
+}
+
+model UserMilestone {
+  id          String    @id
+  userId      String
+  milestoneId String
+  claimed     Boolean   @default(false)
+  claimedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  Milestone   Milestone @relation(fields: [milestoneId], references: [id], onDelete: Cascade)
+  User        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, milestoneId])
+  @@index([userId])
+}
+
+model UserProgress {
+  id                 String   @id
+  userId             String   @unique
+  currentStreak      Int      @default(0)
+  longestStreak      Int      @default(0)
+  totalXP            Int      @default(0)
+  totalCoins         Int      @default(0)
+  currentLevel       Int      @default(1)
+  lastActivityDate   String?
+  daysLearned        Int      @default(0)
+  perfectDays        Int      @default(0)
+  totalLessons       Int      @default(0)
+  totalQuizzes       Int      @default(0)
+  totalChallenges    Int      @default(0)
+  totalAssessments   Int      @default(0)
+  totalStudyMinutes  Int      @default(0)
+  streakFreezes      Int      @default(0)
+  lastFreezeUsedDate String?
+  weeklyXP           Int      @default(0)
+  monthlyXP          Int      @default(0)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime
+  User               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum PromptType {
+  FREE
+  PREMIUM
+  ONE_TIME_PREMIUM
+}
+
+model Purchase {
+  id                 String   @id @default(cuid())
+  userId             String
+  courseId           String
+  razorpayOrderId    String   @unique
+  razorpayPaymentId  String?  @unique
+  status             String   @default("PENDING") // PENDING, SUCCESS, FAILED
+  amount             Int
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId])
+}
+

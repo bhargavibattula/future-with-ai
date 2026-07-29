@@ -12,9 +12,10 @@ import { DetailedCoursePath, CourseModule, getCoursePathData } from "@/data/cour
 
 interface CoursePathClientProps {
   slug: string;
+  isPurchased?: boolean;
 }
 
-export default function CoursePathClient({ slug }: CoursePathClientProps) {
+export default function CoursePathClient({ slug, isPurchased = false }: CoursePathClientProps) {
   const [pathData, setPathData] = useState<DetailedCoursePath>(() =>
     getCoursePathData(slug)
   );
@@ -73,6 +74,8 @@ export default function CoursePathClient({ slug }: CoursePathClientProps) {
       <CourseModuleModal
         module={selectedModule}
         onClose={() => setSelectedModule(null)}
+        isPurchased={isPurchased}
+        course={pathData.course}
       />
 
       {/* Footer */}
