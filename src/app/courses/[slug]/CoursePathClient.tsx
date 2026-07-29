@@ -94,10 +94,34 @@ export default function CoursePathClient({ slug }: CoursePathClientProps) {
       return newState;
     });
 
-    // Update active lesson state
-    if (selectedLesson && selectedLesson.id === lessonId) {
-      setSelectedLesson((prev) => prev ? { ...prev, completed: true } : null);
+    // Update active module state if open
+    if (selectedModule && selectedModule.id === moduleId) {
+      setSelectedModule((prev) =>
+        prev
+          ? {
+              ...prev,
+              lessons: prev.lessons.map((l) =>
+                l.id === lessonId ? { ...l, completed: true } : l
+              ),
+            }
+          : null
+      );
     }
+
+    // Trigger backend activity complete API for streak & XP tracking
+    fetch("/api/activity/complete", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        activityType: "LESSON",
+        activityId: lessonId,
+        courseId: slug,
+        lessonId: lessonId,
+        xp: 50,
+        coins: 20,
+        timeSpent: 15,
+      }),
+    }).catch((err) => console.error("Failed to record lesson activity:", err));
   };
 
   // Pass Quiz & Unlock Next Module

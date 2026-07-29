@@ -40,26 +40,28 @@ export default function DashboardNavbar() {
   const learnRef = useRef<HTMLDivElement>(null);
   const toolsRef = useRef<HTMLDivElement>(null);
 
-  // Sync streak count dynamically from localStorage & custom events
+  // Sync streak count dynamically from backend API & custom events
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const stored = localStorage.getItem("future_ai_streak_count");
-      if (stored) {
-        const parsed = parseInt(stored, 10);
-        if (!isNaN(parsed)) setStreakCount(parsed);
+    const fetchStreak = async () => {
+      try {
+        const res = await fetch("/api/streak");
+        const json = await res.json();
+        if (res.ok && json.success && json.data?.progress?.currentStreak !== undefined) {
+          setStreakCount(json.data.progress.currentStreak);
+        }
+      } catch (err) {
+        console.error("Failed to fetch streak in navbar:", err);
       }
-    }
+    };
+
+    fetchStreak();
 
     const handleStreakUpdate = (e: Event) => {
       const customEvt = e as CustomEvent<number>;
       if (customEvt.detail !== undefined && typeof customEvt.detail === "number") {
         setStreakCount(customEvt.detail);
       } else {
-        const stored = localStorage.getItem("future_ai_streak_count");
-        if (stored) {
-          const parsed = parseInt(stored, 10);
-          if (!isNaN(parsed)) setStreakCount(parsed);
-        }
+        fetchStreak();
       }
     };
 

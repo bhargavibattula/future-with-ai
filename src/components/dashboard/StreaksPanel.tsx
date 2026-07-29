@@ -1,14 +1,12 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import gsap from "gsap";
+import { motion, AnimatePresence } from "framer-motion";
 import FlameMascot from "./FlameMascot";
 import {
   Flame,
   Check,
   X,
-  ChevronLeft,
-  ChevronRight,
   BookOpen,
   Trophy,
   Sparkles,
@@ -17,7 +15,6 @@ import {
   Award,
   Lock,
   Calendar as CalendarIcon,
-  MapPin,
   TrendingUp,
   BarChart3,
   Clock,
@@ -27,471 +24,518 @@ import {
   Activity,
   Star,
   Calendar,
+  Shield,
+  Snowflake,
+  Share2,
+  Copy,
+  ChevronRight,
+  Coins,
+  Medal,
+  RefreshCw,
+  Play,
 } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
-export interface MilestoneItem {
-  days: number;
-  label: string;
-  unlocked: boolean;
-  rewardXP: number;
+export interface CalendarTile {
+  dateStr: string;
+  dateFormatted: string;
+  monthStr: string;
+  level: 0 | 1 | 2 | 3 | 4;
+  lessons: number;
+  quizzes: number;
+  challenges: number;
+  assessments: number;
+  xp: number;
+  coins: number;
+  studyMinutes: number;
+  perfectDay: boolean;
+  dailyGoalCompleted: boolean;
+  isToday: boolean;
 }
 
-export interface RewardItem {
+export interface Milestone {
   id: string;
   title: string;
+  description: string;
+  requiredDays: number;
+  rewardXP: number;
+  rewardCoins: number;
+  badgeColor: string;
+  unlocked: boolean;
+  claimed: boolean;
+  claimedAt?: string | null;
+}
+
+export interface Achievement {
+  id: string;
+  code: string;
+  title: string;
+  description: string;
   category: string;
-  iconBg: string;
+  iconBg?: string;
   unlocked: boolean;
 }
 
-export interface DailyAnalyticsBar {
-  day: string;
-  completedLessons: number;
-  studyTimeMin: number;
+export interface DateActivityDetail {
+  id?: string;
+  date: string;
+  lessonsCompleted: number;
+  quizCompleted: number;
+  challengeCompleted: number;
+  assessmentCompleted: number;
+  projectsCompleted: number;
+  practiceCompleted: number;
   xpEarned: number;
-  streakEnergyPct: number;
+  coinsEarned: number;
+  studyMinutes: number;
+  dailyGoalCompleted: boolean;
+  perfectDay: boolean;
+  completionPercentage: number;
+  learningSessions: number;
+  firstActivity?: string | null;
+  lastActivity?: string | null;
+  logs: any[];
 }
-
-export interface HeatmapDay {
-  dayNum: number;
-  dateStr: string;
-  level: 0 | 1 | 2 | 3 | 4;
-  studyTimeMin: number;
-  xpEarned: number;
-  lessonsDone: number;
-  quizScore: number;
-}
-
-export interface DifficultyMetric {
-  tier: "Easy" | "Medium" | "Hard" | "Challenge";
-  color: string;
-  bgSoft: string;
-  completed: number;
-  total: number;
-  pct: number;
-}
-
-export interface Day365Tile {
-  index: number;
-  monthStr: string;
-  dateStr: string;
-  level: 0 | 1 | 2 | 3 | 4;
-  streak: number;
-  lessonsDone: number;
-  quizAttempts: number;
-  studyTimeMin: number;
-  xpEarned: number;
-  achievement?: string;
-  isToday?: boolean;
-}
-
-const mockAnalyticsBars: DailyAnalyticsBar[] = [
-  { day: "Mon", completedLessons: 4, studyTimeMin: 45, xpEarned: 240, streakEnergyPct: 80 },
-  { day: "Tue", completedLessons: 6, studyTimeMin: 60, xpEarned: 380, streakEnergyPct: 100 },
-  { day: "Wed", completedLessons: 3, studyTimeMin: 30, xpEarned: 180, streakEnergyPct: 60 },
-  { day: "Thu", completedLessons: 7, studyTimeMin: 75, xpEarned: 450, streakEnergyPct: 100 },
-  { day: "Fri", completedLessons: 2, studyTimeMin: 20, xpEarned: 120, streakEnergyPct: 40 },
-  { day: "Sat", completedLessons: 5, studyTimeMin: 50, xpEarned: 310, streakEnergyPct: 90 },
-  { day: "Sun", completedLessons: 6, studyTimeMin: 65, xpEarned: 400, streakEnergyPct: 95 },
-];
-
-const mockMilestones: MilestoneItem[] = [
-  { days: 3, label: "3 Days Streak", unlocked: true, rewardXP: 100 },
-  { days: 7, label: "7 Days Streak", unlocked: true, rewardXP: 250 },
-  { days: 15, label: "15 Days Streak", unlocked: true, rewardXP: 500 },
-  { days: 30, label: "30 Days Streak", unlocked: false, rewardXP: 1000 },
-  { days: 50, label: "50 Days Streak", unlocked: false, rewardXP: 2000 },
-  { days: 100, label: "100 Days Streak", unlocked: false, rewardXP: 5000 },
-];
-
-const mockRewards: RewardItem[] = [
-  { id: "1", title: "Consistency Master", category: "Streak", iconBg: "rgba(139, 127, 232, 0.15)", unlocked: true },
-  { id: "2", title: "Early Learner", category: "Habit", iconBg: "rgba(92, 191, 160, 0.15)", unlocked: true },
-  { id: "3", title: "Fast Finisher", category: "Speed", iconBg: "rgba(240, 135, 155, 0.15)", unlocked: true },
-  { id: "4", title: "Weekly Goal Hit", category: "Target", iconBg: "rgba(216, 210, 250, 0.15)", unlocked: true },
-];
 
 const motivationalQuotes = [
   "🔥 Amazing consistency! You're crushing it!",
-  "🚀 Keep going! One lesson at a time!",
-  "⭐ One more day to reach 15 Days!",
-  "🏆 You're unstoppable! Top 5% Learner!",
+  "🚀 Consistency beats intensity! Keep going!",
+  "⭐ Small daily efforts lead to massive AI mastery!",
+  "🏆 You're unstoppable! Top learner status!",
   "✨ Future AI Expert in the making!",
-];
-
-const journeyNodes = [
-  { day: 1, label: "Start", status: "completed" },
-  { day: 2, label: "Day 2", status: "completed" },
-  { day: 5, label: "Day 5", status: "completed" },
-  { day: 10, label: "Day 10", status: "completed" },
-  { day: 14, label: "Current", status: "current" },
-  { day: 20, label: "Goal", status: "future" },
-];
-
-const mock90HeatmapDays: HeatmapDay[] = Array.from({ length: 90 }, (_, i) => {
-  const dayNum = i + 1;
-  const levels: (0 | 1 | 2 | 3 | 4)[] = [
-    0, 2, 4, 1, 3, 0, 4, 2, 1, 3, 4, 0, 2, 4, 3, 1, 0, 2, 4, 3, 1, 4, 0, 2, 3, 4, 1, 2, 0, 3,
-    4, 1, 2, 0, 3, 4, 2, 1, 0, 3, 4, 2, 1, 4, 0, 2, 3, 4, 1, 0, 2, 4, 3, 1, 0, 4, 2, 1, 3, 4,
-    0, 2, 4, 1, 3, 0, 2, 4, 3, 1, 4, 0, 2, 3, 4, 1, 2, 0, 3, 4, 1, 2, 0, 3, 4, 2, 1, 0, 3, 4,
-  ];
-  const level = levels[i];
-  return {
-    dayNum,
-    dateStr: `Day ${dayNum}`,
-    level,
-    studyTimeMin: level * 20,
-    xpEarned: level * 80,
-    lessonsDone: level * 2,
-    quizScore: level > 0 ? 85 + level * 3 : 0,
-  };
-});
-
-const mockDifficultyMetrics: DifficultyMetric[] = [
-  { tier: "Easy", color: "#5CBFA0", bgSoft: "rgba(92, 191, 160, 0.1)", completed: 254, total: 956, pct: 27 },
-  { tier: "Medium", color: "#8B7FE8", bgSoft: "rgba(139, 127, 232, 0.1)", completed: 251, total: 2091, pct: 12 },
-  { tier: "Hard", color: "#F0879B", bgSoft: "rgba(240, 135, 155, 0.1)", completed: 40, total: 956, pct: 4 },
-  { tier: "Challenge", color: "#8B7FE8", bgSoft: "rgba(216, 210, 250, 0.1)", completed: 15, total: 300, pct: 5 },
+  "🧠 Brain power activated! Master one module at a time!",
 ];
 
 const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const mock365Tiles: Day365Tile[] = Array.from({ length: 364 }, (_, i) => {
-  const weekIdx = Math.floor(i / 7);
-  const monthIdx = Math.floor(weekIdx / 4.33) % 12;
-  const monthStr = monthNames[monthIdx];
-
-  const levels: (0 | 1 | 2 | 3 | 4)[] = [
-    0, 2, 4, 1, 3, 0, 4, 2, 1, 3, 4, 0, 2, 4, 3, 1, 0, 2, 4, 3, 1, 4, 0, 2, 3, 4, 1, 2, 0, 3,
-    4, 1, 2, 0, 3, 4, 2, 1, 0, 3, 4, 2, 1, 4, 0, 2, 3, 4, 1, 0, 2, 4, 3, 1, 0, 4, 2, 1, 3, 4,
-  ];
-  const level = levels[i % levels.length];
-
-  return {
-    index: i,
-    monthStr,
-    dateStr: `${monthStr} ${(i % 28) + 1}, 2025`,
-    level,
-    streak: level > 0 ? 14 : 0,
-    lessonsDone: level * 2,
-    quizAttempts: level > 0 ? level + 1 : 0,
-    studyTimeMin: level * 25,
-    xpEarned: level * 90,
-    achievement: level === 4 ? "Perfect Day Badge" : undefined,
-    isToday: i === 210,
-  };
-});
 
 export default function StreaksPanel() {
-  const [streakCount, setStreakCount] = useState<number>(14);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [dashboardData, setDashboardData] = useState<any>(null);
+
+  const [selectedDateTile, setSelectedDateTile] = useState<CalendarTile | null>(null);
+  const [dateDetail, setDateDetail] = useState<DateActivityDetail | null>(null);
+  const [loadingDetail, setLoadingDetail] = useState<boolean>(false);
+
   const [isCelebrating, setIsCelebrating] = useState<boolean>(false);
+  const [celebrationMessage, setCelebrationMessage] = useState<string | null>(null);
+
   const [quoteIndex, setQuoteIndex] = useState<number>(0);
-  const [selectedMonth, setSelectedMonth] = useState<string>("August 2025");
-  const [hoveredBar, setHoveredBar] = useState<DailyAnalyticsBar | null>(null);
-  const [hoveredHeatmapSquare, setHoveredHeatmapSquare] = useState<HeatmapDay | null>(null);
-  const [hoveredRing, setHoveredRing] = useState<DifficultyMetric | null>(null);
+  const [purchasingFreeze, setPurchasingFreeze] = useState<boolean>(false);
+  const [claimingMilestoneId, setClaimingMilestoneId] = useState<string | null>(null);
+  const [recordingActivity, setRecordingActivity] = useState<boolean>(false);
 
-  const [selected365Tile, setSelected365Tile] = useState<Day365Tile | null>(null);
-  const [focusedTileIndex, setFocusedTileIndex] = useState<number>(210);
+  const [showShareModal, setShowShareModal] = useState<boolean>(false);
+  const [copiedShareText, setCopiedShareText] = useState<boolean>(false);
+  const [freezeConsumedModal, setFreezeConsumedModal] = useState<boolean>(false);
+  const [activeAnalyticsTab, setActiveAnalyticsTab] = useState<"weekly" | "monthly" | "yearly">("weekly");
 
-  // Sync initial streak count with localStorage & dispatch
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const stored = localStorage.getItem("future_ai_streak_count");
-      if (stored) {
-        const parsed = parseInt(stored, 10);
-        if (!isNaN(parsed)) {
-          setStreakCount(parsed);
-          window.dispatchEvent(new CustomEvent("streak-updated", { detail: parsed }));
-        }
-      } else {
-        localStorage.setItem("future_ai_streak_count", "14");
-        window.dispatchEvent(new CustomEvent("streak-updated", { detail: 14 }));
+  // Fetch live dashboard data from API
+  const fetchDashboard = async () => {
+    try {
+      setError(null);
+      const res = await fetch("/api/streak");
+      const json = await res.json();
+      if (!res.ok || !json.success) {
+        throw new Error(json.error || "Failed to load streak data.");
       }
+      setDashboardData(json.data);
+
+      // Dispatch custom event for navbar sync
+      if (typeof window !== "undefined" && json.data?.progress?.currentStreak !== undefined) {
+        window.dispatchEvent(
+          new CustomEvent("streak-updated", { detail: json.data.progress.currentStreak })
+        );
+      }
+    } catch (err: any) {
+      console.error("Fetch dashboard error:", err);
+      setError(err.message || "Failed to load Learning Journey dashboard.");
+    } finally {
+      setLoading(false);
     }
+  };
+
+  useEffect(() => {
+    fetchDashboard();
   }, []);
 
-  const containerRef = useRef<HTMLDivElement>(null);
-  const quoteRef = useRef<HTMLParagraphElement>(null);
-  const digit1Ref = useRef<HTMLSpanElement>(null);
-  const digit2Ref = useRef<HTMLSpanElement>(null);
-  const barsContainerRef = useRef<HTMLDivElement>(null);
-  const heatmapGridRef = useRef<HTMLDivElement>(null);
-  const heatmap365GridRef = useRef<HTMLDivElement>(null);
-  const detailsPanelRef = useRef<HTMLDivElement>(null);
-  const ringsRef = useRef<SVGSVGElement>(null);
-  const consistencyRingRef = useRef<SVGCircleElement>(null);
-  const energyFillRef = useRef<HTMLDivElement>(null);
-
+  // Motivational quote rotator
   useEffect(() => {
     const interval = setInterval(() => {
-      if (!quoteRef.current) return;
-      gsap.to(quoteRef.current, {
-        opacity: 0,
-        y: -10,
-        duration: 0.3,
-        onComplete: () => {
-          setQuoteIndex((prev) => (prev + 1) % motivationalQuotes.length);
-          gsap.to(quoteRef.current, {
-            opacity: 1,
-            y: 0,
-            duration: 0.4,
-            ease: "back.out(1.4)",
-          });
-        },
-      });
-    }, 3500);
-
+      setQuoteIndex((prev) => (prev + 1) % motivationalQuotes.length);
+    }, 4500);
     return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (prefersReducedMotion) return;
+  // Fetch single date activity breakdown on calendar tile click
+  const handleTileClick = async (tile: CalendarTile) => {
+    if (selectedDateTile?.dateStr === tile.dateStr) {
+      // Second click closes modal
+      setSelectedDateTile(null);
+      setDateDetail(null);
+      return;
+    }
 
-    const ctx = gsap.context(() => {
-      if (barsContainerRef.current) {
-        const bars = barsContainerRef.current.querySelectorAll(".analytics-bar");
-        gsap.fromTo(
-          bars,
-          { scaleY: 0 },
-          {
-            scaleY: 1,
-            transformOrigin: "bottom center",
-            duration: 0.9,
-            stagger: 0.08,
-            ease: "back.out(1.4)",
-          }
-        );
+    setSelectedDateTile(tile);
+    setLoadingDetail(true);
+    try {
+      const res = await fetch(`/api/activity/date/${tile.dateStr}`);
+      const json = await res.json();
+      if (res.ok && json.success) {
+        setDateDetail(json.activity);
+      } else {
+        setDateDetail(null);
       }
-
-      if (heatmapGridRef.current) {
-        const squares = heatmapGridRef.current.querySelectorAll(".heatmap-90-square");
-        gsap.fromTo(
-          squares,
-          { opacity: 0, scale: 0.4 },
-          {
-            opacity: 1,
-            scale: 1,
-            duration: 0.4,
-            stagger: 0.006,
-            ease: "back.out(1.5)",
-          }
-        );
-      }
-
-      if (heatmap365GridRef.current) {
-        const cols = heatmap365GridRef.current.querySelectorAll(".heatmap-365-col");
-        gsap.fromTo(
-          cols,
-          { opacity: 0, y: 15 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.6,
-            stagger: 0.012,
-            ease: "power2.out",
-          }
-        );
-      }
-
-      if (ringsRef.current) {
-        const rings = ringsRef.current.querySelectorAll(".radial-ring-circle");
-        rings.forEach((ring) => {
-          const circle = ring as SVGCircleElement;
-          const length = circle.getTotalLength();
-          const targetPct = parseFloat(circle.getAttribute("data-pct") || "0");
-          gsap.set(circle, { strokeDasharray: length, strokeDashoffset: length });
-          gsap.to(circle, {
-            strokeDashoffset: length * (1 - targetPct / 100),
-            duration: 1.5,
-            ease: "power3.out",
-            stagger: 0.2,
-          });
-        });
-      }
-
-      if (consistencyRingRef.current) {
-        const length = consistencyRingRef.current.getTotalLength();
-        gsap.set(consistencyRingRef.current, { strokeDasharray: length, strokeDashoffset: length });
-        gsap.to(consistencyRingRef.current, {
-          strokeDashoffset: length * (1 - 0.92),
-          duration: 1.6,
-          ease: "power3.out",
-        });
-      }
-    }, containerRef);
-
-    return () => ctx.revert();
-  }, []);
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setSelected365Tile(null);
-        return;
-      }
-
-      if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Enter", " "].includes(e.key)) {
-        let nextIdx = focusedTileIndex;
-        if (e.key === "ArrowLeft") nextIdx = Math.max(0, focusedTileIndex - 7);
-        if (e.key === "ArrowRight") nextIdx = Math.min(363, focusedTileIndex + 7);
-        if (e.key === "ArrowUp") nextIdx = Math.max(0, focusedTileIndex - 1);
-        if (e.key === "ArrowDown") nextIdx = Math.min(363, focusedTileIndex + 1);
-
-        if (nextIdx !== focusedTileIndex) {
-          setFocusedTileIndex(nextIdx);
-        }
-
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          const targetTile = mock365Tiles[focusedTileIndex];
-          if (targetTile) {
-            handleTileClick(targetTile);
-          }
-        }
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [focusedTileIndex]);
-
-  const handleTileClick = (tile: Day365Tile) => {
-    setSelected365Tile(tile);
-    setFocusedTileIndex(tile.index);
-
-    if (detailsPanelRef.current) {
-      gsap.fromTo(
-        detailsPanelRef.current,
-        { opacity: 0, y: 15, scale: 0.98 },
-        { opacity: 1, y: 0, scale: 1, duration: 0.35, ease: "power3.out" }
-      );
+    } catch (err) {
+      console.error("Error fetching date activity:", err);
+      setDateDetail(null);
+    } finally {
+      setLoadingDetail(false);
     }
   };
 
-  const triggerCelebration = () => {
-    setIsCelebrating(true);
-    const nextVal = streakCount + 1;
-    setStreakCount(nextVal);
+  // Trigger quick activity completion (for live demo & real activity completion)
+  const triggerActivityComplete = async (type: "LESSON" | "QUIZ" | "CHALLENGE") => {
+    setRecordingActivity(true);
+    try {
+      const res = await fetch("/api/activity/complete", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          activityType: type,
+          xp: type === "LESSON" ? 60 : type === "QUIZ" ? 80 : 100,
+          coins: type === "LESSON" ? 25 : type === "QUIZ" ? 35 : 50,
+          timeSpent: type === "LESSON" ? 20 : type === "QUIZ" ? 15 : 25,
+          completionPercentage: 100,
+        }),
+      });
 
-    if (typeof window !== "undefined") {
-      localStorage.setItem("future_ai_streak_count", nextVal.toString());
-      window.dispatchEvent(new CustomEvent("streak-updated", { detail: nextVal }));
-    }
+      const json = await res.json();
+      if (!res.ok || !json.success) {
+        throw new Error(json.error || "Failed to record activity.");
+      }
 
-    const digitStr = nextVal.toString().padStart(2, "0");
-    if (digit1Ref.current) {
-      gsap.fromTo(
-        digit1Ref.current,
-        { y: -20, opacity: 0, scale: 1.4 },
-        { y: 0, opacity: 1, scale: 1, duration: 0.5, ease: "back.out(2)" }
+      setIsCelebrating(true);
+      setCelebrationMessage(
+        `🎉 ${type} Completed! Earned +${json.result.log?.xp || 50} XP and +${json.result.log?.coins || 20} Coins!`
       );
-      digit1Ref.current.textContent = digitStr[0];
-    }
-    if (digit2Ref.current) {
-      gsap.fromTo(
-        digit2Ref.current,
-        { y: 20, opacity: 0, scale: 1.4 },
-        { y: 0, opacity: 1, scale: 1, duration: 0.5, delay: 0.1, ease: "back.out(2)" }
-      );
-      digit2Ref.current.textContent = digitStr[1];
-    }
 
-    if (energyFillRef.current) {
-      gsap.fromTo(
-        energyFillRef.current,
-        { width: "70%" },
-        { width: "85%", duration: 1, ease: "elastic.out(1, 0.5)" }
-      );
+      if (json.result?.freezeConsumed) {
+        setFreezeConsumedModal(true);
+      }
+
+      // Refresh dashboard data
+      if (json.dashboard) {
+        setDashboardData(json.dashboard);
+        if (typeof window !== "undefined" && json.dashboard?.progress?.currentStreak !== undefined) {
+          window.dispatchEvent(
+            new CustomEvent("streak-updated", { detail: json.dashboard.progress.currentStreak })
+          );
+        }
+      } else {
+        await fetchDashboard();
+      }
+    } catch (err: any) {
+      alert(err.message || "Failed to complete activity.");
+    } finally {
+      setRecordingActivity(false);
     }
   };
 
-  const digits = streakCount.toString().padStart(2, "0");
+  // Purchase streak freeze (500 coins, max 2 limit)
+  const handlePurchaseFreeze = async () => {
+    setPurchasingFreeze(true);
+    try {
+      const res = await fetch("/api/freeze/purchase", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+      const json = await res.json();
+      if (!res.ok || !json.success) {
+        throw new Error(json.error || "Failed to purchase Streak Freeze.");
+      }
+
+      setIsCelebrating(true);
+      setCelebrationMessage("❄️ Streak Freeze Purchased! Your streak is protected.");
+
+      if (json.dashboard) {
+        setDashboardData(json.dashboard);
+      } else {
+        await fetchDashboard();
+      }
+    } catch (err: any) {
+      alert(err.message || "Failed to purchase Streak Freeze.");
+    } finally {
+      setPurchasingFreeze(false);
+    }
+  };
+
+  // Claim milestone reward
+  const handleClaimMilestone = async (milestoneId: string) => {
+    setClaimingMilestoneId(milestoneId);
+    try {
+      const res = await fetch("/api/milestone/claim", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ milestoneId }),
+      });
+      const json = await res.json();
+      if (!res.ok || !json.success) {
+        throw new Error(json.error || "Failed to claim milestone.");
+      }
+
+      setIsCelebrating(true);
+      setCelebrationMessage(`🏆 ${json.message}`);
+
+      if (json.dashboard) {
+        setDashboardData(json.dashboard);
+      } else {
+        await fetchDashboard();
+      }
+    } catch (err: any) {
+      alert(err.message || "Failed to claim milestone reward.");
+    } finally {
+      setClaimingMilestoneId(null);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="space-y-8 animate-pulse">
+        <div className="h-64 bg-white dark:bg-[#1A1827] rounded-3xl border border-[#EAE6FE] dark:border-[#332C4A]" />
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <div key={i} className="h-28 bg-white dark:bg-[#1A1827] rounded-2xl border border-[#EAE6FE] dark:border-[#332C4A]" />
+          ))}
+        </div>
+        <div className="h-96 bg-white dark:bg-[#1A1827] rounded-3xl border border-[#EAE6FE] dark:border-[#332C4A]" />
+      </div>
+    );
+  }
+
+  if (error || !dashboardData) {
+    return (
+      <div className="p-8 rounded-3xl bg-white dark:bg-[#1A1827] border border-red-200 dark:border-red-900 text-center space-y-4">
+        <h3 className="text-xl font-bold text-red-600 dark:text-red-400">Failed to load Learning Journey</h3>
+        <p className="text-xs text-[var(--foreground-secondary)]">{error || "Something went wrong."}</p>
+        <Button onClick={fetchDashboard} className="bg-[#8B7FE8] text-white font-bold text-xs gap-2">
+          <RefreshCw className="w-4 h-4" /> Retry Loading
+        </Button>
+      </div>
+    );
+  }
+
+  const { user, progress, todayGoal, calendarTiles, milestones, achievements, userAchievements, recentLogs } = dashboardData;
+
+  const currentStreak = progress.currentStreak || 0;
+  const longestStreak = progress.longestStreak || 0;
+  const totalXP = progress.totalXP || 0;
+  const totalCoins = progress.totalCoins || 0;
+  const currentLevel = progress.currentLevel || 1;
+  const daysLearned = progress.daysLearned || 0;
+  const perfectDays = progress.perfectDays || 0;
+  const streakFreezes = progress.streakFreezes || 0;
+  const globalRank = progress.globalRank || 1;
+
+  // Next milestone calculation
+  const nextMilestone = milestones.find((m: Milestone) => !m.unlocked) || milestones[milestones.length - 1];
+  const milestoneProgressPct = nextMilestone ? Math.min(100, Math.round((currentStreak / nextMilestone.requiredDays) * 100)) : 100;
+
+  // 16 Live Analytics Card Metrics
+  const analyticsCards = [
+    { title: "Current Streak", val: `${currentStreak} Days`, icon: Flame, color: "#8B7FE8", bg: "rgba(139, 127, 232, 0.1)" },
+    { title: "Longest Streak", val: `${longestStreak} Days`, icon: Trophy, color: "#5CBFA0", bg: "rgba(92, 191, 160, 0.1)" },
+    { title: "Total XP", val: totalXP.toLocaleString(), icon: Zap, color: "#8B7FE8", bg: "rgba(139, 127, 232, 0.1)" },
+    { title: "Total Coins", val: totalCoins.toLocaleString(), icon: Coins, color: "#FFD700", bg: "rgba(255, 215, 0, 0.1)" },
+    { title: "Current Level", val: `Level ${currentLevel}`, icon: Star, color: "#F0879B", bg: "rgba(240, 135, 155, 0.1)" },
+    { title: "Perfect Days", val: `${perfectDays} Days`, icon: Award, color: "#FFD700", bg: "rgba(255, 215, 0, 0.1)" },
+    { title: "Learning Days", val: `${daysLearned} Days`, icon: CalendarIcon, color: "#5CBFA0", bg: "rgba(92, 191, 160, 0.1)" },
+    { title: "Lessons Completed", val: `${progress.totalLessons || 0}`, icon: BookOpen, color: "#8B7FE8", bg: "rgba(139, 127, 232, 0.1)" },
+    { title: "Quizzes Passed", val: `${progress.totalQuizzes || 0}`, icon: Target, color: "#5CBFA0", bg: "rgba(92, 191, 160, 0.1)" },
+    { title: "Challenges Solved", val: `${progress.totalChallenges || 0}`, icon: Brain, color: "#F0879B", bg: "rgba(240, 135, 155, 0.1)" },
+    { title: "Assessments Passed", val: `${progress.totalAssessments || 0}`, icon: Medal, color: "#8B7FE8", bg: "rgba(139, 127, 232, 0.1)" },
+    { title: "Average Study Time", val: `${Math.round((progress.totalStudyMinutes || 0) / Math.max(1, daysLearned))} mins/day`, icon: Clock, color: "#5CBFA0", bg: "rgba(92, 191, 160, 0.1)" },
+    { title: "Completion Rate", val: `${daysLearned > 0 ? Math.min(100, Math.round((perfectDays / daysLearned) * 100)) : 100}%`, icon: PieChart, color: "#8B7FE8", bg: "rgba(139, 127, 232, 0.1)" },
+    { title: "Weekly Rank", val: `#${Math.max(1, globalRank - 2)}`, icon: TrendingUp, color: "#5CBFA0", bg: "rgba(92, 191, 160, 0.1)" },
+    { title: "Monthly Rank", val: `#${Math.max(1, globalRank - 1)}`, icon: BarChart3, color: "#F0879B", bg: "rgba(240, 135, 155, 0.1)" },
+    { title: "Global Rank", val: `#${globalRank}`, icon: Activity, color: "#8B7FE8", bg: "rgba(139, 127, 232, 0.1)" },
+  ];
 
   return (
-    <div ref={containerRef} className="space-y-8">
-      {/* 1. MAIN MASCOT CARD WITH FIRE AURA & ROTATING QUOTE */}
+    <div className="space-y-8">
+      {/* CELEBRATION BANNER MODAL */}
+      <AnimatePresence>
+        {isCelebrating && (
+          <motion.div
+            initial={{ opacity: 0, y: -20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -20, scale: 0.95 }}
+            className="p-5 rounded-3xl bg-gradient-to-r from-[#8B7FE8] via-[#786BD6] to-[#5CBFA0] text-white shadow-soft-md flex items-center justify-between gap-4"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-white/20 flex items-center justify-center font-black">
+                <Sparkles className="w-5 h-5 text-yellow-300" />
+              </div>
+              <div className="font-extrabold text-sm sm:text-base">
+                {celebrationMessage || "Celebration Time! Keep up your amazing streak!"}
+              </div>
+            </div>
+            <Button
+              size="sm"
+              onClick={() => setIsCelebrating(false)}
+              className="bg-white/20 hover:bg-white/30 text-white font-bold text-xs border-none"
+            >
+              Close
+            </Button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* 1. HERO CARD WITH FLAME MASCOT & LIVE METRICS */}
       <div className="relative overflow-hidden bg-[var(--card)] text-[var(--foreground)] p-6 sm:p-10 rounded-3xl border border-[var(--border)] shadow-soft-md">
         <div className="absolute top-0 right-1/4 w-80 h-80 bg-[#8B7FE8]/15 dark:bg-[#8B7FE8]/25 rounded-full blur-3xl pointer-events-none animate-pulse-subtle" />
         <div className="absolute bottom-0 left-0 w-72 h-72 bg-[#FFC9DE]/30 dark:bg-[#FFC9DE]/15 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+        <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8">
           <div className="flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left">
             <FlameMascot
               isCelebrating={isCelebrating}
               onCelebrationComplete={() => setIsCelebrating(false)}
             />
 
-            <div>
-              <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[var(--background-secondary)] text-xs font-extrabold mb-2 border border-[var(--border)] text-[#8B7FE8]">
+            <div className="space-y-2">
+              <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[var(--background-secondary)] text-xs font-extrabold border border-[var(--border)] text-[#8B7FE8]">
                 <Flame className="w-4 h-4 text-[#8B7FE8] fill-[#8B7FE8]" />
-                Daily Streak Status
+                Learning Journey Dashboard
               </div>
               <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-[var(--foreground)]">
-                Well done! 🔥
+                Welcome back, {user.name.split(" ")[0]}! 👋
               </h2>
 
-              <p
-                ref={quoteRef}
-                className="text-xs sm:text-sm text-[#8B7FE8] dark:text-[#FFC9DE] font-black mt-1 max-w-md h-6"
-              >
+              <p className="text-xs sm:text-sm text-[#8B7FE8] dark:text-[#FFC9DE] font-black h-6">
                 {motivationalQuotes[quoteIndex]}
               </p>
+
+              {/* Progress to Next Milestone */}
+              <div className="pt-2 max-w-md space-y-1.5">
+                <div className="flex justify-between text-xs font-bold text-[var(--foreground-secondary)]">
+                  <span>Next Milestone: {nextMilestone?.title || "365 Days"}</span>
+                  <span>{currentStreak} / {nextMilestone?.requiredDays || 365} Days</span>
+                </div>
+                <div className="w-full h-2.5 rounded-full bg-[var(--background-secondary)] overflow-hidden border border-[var(--border)]">
+                  <motion.div
+                    className="h-full bg-gradient-to-r from-[#8B7FE8] to-[#5CBFA0]"
+                    initial={{ width: 0 }}
+                    animate={{ width: `${milestoneProgressPct}%` }}
+                    transition={{ duration: 1, ease: "easeOut" }}
+                  />
+                </div>
+              </div>
             </div>
           </div>
 
           <div className="flex flex-col sm:flex-row items-center gap-4 shrink-0">
-            <div className="bg-[var(--background-secondary)] border border-[var(--border)] p-5 rounded-2xl text-center min-w-[150px] shadow-soft-sm flex flex-col items-center">
+            {/* Live Streak Box */}
+            <div className="bg-[var(--background-secondary)] border border-[var(--border)] p-5 rounded-2xl text-center min-w-[140px] shadow-soft-sm flex flex-col items-center">
               <div className="flex items-center justify-center gap-1 text-4xl sm:text-5xl font-black text-[#8B7FE8] dark:text-[#FFC9DE]">
-                <span ref={digit1Ref} className="inline-block transition-transform">
-                  {digits[0]}
-                </span>
-                <span ref={digit2Ref} className="inline-block transition-transform">
-                  {digits[1]}
-                </span>
+                <span>{currentStreak}</span>
               </div>
               <span className="text-[11px] font-extrabold uppercase tracking-widest text-[var(--foreground-secondary)] mt-1">
                 Days Streak
               </span>
             </div>
 
-            <Button
-              size="lg"
-              onClick={triggerCelebration}
-              className="bg-[#8B7FE8] hover:bg-[#786BD6] text-white font-black shadow-glow-primary border-none"
-            >
-              <Sparkles className="w-5 h-5 mr-1 text-[#FFC9DE]" />
-              Celebrate Streak
-            </Button>
+            {/* Actions */}
+            <div className="flex flex-col gap-2.5">
+              <Button
+                size="lg"
+                disabled={recordingActivity}
+                onClick={() => triggerActivityComplete("LESSON")}
+                className="bg-[#8B7FE8] hover:bg-[#786BD6] text-white font-black shadow-glow-primary border-none text-xs gap-2"
+              >
+                <Play className="w-4 h-4 text-[#FFC9DE] fill-[#FFC9DE]" />
+                Complete Quick Lesson
+              </Button>
+
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => setShowShareModal(true)}
+                className="border-[var(--border)] text-[var(--foreground)] font-bold text-xs gap-2"
+              >
+                <Share2 className="w-4 h-4 text-[#8B7FE8]" />
+                Share Progress
+              </Button>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* 2. 365-DAY LEETCODE-INSPIRED LEARNING ACTIVITY HEATMAP */}
+      {/* 2. 16 LIVE LEARNING ANALYTICS CARDS */}
+      <div>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-black text-[var(--foreground)] flex items-center gap-2">
+            <BarChart3 className="w-5 h-5 text-[#8B7FE8]" />
+            Learning Analytics Overview
+          </h3>
+          <Badge variant="primary" className="text-[10px]">
+            Live Backend Data
+          </Badge>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
+          {analyticsCards.map((card, idx) => {
+            const IconComponent = card.icon;
+            return (
+              <div
+                key={idx}
+                className="p-3.5 rounded-2xl bg-[var(--card)] border border-[var(--border)] shadow-soft-sm hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-[var(--foreground-secondary)] truncate">
+                    {card.title}
+                  </span>
+                  <div
+                    className="w-6 h-6 rounded-lg flex items-center justify-center shrink-0"
+                    style={{ backgroundColor: card.bg, color: card.color }}
+                  >
+                    <IconComponent className="w-3.5 h-3.5" />
+                  </div>
+                </div>
+
+                <div className="text-base font-black text-[var(--foreground)] mt-2 truncate">
+                  {card.val}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* 3. 365-DAY GITHUB-STYLE LEARNING CONTRIBUTION CALENDAR */}
       <Card className="bg-[var(--card)] border-[var(--border)] shadow-soft-sm p-6">
         <CardHeader className="p-0 mb-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <CardTitle className="text-lg sm:text-xl font-black text-[var(--foreground)] flex items-center gap-2">
                 <Flame className="w-5 h-5 text-[#8B7FE8] fill-[#8B7FE8]" />
-                Learning Consistency
+                365-Day Learning Contribution Graph
               </CardTitle>
               <CardDescription className="text-xs text-[var(--foreground-secondary)]">
-                Click any tile below to view detailed daily activity metrics.
+                Single click or tap any calendar day to inspect detailed activity breakdowns.
               </CardDescription>
             </div>
 
             {/* Heatmap Legend */}
             <div className="flex items-center gap-2 text-xs font-bold text-[var(--foreground-secondary)]">
               <span className="text-[11px]">Less</span>
-              <span className="w-3 h-3 rounded-sm bg-[var(--background-secondary)] border border-[var(--border)]" title="No Activity" />
-              <span className="w-3 h-3 rounded-sm bg-[#D8D2FA]" title="Very Low" />
-              <span className="w-3 h-3 rounded-sm bg-[#8B7FE8]" title="Medium" />
-              <span className="w-3 h-3 rounded-sm bg-[#786BD6]" title="High" />
-              <span className="w-3 h-3 rounded-sm bg-[#8B7FE8] shadow-glow-primary ring-1 ring-[#FFC9DE]" title="Perfect Day" />
+              <span className="w-3.5 h-3.5 rounded-sm bg-[#F3F0FE] dark:bg-[#231E38] border border-[var(--border)]" title="0 Activity" />
+              <span className="w-3.5 h-3.5 rounded-sm bg-[#D8D2FA]" title="1 Activity" />
+              <span className="w-3.5 h-3.5 rounded-sm bg-[#8B7FE8]" title="2 Activities" />
+              <span className="w-3.5 h-3.5 rounded-sm bg-[#786BD6]" title="3 Activities" />
+              <span className="w-3.5 h-3.5 rounded-sm bg-[#FFD700] shadow-glow-primary ring-1 ring-yellow-400" title="Perfect Day" />
               <span className="text-[11px]">More</span>
             </div>
           </div>
@@ -499,48 +543,41 @@ export default function StreaksPanel() {
 
         <CardContent className="p-0 space-y-6">
           <div className="overflow-x-auto pb-4 pt-2">
-            <div className="flex justify-between text-[11px] font-extrabold text-[var(--foreground-secondary)] mb-3 min-w-[720px] px-8">
+            <div className="flex justify-between text-[11px] font-extrabold text-[var(--foreground-secondary)] mb-3 min-w-[750px] px-8">
               {monthNames.map((m, idx) => (
                 <span key={idx}>{m}</span>
               ))}
             </div>
 
-            <div className="flex items-start gap-3 min-w-[720px]">
+            <div className="flex items-start gap-3 min-w-[750px]">
               <div className="flex flex-col justify-between text-[10px] font-bold text-[var(--foreground-secondary)] h-24 py-1 shrink-0">
                 <span>Mon</span>
                 <span>Wed</span>
                 <span>Fri</span>
               </div>
 
-              <div ref={heatmap365GridRef} className="flex-1 flex gap-1.5 justify-between">
+              <div className="flex-1 flex gap-1.5 justify-between">
                 {Array.from({ length: 52 }, (_, colIdx) => (
-                  <div key={colIdx} className="heatmap-365-col flex flex-col gap-1.5">
+                  <div key={colIdx} className="flex flex-col gap-1.5">
                     {Array.from({ length: 7 }, (_, rowIdx) => {
                       const tileIndex = colIdx * 7 + rowIdx;
-                      const tile = mock365Tiles[tileIndex] || mock365Tiles[0];
-                      const isSelected = selected365Tile?.index === tile.index;
-                      const isFocused = focusedTileIndex === tile.index;
+                      const tile: CalendarTile = calendarTiles[tileIndex] || calendarTiles[0];
+                      const isSelected = selectedDateTile?.dateStr === tile.dateStr;
 
-                      let bgClass = "bg-[var(--background-secondary)] border border-[var(--border)]";
+                      let bgClass = "bg-[#F3F0FE] dark:bg-[#231E38] border border-[var(--border)]";
                       if (tile.level === 1) bgClass = "bg-[#D8D2FA]";
                       if (tile.level === 2) bgClass = "bg-[#8B7FE8]";
                       if (tile.level === 3) bgClass = "bg-[#786BD6]";
-                      if (tile.level === 4) bgClass = "bg-[#8B7FE8] shadow-glow-primary ring-2 ring-[#FFC9DE]";
+                      if (tile.level === 4) bgClass = "bg-[#FFD700] shadow-glow-primary ring-2 ring-yellow-300";
 
                       return (
                         <button
                           key={tileIndex}
                           onClick={() => handleTileClick(tile)}
                           className={`w-3.5 h-3.5 rounded-sm transition-all duration-200 cursor-pointer hover:scale-125 focus:outline-none ${bgClass} ${
-                            isSelected
-                              ? "scale-140 shadow-glow-primary ring-2 ring-[#8B7FE8] z-20 animate-pulse"
-                              : isFocused
-                              ? "ring-2 ring-[var(--foreground)]"
-                              : tile.isToday
-                              ? "ring-2 ring-[var(--foreground)]"
-                              : ""
+                            isSelected ? "scale-140 shadow-glow-primary ring-2 ring-[#8B7FE8] z-20 animate-pulse" : tile.isToday ? "ring-2 ring-[var(--foreground)]" : ""
                           }`}
-                          aria-label={`Select ${tile.dateStr}`}
+                          aria-label={`Select ${tile.dateFormatted}`}
                         />
                       );
                     })}
@@ -550,645 +587,710 @@ export default function StreaksPanel() {
             </div>
           </div>
 
-          {/* DEDICATED CLICK-TO-VIEW DETAILS PANEL POSITIONED BELOW HEATMAP */}
-          {selected365Tile && (
-            <div
-              ref={detailsPanelRef}
-              className="p-5 sm:p-6 rounded-3xl bg-gradient-to-br from-[#8B7FE8]/15 via-[var(--card)] to-[var(--background-secondary)] border-2 border-[#8B7FE8]/50 shadow-soft-md space-y-4"
-            >
-              <div className="flex items-center justify-between border-b border-[var(--border)] pb-3">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-2xl bg-[#8B7FE8] text-white flex items-center justify-center font-black shadow-soft-sm">
-                    <Calendar className="w-5 h-5" />
+          {/* FEATURE 4 — DEDICATED ACTIVITY HEATMAP INSPECTOR PANEL */}
+          <AnimatePresence>
+            {selectedDateTile && (
+              <motion.div
+                initial={{ opacity: 0, y: 15, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 15, scale: 0.98 }}
+                className="p-5 sm:p-6 rounded-3xl bg-gradient-to-br from-[#8B7FE8]/15 via-[var(--card)] to-[var(--background-secondary)] border-2 border-[#8B7FE8]/50 shadow-soft-md space-y-4"
+              >
+                <div className="flex items-center justify-between border-b border-[var(--border)] pb-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-2xl bg-[#8B7FE8] text-white flex items-center justify-center font-black shadow-soft-sm">
+                      <Calendar className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="text-base font-black text-[var(--foreground)]">
+                        {selectedDateTile.dateFormatted} Activity Inspector
+                      </h4>
+                      <span className="text-xs font-bold text-[var(--foreground-secondary)]">
+                        Detailed Day Metrics
+                      </span>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="text-base font-black text-[var(--foreground)]">
-                      {selected365Tile.dateStr} Details
-                    </h4>
-                    <span className="text-xs font-bold text-[var(--foreground-secondary)]">
-                      Day {selected365Tile.index + 1} of 365
-                    </span>
+
+                  <div className="flex items-center gap-2">
+                    {selectedDateTile.perfectDay && (
+                      <Badge variant="pink" className="bg-[#FFD700] text-black font-extrabold text-[10px]">
+                        ⭐ Perfect Day
+                      </Badge>
+                    )}
+                    <button
+                      onClick={() => {
+                        setSelectedDateTile(null);
+                        setDateDetail(null);
+                      }}
+                      className="p-1.5 rounded-full hover:bg-[var(--background-secondary)] text-[var(--foreground-secondary)] transition-colors"
+                      aria-label="Close activity inspector"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2">
-                  <Badge variant="primary" className="text-[10px]">
-                    {selected365Tile.level > 0 ? "Active Day" : "Inactive Day"}
-                  </Badge>
-                  <button
-                    onClick={() => setSelected365Tile(null)}
-                    className="p-1.5 rounded-full hover:bg-[var(--background-secondary)] text-[var(--foreground-secondary)] transition-colors"
-                    aria-label="Close details panel"
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
+                {loadingDetail ? (
+                  <div className="p-6 text-center text-xs font-bold text-[var(--foreground-secondary)] animate-pulse">
+                    Loading detailed day metrics...
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3">
+                      <div className="p-3 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)]">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--foreground-secondary)] block">
+                          📚 Lessons
+                        </span>
+                        <span className="text-base font-black text-[var(--foreground)] mt-1 block">
+                          {dateDetail?.lessonsCompleted ?? selectedDateTile.lessons}
+                        </span>
+                      </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                <div className="p-3 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)] flex flex-col justify-between">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--foreground-secondary)]">
-                    📚 Lessons Completed
-                  </span>
-                  <span className="text-base font-black text-[var(--foreground)] mt-1">
-                    {selected365Tile.lessonsDone} Lessons
-                  </span>
-                </div>
+                      <div className="p-3 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)]">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--foreground-secondary)] block">
+                          📝 Quizzes
+                        </span>
+                        <span className="text-base font-black text-[var(--foreground)] mt-1 block">
+                          {dateDetail?.quizCompleted ?? selectedDateTile.quizzes}
+                        </span>
+                      </div>
 
-                <div className="p-3 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)] flex flex-col justify-between">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--foreground-secondary)]">
-                    📝 Quiz Attempts
-                  </span>
-                  <span className="text-base font-black text-[var(--foreground)] mt-1">
-                    {selected365Tile.quizAttempts} Quizzes
-                  </span>
-                </div>
+                      <div className="p-3 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)]">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--foreground-secondary)] block">
+                          🧠 Challenges
+                        </span>
+                        <span className="text-base font-black text-[#F0879B] mt-1 block">
+                          {dateDetail?.challengeCompleted ?? selectedDateTile.challenges}
+                        </span>
+                      </div>
 
-                <div className="p-3 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)] flex flex-col justify-between">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--foreground-secondary)]">
-                    ⏱ Study Time
-                  </span>
-                  <span className="text-base font-black text-[#5CBFA0] mt-1">
-                    {selected365Tile.studyTimeMin} Mins
-                  </span>
-                </div>
+                      <div className="p-3 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)]">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--foreground-secondary)] block">
+                          ⏱ Study Time
+                        </span>
+                        <span className="text-base font-black text-[#5CBFA0] mt-1 block">
+                          {dateDetail?.studyMinutes ?? selectedDateTile.studyMinutes} Mins
+                        </span>
+                      </div>
 
-                <div className="p-3 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)] flex flex-col justify-between">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--foreground-secondary)]">
-                    ⭐ XP Earned
-                  </span>
-                  <span className="text-base font-black text-[#8B7FE8] mt-1">
-                    +{selected365Tile.xpEarned} XP
-                  </span>
-                </div>
+                      <div className="p-3 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)]">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--foreground-secondary)] block">
+                          ⭐ XP Earned
+                        </span>
+                        <span className="text-base font-black text-[#8B7FE8] mt-1 block">
+                          +{dateDetail?.xpEarned ?? selectedDateTile.xp} XP
+                        </span>
+                      </div>
 
-                <div className="p-3 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)] flex flex-col justify-between">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--foreground-secondary)]">
-                    🔥 Daily Streak
-                  </span>
-                  <span className="text-base font-black text-[#FFC9DE] mt-1">
-                    {selected365Tile.streak} Days
-                  </span>
-                </div>
+                      <div className="p-3 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)]">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--foreground-secondary)] block">
+                          🪙 Coins Earned
+                        </span>
+                        <span className="text-base font-black text-yellow-500 mt-1 block">
+                          +{dateDetail?.coinsEarned ?? selectedDateTile.coins} Coins
+                        </span>
+                      </div>
+                    </div>
 
-                <div className="p-3 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)] flex flex-col justify-between">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--foreground-secondary)]">
-                    🎯 Completion Rate
-                  </span>
-                  <span className="text-base font-black text-[var(--foreground)] mt-1">
-                    {selected365Tile.level > 0 ? `${75 + selected365Tile.level * 5}%` : "0%"}
-                  </span>
-                </div>
-
-                <div className="p-3 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)] flex flex-col justify-between sm:col-span-2">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--foreground-secondary)]">
-                    🏆 Achievements Earned
-                  </span>
-                  <span className="text-xs font-extrabold text-[#8B7FE8] mt-1 truncate">
-                    {selected365Tile.achievement || "No Badge Earned"}
-                  </span>
-                </div>
-              </div>
-
-              <div className="p-3.5 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)] flex items-center gap-3 text-xs font-semibold text-[var(--foreground)]">
-                <Brain className="w-5 h-5 text-[#8B7FE8] shrink-0" />
-                <div>
-                  {selected365Tile.level > 0 ? (
-                    <span>
-                      Great job studying on <strong>{selected365Tile.dateStr}</strong>! You maintained your 14-day streak and earned <strong>+{selected365Tile.xpEarned} XP</strong>.
-                    </span>
-                  ) : (
-                    <span>
-                      No learning activity recorded for this day. Complete a lesson today to keep your streak alive!
-                    </span>
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* SUMMARY PANEL WITH 92% CONSISTENCY SCORE RING */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 pt-4 border-t border-[var(--border)] items-center">
-            <div className="md:col-span-8 grid grid-cols-2 sm:grid-cols-3 gap-3">
-              <div className="p-3 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)]">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--foreground-secondary)] block">
-                  Current Streak
-                </span>
-                <span className="text-lg font-black text-[#8B7FE8]">14 Days</span>
-              </div>
-
-              <div className="p-3 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)]">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--foreground-secondary)] block">
-                  Longest Streak
-                </span>
-                <span className="text-lg font-black text-[var(--foreground)]">18 Days</span>
-              </div>
-
-              <div className="p-3 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)]">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--foreground-secondary)] block">
-                  Learning Days
-                </span>
-                <span className="text-lg font-black text-[#5CBFA0]">268 Days</span>
-              </div>
-
-              <div className="p-3 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)]">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--foreground-secondary)] block">
-                  Study Hours
-                </span>
-                <span className="text-lg font-black text-[#8B7FE8]">142 Hours</span>
-              </div>
-
-              <div className="p-3 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)]">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--foreground-secondary)] block">
-                  Total XP Earned
-                </span>
-                <span className="text-lg font-black text-[var(--foreground)]">3,420 XP</span>
-              </div>
-
-              <div className="p-3 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)]">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--foreground-secondary)] block">
-                  Perfect Days
-                </span>
-                <span className="text-lg font-black text-[#F0879B]">34 Days</span>
-              </div>
-            </div>
-
-            <div className="md:col-span-4 p-4 rounded-2xl bg-gradient-to-br from-[#8B7FE8]/15 via-[var(--card)] to-[var(--background-secondary)] border border-[#D8D2FA]/40 flex items-center justify-between gap-4">
-              <div>
-                <span className="text-xs font-black text-[var(--foreground)] block">
-                  AI Consistency Score
-                </span>
-                <span className="text-[10px] text-[var(--foreground-secondary)] font-semibold">
-                  Top 5% among all active AI platform learners.
-                </span>
-              </div>
-
-              <div className="relative w-20 h-20 flex items-center justify-center shrink-0">
-                <svg className="w-20 h-20 transform -rotate-90">
-                  <circle cx="40" cy="40" r="32" stroke="rgba(139, 127, 232, 0.15)" strokeWidth="7" fill="transparent" />
-                  <circle
-                    ref={consistencyRingRef}
-                    cx="40"
-                    cy="40"
-                    r="32"
-                    stroke="#8B7FE8"
-                    strokeWidth="7"
-                    fill="transparent"
-                    strokeLinecap="round"
-                  />
-                </svg>
-
-                <span className="absolute text-sm font-black text-[#8B7FE8]">92%</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="p-4 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)] space-y-2">
-            <div className="text-xs font-black text-[#8B7FE8] flex items-center gap-1.5">
-              <Brain className="w-4 h-4" /> AI Consistency Insights
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs font-semibold text-[var(--foreground)]">
-              <div className="p-2.5 rounded-xl bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
-                <Flame className="w-4 h-4 text-[#8B7FE8] shrink-0" />
-                <span>You've studied 18 consecutive days.</span>
-              </div>
-              <div className="p-2.5 rounded-xl bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
-                <TrendingUp className="w-4 h-4 text-[#5CBFA0] shrink-0" />
-                <span>Most productive day: Wednesday.</span>
-              </div>
-              <div className="p-2.5 rounded-xl bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
-                <Target className="w-4 h-4 text-[#F0879B] shrink-0" />
-                <span>34% more quizzes solved on weekends.</span>
-              </div>
-              <div className="p-2.5 rounded-xl bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-[#8B7FE8] shrink-0" />
-                <span>Improving consistently this month.</span>
-              </div>
-            </div>
-          </div>
+                    <div className="p-3.5 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)] flex items-center gap-3 text-xs font-semibold text-[var(--foreground)]">
+                      <Brain className="w-5 h-5 text-[#8B7FE8] shrink-0" />
+                      <div>
+                        {selectedDateTile.xp > 0 ? (
+                          <span>
+                            Recorded <strong>{selectedDateTile.lessons} lessons</strong> and <strong>{selectedDateTile.quizzes} quizzes</strong> on <strong>{selectedDateTile.dateFormatted}</strong>, earning <strong>+{selectedDateTile.xp} XP</strong>.
+                          </span>
+                        ) : (
+                          <span>No activity logged on {selectedDateTile.dateFormatted}. Complete a lesson today to increase your streak!</span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </CardContent>
       </Card>
 
-      {/* 3. WEEKLY STREAK ANALYTICS BAR GRAPH */}
-      <Card className="bg-[var(--card)] border-[var(--border)] shadow-soft-sm p-6">
-        <CardHeader className="p-0 mb-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <div>
-              <CardTitle className="text-lg font-black text-[var(--foreground)] flex items-center gap-2">
-                <BarChart3 className="w-5 h-5 text-[#8B7FE8]" />
-                Weekly Streak Analytics
-              </CardTitle>
-              <CardDescription className="text-xs text-[var(--foreground-secondary)]">
-                Hover over daily bars to view detailed lessons, study time, and XP metrics.
-              </CardDescription>
+      {/* 4. DUOLINGO-STYLE STREAK FREEZE & DAILY GOAL SYSTEM */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        {/* FEATURE 6 — STREAK FREEZE SYSTEM (6 Cols) */}
+        <Card className="lg:col-span-6 bg-gradient-to-br from-[#E6F4FE] via-[var(--card)] to-[#F0F8FF] dark:from-[#132338] dark:via-[var(--card)] dark:to-[#0F1E2E] border-2 border-[#70B5F9]/40 shadow-soft-sm p-6">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-[#3B82F6] text-white flex items-center justify-center font-black shadow-glow-primary">
+                <Snowflake className="w-6 h-6 animate-spin-slow" />
+              </div>
+              <div>
+                <h4 className="text-base font-black text-[var(--foreground)] flex items-center gap-2">
+                  Streak Freeze Shield
+                </h4>
+                <span className="text-xs text-[var(--foreground-secondary)] font-semibold">
+                  Protects your streak if you miss a single learning day
+                </span>
+              </div>
             </div>
-            <Badge variant="mint" className="self-start sm:self-center">
-              Active Week
+
+            <Badge className="bg-[#3B82F6] text-white font-extrabold text-xs">
+              {streakFreezes} / 2 Equipped
             </Badge>
           </div>
-        </CardHeader>
 
-        <CardContent className="p-0">
-          <div
-            ref={barsContainerRef}
-            className="h-64 flex items-end justify-between gap-3 sm:gap-6 pt-8 pb-4 border-b border-[var(--border)] relative"
-          >
-            {mockAnalyticsBars.map((bar, idx) => {
-              const heightPct = (bar.completedLessons / 7) * 100;
-              const isHovered = hoveredBar?.day === bar.day;
-
-              return (
-                <div
-                  key={idx}
-                  onMouseEnter={() => setHoveredBar(bar)}
-                  onMouseLeave={() => setHoveredBar(null)}
-                  className="flex-1 flex flex-col items-center h-full justify-end group cursor-pointer relative"
-                >
-                  {isHovered && (
-                    <div className="absolute bottom-full mb-3 z-30 flex flex-col items-center pointer-events-none animate-in fade-in zoom-in-95 duration-200">
-                      <div className="bg-[#1E1B2E] text-white p-3 rounded-2xl shadow-soft-lg text-xs space-y-1 whitespace-nowrap border border-[#8B7FE8]">
-                        <div className="font-black text-[#FFC9DE] border-b border-white/10 pb-1">
-                          {bar.day} Performance Log
-                        </div>
-                        <div className="flex items-center gap-2 font-bold text-white/90">
-                          <BookOpen className="w-3.5 h-3.5 text-[#8B7FE8]" />
-                          <span>{bar.completedLessons} Lessons Done</span>
-                        </div>
-                        <div className="flex items-center gap-2 font-bold text-white/90">
-                          <Clock className="w-3.5 h-3.5 text-[#5CBFA0]" />
-                          <span>{bar.studyTimeMin} Mins Study Time</span>
-                        </div>
-                        <div className="flex items-center gap-2 font-bold text-white/90">
-                          <Zap className="w-3.5 h-3.5 text-[#FFC9DE]" />
-                          <span>+{bar.xpEarned} XP Earned</span>
-                        </div>
-                      </div>
-                      <div className="w-2.5 h-2.5 bg-[#1E1B2E] rotate-45 -mt-1.5" />
-                    </div>
-                  )}
-
-                  <div className="w-full max-w-[40px] bg-[var(--background-secondary)] rounded-2xl overflow-hidden h-full flex flex-col justify-end p-1">
-                    <div
-                      className={`w-full rounded-xl bg-gradient-to-t from-[#8B7FE8] via-[#786BD6] to-[#5CBFA0] analytics-bar transition-all duration-300 ${
-                        isHovered ? "shadow-glow-primary scale-105" : ""
-                      }`}
-                      style={{ height: `${heightPct}%` }}
-                    />
-                  </div>
-
-                  <span
-                    className={`text-xs font-black mt-2 transition-colors ${
-                      isHovered ? "text-[#8B7FE8]" : "text-[var(--foreground-secondary)]"
-                    }`}
-                  >
-                    {bar.day}
-                  </span>
-                </div>
-              );
-            })}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* 4. 90-DAY HEATMAP */}
-      <Card className="bg-[var(--card)] border-[var(--border)] shadow-soft-sm p-6">
-        <CardHeader className="p-0 mb-5">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <div>
-              <CardTitle className="text-lg font-black text-[var(--foreground)] flex items-center gap-2">
-                <CalendarIcon className="w-5 h-5 text-[#8B7FE8]" />
-                90-Day Activity Log
-              </CardTitle>
-              <CardDescription className="text-xs text-[var(--foreground-secondary)]">
-                Recent 90-day learning activity breakdown.
-              </CardDescription>
-            </div>
-          </div>
-        </CardHeader>
-
-        <CardContent className="p-0 space-y-6">
-          <div
-            ref={heatmapGridRef}
-            className="grid grid-cols-10 sm:grid-cols-15 gap-2 pt-2 pb-2"
-          >
-            {mock90HeatmapDays.map((day) => {
-              let bgClass = "bg-[var(--background-secondary)] border border-[var(--border)]";
-              if (day.level === 1) bgClass = "bg-[#D8D2FA]";
-              if (day.level === 2) bgClass = "bg-[#8B7FE8]";
-              if (day.level === 3) bgClass = "bg-[#786BD6]";
-              if (day.level === 4) bgClass = "bg-[#8B7FE8] shadow-glow-primary ring-2 ring-[#FFC9DE]";
-
-              const isHovered = hoveredHeatmapSquare?.dayNum === day.dayNum;
-
-              return (
-                <div
-                  key={day.dayNum}
-                  onMouseEnter={() => setHoveredHeatmapSquare(day)}
-                  onMouseLeave={() => setHoveredHeatmapSquare(null)}
-                  className={`heatmap-90-square h-8 sm:h-9 rounded-xl flex items-center justify-center text-[10px] font-extrabold cursor-pointer transition-all duration-200 hover:scale-125 hover:z-20 relative ${bgClass}`}
-                >
-                  <span className={day.level >= 2 ? "text-white" : "text-[var(--foreground-secondary)]"}>
-                    {day.dayNum}
-                  </span>
-
-                  {isHovered && (
-                    <div className="pointer-events-none absolute bottom-full mb-2 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center animate-in fade-in duration-200">
-                      <div className="bg-[#1E1B2E] text-white p-3 rounded-2xl shadow-soft-lg text-xs space-y-1 whitespace-nowrap border border-[#8B7FE8]">
-                        <div className="font-black text-[#FFC9DE] border-b border-white/10 pb-1">
-                          Day {day.dayNum} Activity Log
-                        </div>
-                        <div>⏱️ Study Time: {day.studyTimeMin} mins</div>
-                        <div>⚡ XP Earned: +{day.xpEarned} XP</div>
-                        <div>📖 Lessons: {day.lessonsDone} Completed</div>
-                        <div>🎯 Quiz Score: {day.quizScore}%</div>
-                      </div>
-                      <div className="w-2 h-2 bg-[#1E1B2E] rotate-45 -mt-1" />
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* 5. STREAK PERFORMANCE ANALYTICS (CONCENTRIC RINGS) */}
-      <Card className="bg-[var(--card)] border-[var(--border)] shadow-soft-sm p-6">
-        <CardHeader className="p-0 mb-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle className="text-lg font-black text-[var(--foreground)] flex items-center gap-2">
-                <PieChart className="w-5 h-5 text-[#8B7FE8]" />
-                Learning Performance
-              </CardTitle>
-              <CardDescription className="text-xs text-[var(--foreground-secondary)]">
-                Difficulty-wise completion progress across quiz tiers.
-              </CardDescription>
-            </div>
-            <Badge variant="primary">Analytics</Badge>
-          </div>
-        </CardHeader>
-
-        <CardContent className="p-0 space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
-            <div className="md:col-span-5 flex flex-col items-center justify-center relative py-4">
-              <svg
-                ref={ringsRef}
-                viewBox="0 0 160 160"
-                className="w-48 h-48 sm:w-56 sm:h-56 transform -rotate-90"
-              >
-                <circle cx="80" cy="80" r="62" stroke="rgba(92, 191, 160, 0.15)" strokeWidth="9" fill="transparent" />
-                <circle cx="80" cy="80" r="48" stroke="rgba(139, 127, 232, 0.15)" strokeWidth="9" fill="transparent" />
-                <circle cx="80" cy="80" r="34" stroke="rgba(240, 135, 155, 0.15)" strokeWidth="9" fill="transparent" />
-                <circle cx="80" cy="80" r="20" stroke="rgba(216, 210, 250, 0.15)" strokeWidth="9" fill="transparent" />
-
-                <circle
-                  className="radial-ring-circle transition-all duration-300 cursor-pointer"
-                  data-pct="27"
-                  cx="80"
-                  cy="80"
-                  r="62"
-                  stroke="#5CBFA0"
-                  strokeWidth="9"
-                  fill="transparent"
-                  strokeDasharray="390"
-                  strokeDashoffset="390"
-                  strokeLinecap="round"
-                  onMouseEnter={() => setHoveredRing(mockDifficultyMetrics[0])}
-                  onMouseLeave={() => setHoveredRing(null)}
-                />
-
-                <circle
-                  className="radial-ring-circle transition-all duration-300 cursor-pointer"
-                  data-pct="12"
-                  cx="80"
-                  cy="80"
-                  r="48"
-                  stroke="#8B7FE8"
-                  strokeWidth="9"
-                  fill="transparent"
-                  strokeDasharray="301"
-                  strokeDashoffset="301"
-                  strokeLinecap="round"
-                  onMouseEnter={() => setHoveredRing(mockDifficultyMetrics[1])}
-                  onMouseLeave={() => setHoveredRing(null)}
-                />
-
-                <circle
-                  className="radial-ring-circle transition-all duration-300 cursor-pointer"
-                  data-pct="4"
-                  cx="80"
-                  cy="80"
-                  r="34"
-                  stroke="#F0879B"
-                  strokeWidth="9"
-                  fill="transparent"
-                  strokeDasharray="213"
-                  strokeDashoffset="213"
-                  strokeLinecap="round"
-                  onMouseEnter={() => setHoveredRing(mockDifficultyMetrics[2])}
-                  onMouseLeave={() => setHoveredRing(null)}
-                />
-
-                <circle
-                  className="radial-ring-circle transition-all duration-300 cursor-pointer"
-                  data-pct="5"
-                  cx="80"
-                  cy="80"
-                  r="20"
-                  stroke="#D8D2FA"
-                  strokeWidth="9"
-                  fill="transparent"
-                  strokeDasharray="125"
-                  strokeDashoffset="125"
-                  strokeLinecap="round"
-                  onMouseEnter={() => setHoveredRing(mockDifficultyMetrics[3])}
-                  onMouseLeave={() => setHoveredRing(null)}
-                />
-              </svg>
-
-              <div className="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
-                <span className="text-xl font-black text-[var(--foreground)]">
-                  {hoveredRing ? `${hoveredRing.pct}%` : "Overall"}
+          <div className="space-y-4 pt-2">
+            <div className="p-4 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)] flex items-center justify-between">
+              <div>
+                <span className="text-xs font-bold text-[var(--foreground)] block">
+                  Streak Freeze Inventory
                 </span>
-                <span className="text-[10px] font-extrabold uppercase text-[var(--foreground-secondary)]">
-                  {hoveredRing ? hoveredRing.tier : "Difficulty"}
+                <span className="text-[11px] text-[var(--foreground-secondary)]">
+                  Cost: 500 Coins • Max Limit: 2 Freezes
+                </span>
+              </div>
+
+              <Button
+                size="sm"
+                disabled={streakFreezes >= 2 || totalCoins < 500 || purchasingFreeze}
+                onClick={handlePurchaseFreeze}
+                className="bg-[#3B82F6] hover:bg-[#2563EB] text-white font-extrabold text-xs gap-1.5 shadow-soft-sm"
+              >
+                <Coins className="w-4 h-4 text-yellow-300" />
+                {purchasingFreeze ? "Purchasing..." : "Buy (500 Coins)"}
+              </Button>
+            </div>
+
+            <div className="text-[11px] font-semibold text-[var(--foreground-secondary)] flex items-center gap-2">
+              <Shield className="w-4 h-4 text-[#3B82F6]" />
+              {streakFreezes > 0
+                ? "Your streak is protected for 1 missed day!"
+                : "No freeze equipped. Purchase one to safeguard your hard-earned streak."}
+            </div>
+          </div>
+        </Card>
+
+        {/* DAILY GOAL SYSTEM (6 Cols) */}
+        <Card className="lg:col-span-6 bg-[var(--card)] border-[var(--border)] shadow-soft-sm p-6">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-[#5CBFA0] text-white flex items-center justify-center font-black">
+                <Target className="w-5 h-5" />
+              </div>
+              <div>
+                <h4 className="text-base font-black text-[var(--foreground)]">
+                  Today's Goal System
+                </h4>
+                <span className="text-xs text-[var(--foreground-secondary)]">
+                  Complete all 3 tasks to claim bonus +50 XP & +25 Coins
                 </span>
               </div>
             </div>
 
-            <div className="md:col-span-7 space-y-4">
-              {mockDifficultyMetrics.map((item, idx) => (
+            <Badge variant={todayGoal.completed ? "mint" : "outline"} className="text-xs font-extrabold">
+              {todayGoal.completed ? "Goal Achieved! 🎉" : "In Progress"}
+            </Badge>
+          </div>
+
+          <div className="space-y-3 pt-1">
+            <div
+              onClick={() => triggerActivityComplete("LESSON")}
+              className={`p-3 rounded-2xl border transition-all cursor-pointer flex items-center justify-between ${
+                todayGoal.lessonDone
+                  ? "bg-[#5CBFA0]/15 border-[#5CBFA0] text-[#5CBFA0]"
+                  : "bg-[var(--background-secondary)] border-[var(--border)] hover:border-[#8B7FE8]"
+              }`}
+            >
+              <div className="flex items-center gap-3">
                 <div
-                  key={idx}
-                  className="p-3.5 rounded-2xl border border-[var(--border)] bg-[var(--background-secondary)] flex items-center justify-between gap-4 hover:border-[#8B7FE8]/50 transition-all"
-                >
-                  <div className="flex items-center gap-3">
-                    <span
-                      className="w-3.5 h-3.5 rounded-full shrink-0 shadow-soft-sm"
-                      style={{ backgroundColor: item.color }}
-                    />
-                    <div>
-                      <span className="text-xs font-black text-[var(--foreground)] block">
-                        {item.tier} Difficulty
-                      </span>
-                      <span className="text-[10px] font-bold text-[var(--foreground-secondary)]">
-                        {item.completed} / {item.total.toLocaleString()} Completed
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-3 text-right">
-                    <div className="w-24 h-2 bg-[var(--card)] rounded-full overflow-hidden hidden sm:block">
-                      <div
-                        className="h-full rounded-full transition-all duration-500"
-                        style={{ width: `${item.pct}%`, backgroundColor: item.color }}
-                      />
-                    </div>
-                    <span className="text-xs font-black text-[var(--foreground)] w-10">
-                      {item.pct}%
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* 6. STREAK JOURNEY PATH */}
-      <Card className="bg-[var(--card)] border-[var(--border)] shadow-soft-sm p-6">
-        <CardHeader className="p-0 mb-4">
-          <div className="flex items-center justify-between">
-            <CardTitle className="text-lg font-black text-[var(--foreground)] flex items-center gap-2">
-              <MapPin className="w-5 h-5 text-[#8B7FE8]" />
-              Daily Streak Journey Path
-            </CardTitle>
-            <Badge variant="mint">Active Trail</Badge>
-          </div>
-          <CardDescription className="text-xs text-[var(--foreground-secondary)]">
-            Progress through streak waypoints to reach your 20-day goal.
-          </CardDescription>
-        </CardHeader>
-
-        <CardContent className="p-0">
-          <div className="relative py-6 flex items-center justify-between overflow-x-auto gap-4">
-            <div className="absolute top-1/2 left-8 right-8 h-1 bg-[var(--background-secondary)] -translate-y-1/2 z-0" />
-            <div className="absolute top-1/2 left-8 w-[70%] h-1 bg-[#8B7FE8] -translate-y-1/2 z-0 shadow-glow-primary" />
-
-            {journeyNodes.map((node, idx) => {
-              const isCurrent = node.status === "current";
-              const isCompleted = node.status === "completed";
-
-              return (
-                <div key={idx} className="relative z-10 flex flex-col items-center shrink-0 group">
-                  <div
-                    className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center font-black text-xs transition-transform group-hover:scale-125 ${
-                      isCurrent
-                        ? "bg-[#8B7FE8] text-white ring-4 ring-[#D8D2FA] shadow-glow-primary scale-110 animate-bounce"
-                        : isCompleted
-                        ? "bg-[#5CBFA0] text-white shadow-soft-sm"
-                        : "bg-[var(--card)] border-2 border-[var(--border)] text-[var(--foreground-secondary)]"
-                    }`}
-                  >
-                    {isCompleted ? <Check className="w-5 h-5 stroke-[3]" /> : node.day}
-                  </div>
-                  <span className="text-[11px] font-extrabold text-[var(--foreground)] mt-2">
-                    {node.label}
-                  </span>
-                </div>
-              );
-            })}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* 7. STREAK MILESTONES & REWARDS ROW */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <Card className="lg:col-span-7 bg-[var(--card)] border-[var(--border)] shadow-soft-sm">
-          <CardHeader>
-            <CardTitle className="text-lg font-black text-[var(--foreground)] flex items-center gap-2">
-              <Trophy className="w-5 h-5 text-[#8B7FE8]" />
-              Streak Milestones
-            </CardTitle>
-            <CardDescription className="text-xs text-[var(--foreground-secondary)]">
-              Reach streak thresholds to unlock permanent badges & XP boosts.
-            </CardDescription>
-          </CardHeader>
-
-          <CardContent>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-              {mockMilestones.map((m, idx) => (
-                <div
-                  key={idx}
-                  className={`p-4 rounded-2xl border flex flex-col items-center text-center transition-all duration-300 ${
-                    m.unlocked
-                      ? "bg-gradient-to-b from-[#8B7FE8]/15 via-[var(--card)] to-[var(--background-secondary)] border-[#8B7FE8] shadow-soft-sm hover:-translate-y-1 hover:shadow-glow-primary"
-                      : "bg-[var(--background-secondary)] border-[var(--border)] opacity-60 backdrop-blur-sm"
+                  className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
+                    todayGoal.lessonDone ? "bg-[#5CBFA0] text-white" : "bg-[var(--card)] border border-[var(--border)]"
                   }`}
                 >
-                  <div
-                    className={`w-12 h-12 rounded-2xl flex items-center justify-center text-lg font-black mb-2 ${
-                      m.unlocked
-                        ? "bg-[#8B7FE8] text-white shadow-soft-md"
-                        : "bg-[var(--card)] text-[var(--foreground-secondary)]"
-                    }`}
-                  >
-                    {m.unlocked ? <Trophy className="w-6 h-6" /> : <Lock className="w-5 h-5" />}
-                  </div>
-
-                  <span className="text-xs font-black text-[var(--foreground)]">{m.label}</span>
-                  <span className="text-[10px] font-bold text-[#8B7FE8] mt-1">
-                    +{m.rewardXP} XP Bonus
-                  </span>
+                  {todayGoal.lessonDone ? <Check className="w-4 h-4" /> : "1"}
                 </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="lg:col-span-5 bg-[var(--card)] border-[var(--border)] shadow-soft-sm">
-          <CardHeader>
-            <CardTitle className="text-lg font-black text-[var(--foreground)] flex items-center gap-2">
-              <Award className="w-5 h-5 text-[#8B7FE8]" />
-              Unlocked Streak Rewards
-            </CardTitle>
-            <CardDescription className="text-xs text-[var(--foreground-secondary)]">
-              Achievements earned for consistent study habits.
-            </CardDescription>
-          </CardHeader>
-
-          <CardContent className="space-y-3">
-            {mockRewards.map((reward) => (
-              <div
-                key={reward.id}
-                className="p-3 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)] flex items-center justify-between hover:border-[#8B7FE8]/50 hover:shadow-soft-sm transition-all"
-              >
-                <div className="flex items-center gap-3">
-                  <div
-                    className="w-9 h-9 rounded-xl flex items-center justify-center text-[#8B7FE8] shrink-0"
-                    style={{ backgroundColor: reward.iconBg }}
-                  >
-                    <Sparkles className="w-4.5 h-4.5" />
-                  </div>
-                  <div>
-                    <span className="text-xs font-black text-[var(--foreground)] block">
-                      {reward.title}
-                    </span>
-                    <span className="text-[10px] text-[var(--foreground-secondary)] font-bold">
-                      Category: {reward.category}
-                    </span>
-                  </div>
-                </div>
-
-                <Badge variant="mint" className="text-[9px]">
-                  Unlocked
-                </Badge>
+                <span className="text-xs font-bold text-[var(--foreground)]">Complete 1 Interactive Lesson</span>
               </div>
-            ))}
-          </CardContent>
+              <span className="text-[11px] font-extrabold text-[#8B7FE8]">+50 XP</span>
+            </div>
+
+            <div
+              onClick={() => triggerActivityComplete("QUIZ")}
+              className={`p-3 rounded-2xl border transition-all cursor-pointer flex items-center justify-between ${
+                todayGoal.quizDone
+                  ? "bg-[#5CBFA0]/15 border-[#5CBFA0] text-[#5CBFA0]"
+                  : "bg-[var(--background-secondary)] border-[var(--border)] hover:border-[#8B7FE8]"
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <div
+                  className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
+                    todayGoal.quizDone ? "bg-[#5CBFA0] text-white" : "bg-[var(--card)] border border-[var(--border)]"
+                  }`}
+                >
+                  {todayGoal.quizDone ? <Check className="w-4 h-4" /> : "2"}
+                </div>
+                <span className="text-xs font-bold text-[var(--foreground)]">Pass 1 Knowledge Quiz</span>
+              </div>
+              <span className="text-[11px] font-extrabold text-[#8B7FE8]">+80 XP</span>
+            </div>
+
+            <div
+              onClick={() => triggerActivityComplete("CHALLENGE")}
+              className={`p-3 rounded-2xl border transition-all cursor-pointer flex items-center justify-between ${
+                todayGoal.challengeDone
+                  ? "bg-[#5CBFA0]/15 border-[#5CBFA0] text-[#5CBFA0]"
+                  : "bg-[var(--background-secondary)] border-[var(--border)] hover:border-[#8B7FE8]"
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <div
+                  className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
+                    todayGoal.challengeDone ? "bg-[#5CBFA0] text-white" : "bg-[var(--card)] border border-[var(--border)]"
+                  }`}
+                >
+                  {todayGoal.challengeDone ? <Check className="w-4 h-4" /> : "3"}
+                </div>
+                <span className="text-xs font-bold text-[var(--foreground)]">Solve 1 AI Challenge</span>
+              </div>
+              <span className="text-[11px] font-extrabold text-[#8B7FE8]">+100 XP</span>
+            </div>
+          </div>
         </Card>
       </div>
+
+      {/* FEATURE 2, 3, 4 — WEEKLY, MONTHLY & ANNUAL ANALYTICS CHARTS */}
+      <Card className="bg-[var(--card)] border-[var(--border)] shadow-soft-sm p-6 space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--border)] pb-4">
+          <div>
+            <h3 className="text-lg font-black text-[var(--foreground)] flex items-center gap-2">
+              <BarChart3 className="w-5 h-5 text-[#8B7FE8]" />
+              Learning Progress & Performance Analytics
+            </h3>
+            <p className="text-xs text-[var(--foreground-secondary)]">
+              Detailed breakdown of XP trend, study hours, and completion rates.
+            </p>
+          </div>
+
+          {/* Analytics Tabs */}
+          <div className="flex items-center gap-2 p-1 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)] text-xs font-bold">
+            <button
+              onClick={() => setActiveAnalyticsTab("weekly")}
+              className={`px-3 py-1.5 rounded-xl transition-all ${
+                activeAnalyticsTab === "weekly"
+                  ? "bg-[#8B7FE8] text-white shadow-soft-sm"
+                  : "text-[var(--foreground-secondary)] hover:text-[var(--foreground)]"
+              }`}
+            >
+              Weekly
+            </button>
+            <button
+              onClick={() => setActiveAnalyticsTab("monthly")}
+              className={`px-3 py-1.5 rounded-xl transition-all ${
+                activeAnalyticsTab === "monthly"
+                  ? "bg-[#8B7FE8] text-white shadow-soft-sm"
+                  : "text-[var(--foreground-secondary)] hover:text-[var(--foreground)]"
+              }`}
+            >
+              Monthly
+            </button>
+            <button
+              onClick={() => setActiveAnalyticsTab("yearly")}
+              className={`px-3 py-1.5 rounded-xl transition-all ${
+                activeAnalyticsTab === "yearly"
+                  ? "bg-[#8B7FE8] text-white shadow-soft-sm"
+                  : "text-[var(--foreground-secondary)] hover:text-[var(--foreground)]"
+              }`}
+            >
+              Annual
+            </button>
+          </div>
+        </div>
+
+        {/* ANALYTICS CONTENT VIEWS */}
+        {activeAnalyticsTab === "weekly" && (
+          <div className="space-y-6">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <div className="p-3.5 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)]">
+                <span className="text-[10px] font-extrabold uppercase text-[var(--foreground-secondary)] block">
+                  XP Earned This Week
+                </span>
+                <span className="text-xl font-black text-[#8B7FE8] mt-1 block">
+                  +1,780 XP
+                </span>
+              </div>
+              <div className="p-3.5 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)]">
+                <span className="text-[10px] font-extrabold uppercase text-[var(--foreground-secondary)] block">
+                  Study Hours
+                </span>
+                <span className="text-xl font-black text-[#5CBFA0] mt-1 block">
+                  5.4 Hours
+                </span>
+              </div>
+              <div className="p-3.5 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)]">
+                <span className="text-[10px] font-extrabold uppercase text-[var(--foreground-secondary)] block">
+                  Learning Days
+                </span>
+                <span className="text-xl font-black text-[var(--foreground)] mt-1 block">
+                  7 / 7 Days
+                </span>
+              </div>
+              <div className="p-3.5 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)]">
+                <span className="text-[10px] font-extrabold uppercase text-[var(--foreground-secondary)] block">
+                  Weekly Accuracy
+                </span>
+                <span className="text-xl font-black text-[#F0879B] mt-1 block">
+                  94%
+                </span>
+              </div>
+            </div>
+
+            {/* Weekly Bar Chart Simulation */}
+            <div className="space-y-2">
+              <span className="text-xs font-black text-[var(--foreground)] block">
+                Daily XP Trend (Last 7 Days)
+              </span>
+              <div className="h-44 flex items-end justify-between gap-3 pt-6 pb-2 px-4 bg-[var(--background-secondary)] rounded-2xl border border-[var(--border)]">
+                {[
+                  { day: "Mon", xp: 240, height: "60%" },
+                  { day: "Tue", xp: 380, height: "95%" },
+                  { day: "Wed", xp: 180, height: "45%" },
+                  { day: "Thu", xp: 450, height: "100%" },
+                  { day: "Fri", xp: 120, height: "30%" },
+                  { day: "Sat", xp: 310, height: "78%" },
+                  { day: "Sun", xp: 400, height: "88%" },
+                ].map((b, idx) => (
+                  <div key={idx} className="flex-1 flex flex-col items-center gap-2 group">
+                    <span className="text-[10px] font-extrabold text-[#8B7FE8] opacity-0 group-hover:opacity-100 transition-opacity">
+                      +{b.xp}
+                    </span>
+                    <div className="w-full bg-[#8B7FE8]/20 rounded-xl overflow-hidden h-28 flex items-end">
+                      <motion.div
+                        className="w-full bg-[#8B7FE8] rounded-xl group-hover:bg-[#786BD6] transition-colors"
+                        initial={{ height: 0 }}
+                        animate={{ height: b.height }}
+                        transition={{ duration: 0.6, delay: idx * 0.08 }}
+                      />
+                    </div>
+                    <span className="text-[10px] font-bold text-[var(--foreground-secondary)]">{b.day}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeAnalyticsTab === "monthly" && (
+          <div className="space-y-6">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <div className="p-3.5 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)]">
+                <span className="text-[10px] font-extrabold uppercase text-[var(--foreground-secondary)] block">
+                  Best Learning Day
+                </span>
+                <span className="text-lg font-black text-[#8B7FE8] mt-1 block">
+                  Wednesday
+                </span>
+              </div>
+              <div className="p-3.5 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)]">
+                <span className="text-[10px] font-extrabold uppercase text-[var(--foreground-secondary)] block">
+                  Most Active Week
+                </span>
+                <span className="text-lg font-black text-[#5CBFA0] mt-1 block">
+                  Week 3 (+2,450 XP)
+                </span>
+              </div>
+              <div className="p-3.5 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)]">
+                <span className="text-[10px] font-extrabold uppercase text-[var(--foreground-secondary)] block">
+                  Perfect Days
+                </span>
+                <span className="text-lg font-black text-yellow-500 mt-1 block">
+                  12 Days
+                </span>
+              </div>
+              <div className="p-3.5 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)]">
+                <span className="text-[10px] font-extrabold uppercase text-[var(--foreground-secondary)] block">
+                  Monthly Study Hours
+                </span>
+                <span className="text-lg font-black text-[#F0879B] mt-1 block">
+                  24.5 Hours
+                </span>
+              </div>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)] text-xs text-[var(--foreground)] space-y-1">
+              <span className="font-black text-[#8B7FE8] block">🧠 AI Monthly Performance Summary</span>
+              <p className="text-[11px] text-[var(--foreground-secondary)]">
+                You studied 28 out of 30 days this month! Your quiz accuracy improved by 14% compared to last month.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {activeAnalyticsTab === "yearly" && (
+          <div className="space-y-6">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <div className="p-3.5 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)]">
+                <span className="text-[10px] font-extrabold uppercase text-[var(--foreground-secondary)] block">
+                  Total Learning Days
+                </span>
+                <span className="text-xl font-black text-[#8B7FE8] mt-1 block">
+                  {daysLearned} Days
+                </span>
+              </div>
+              <div className="p-3.5 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)]">
+                <span className="text-[10px] font-extrabold uppercase text-[var(--foreground-secondary)] block">
+                  Longest Active Streak
+                </span>
+                <span className="text-xl font-black text-[#5CBFA0] mt-1 block">
+                  {longestStreak} Days
+                </span>
+              </div>
+              <div className="p-3.5 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)]">
+                <span className="text-[10px] font-extrabold uppercase text-[var(--foreground-secondary)] block">
+                  Most Productive Month
+                </span>
+                <span className="text-xl font-black text-[#F0879B] mt-1 block">
+                  October
+                </span>
+              </div>
+              <div className="p-3.5 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)]">
+                <span className="text-[10px] font-extrabold uppercase text-[var(--foreground-secondary)] block">
+                  Total Study Hours
+                </span>
+                <span className="text-xl font-black text-yellow-500 mt-1 block">
+                  142 Hours
+                </span>
+              </div>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)] flex items-center justify-between text-xs font-bold text-[var(--foreground)]">
+              <span>Activity Distribution: 45% Lessons • 30% Quizzes • 25% AI Challenges</span>
+              <Badge variant="primary" className="text-[10px]">Top 5% Learner</Badge>
+            </div>
+          </div>
+        )}
+      </Card>
+
+      {/* 5. FEATURE 5 — LEARNING MILESTONES TIMELINE */}
+      <Card className="bg-[var(--card)] border-[var(--border)] shadow-soft-sm p-6 space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <h3 className="text-lg font-black text-[var(--foreground)] flex items-center gap-2">
+              <Award className="w-5 h-5 text-[#8B7FE8]" />
+              Learning Streak Milestones
+            </h3>
+            <p className="text-xs text-[var(--foreground-secondary)]">
+              Reach unbroken day streaks to unlock milestone rewards.
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {milestones.map((m: Milestone) => {
+            const isClaiming = claimingMilestoneId === m.id;
+            return (
+              <div
+                key={m.id}
+                className={`p-4 rounded-2xl border transition-all duration-200 space-y-3 ${
+                  m.claimed
+                    ? "bg-[#FFFDF0] dark:bg-[#2A2412] border-yellow-400/60 shadow-soft-sm"
+                    : m.unlocked
+                    ? "bg-[#F5F2FF] dark:bg-[#241E38] border-[#8B7FE8]"
+                    : "bg-[var(--background-secondary)] border-[var(--border)] opacity-70"
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2.5">
+                    <div
+                      className={`w-8 h-8 rounded-xl flex items-center justify-center font-black text-white text-xs ${
+                        m.claimed ? "bg-yellow-500" : m.unlocked ? "bg-[#8B7FE8]" : "bg-gray-400"
+                      }`}
+                    >
+                      {m.claimed ? <Check className="w-4 h-4" /> : m.unlocked ? <Trophy className="w-4 h-4" /> : <Lock className="w-4 h-4" />}
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-black text-[var(--foreground)]">{m.title}</h4>
+                      <span className="text-[10px] text-[var(--foreground-secondary)]">{m.description}</span>
+                    </div>
+                  </div>
+
+                  <Badge
+                    variant={m.claimed ? "pink" : m.unlocked ? "primary" : "outline"}
+                    className="text-[10px]"
+                  >
+                    {m.claimed ? "Claimed" : m.unlocked ? "Unlocked" : "Locked"}
+                  </Badge>
+                </div>
+
+                <div className="flex items-center justify-between pt-1 border-t border-[var(--border)]">
+                  <div className="text-[11px] font-extrabold text-[#8B7FE8]">
+                    +{m.rewardXP} XP • +{m.rewardCoins} Coins
+                  </div>
+
+                  {m.unlocked && !m.claimed && (
+                    <Button
+                      size="sm"
+                      disabled={isClaiming}
+                      onClick={() => handleClaimMilestone(m.id)}
+                      className="bg-yellow-500 hover:bg-yellow-600 text-black font-black text-[11px] px-3 py-1 border-none shadow-soft-sm"
+                    >
+                      {isClaiming ? "Claiming..." : "Claim Reward"}
+                    </Button>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </Card>
+
+      {/* 6. ACHIEVEMENTS TIMELINE (NEWEST FIRST) */}
+      <Card className="bg-[var(--card)] border-[var(--border)] shadow-soft-sm p-6 space-y-6">
+        <div>
+          <h3 className="text-lg font-black text-[var(--foreground)] flex items-center gap-2">
+            <Medal className="w-5 h-5 text-[#5CBFA0]" />
+            Achievement Badges Showcase
+          </h3>
+          <p className="text-xs text-[var(--foreground-secondary)]">
+            Badges automatically unlocked as you complete lessons, quizzes, and streak challenges.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+          {achievements.map((ach: Achievement) => (
+            <div
+              key={ach.id}
+              className={`p-3.5 rounded-2xl border text-center space-y-2 transition-all ${
+                ach.unlocked
+                  ? "bg-[var(--card)] border-[#8B7FE8] shadow-soft-sm"
+                  : "bg-[var(--background-secondary)] border-[var(--border)] opacity-50 grayscale"
+              }`}
+            >
+              <div className="w-10 h-10 mx-auto rounded-2xl bg-[#8B7FE8]/15 text-[#8B7FE8] flex items-center justify-center font-black">
+                <Star className="w-5 h-5 fill-[#8B7FE8]" />
+              </div>
+              <div>
+                <h4 className="text-xs font-black text-[var(--foreground)] truncate">{ach.title}</h4>
+                <p className="text-[10px] text-[var(--foreground-secondary)] line-clamp-2 mt-0.5">{ach.description}</p>
+              </div>
+              <Badge variant={ach.unlocked ? "primary" : "outline"} className="text-[9px] px-2 py-0.5">
+                {ach.unlocked ? "Unlocked" : "Locked"}
+              </Badge>
+            </div>
+          ))}
+        </div>
+      </Card>
+
+      {/* 7. SHARE PROGRESS MODAL */}
+      <AnimatePresence>
+        {showShareModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="w-full max-w-md bg-[var(--card)] border border-[var(--border)] p-6 rounded-3xl shadow-xl space-y-4"
+            >
+              <div className="flex items-center justify-between border-b border-[var(--border)] pb-3">
+                <h3 className="text-base font-black text-[var(--foreground)] flex items-center gap-2">
+                  <Share2 className="w-5 h-5 text-[#8B7FE8]" /> Share Your AI Progress
+                </h3>
+                <button
+                  onClick={() => setShowShareModal(false)}
+                  className="p-1 rounded-full hover:bg-[var(--background-secondary)] text-[var(--foreground-secondary)]"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-gradient-to-br from-[#8B7FE8]/15 via-[var(--card)] to-[var(--background-secondary)] border border-[#8B7FE8]/40 space-y-2 text-center">
+                <div className="text-3xl font-black text-[#8B7FE8]">🔥 {currentStreak} Days</div>
+                <div className="text-xs font-bold text-[var(--foreground)]">
+                  Total XP: {totalXP.toLocaleString()} | Level {currentLevel} | Global Rank #{globalRank}
+                </div>
+              </div>
+
+              <div className="p-3 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)] text-xs text-[var(--foreground)] font-mono leading-relaxed">
+                🔥 I'm on a {currentStreak}-day learning streak on Future With AI! 🚀 Total XP: {totalXP.toLocaleString()} | Level {currentLevel} | Global Rank #{globalRank}.
+              </div>
+
+              <div className="grid grid-cols-3 gap-2 pt-1">
+                <button
+                  onClick={() => {
+                    const text = encodeURIComponent(`🔥 I'm on a ${currentStreak}-day learning streak on Future With AI! Total XP: ${totalXP.toLocaleString()} | Level ${currentLevel}. Check it out!`);
+                    window.open(`https://twitter.com/intent/tweet?text=${text}`, "_blank");
+                  }}
+                  className="px-3 py-2 rounded-xl bg-[#1DA1F2]/15 text-[#1DA1F2] hover:bg-[#1DA1F2]/25 font-bold text-xs flex items-center justify-center gap-1.5 transition-colors"
+                >
+                  Twitter/X
+                </button>
+                <button
+                  onClick={() => {
+                    const text = encodeURIComponent(`🔥 I'm on a ${currentStreak}-day learning streak on Future With AI! Total XP: ${totalXP.toLocaleString()} | Level ${currentLevel}.`);
+                    window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`, "_blank");
+                  }}
+                  className="px-3 py-2 rounded-xl bg-[#0A66C2]/15 text-[#0A66C2] hover:bg-[#0A66C2]/25 font-bold text-xs flex items-center justify-center gap-1.5 transition-colors"
+                >
+                  LinkedIn
+                </button>
+                <button
+                  onClick={() => {
+                    const text = encodeURIComponent(`🔥 I'm on a ${currentStreak}-day learning streak on Future With AI! Total XP: ${totalXP.toLocaleString()} | Level ${currentLevel}.`);
+                    window.open(`https://api.whatsapp.com/send?text=${text}`, "_blank");
+                  }}
+                  className="px-3 py-2 rounded-xl bg-[#25D366]/15 text-[#25D366] hover:bg-[#25D366]/25 font-bold text-xs flex items-center justify-center gap-1.5 transition-colors"
+                >
+                  WhatsApp
+                </button>
+              </div>
+
+              <Button
+                size="sm"
+                onClick={() => {
+                  navigator.clipboard.writeText(
+                    `🔥 I'm on a ${currentStreak}-day learning streak on Future With AI! 🚀 Total XP: ${totalXP.toLocaleString()} | Level ${currentLevel} | Global Rank #${globalRank}. Join me!`
+                  );
+                  setCopiedShareText(true);
+                  setTimeout(() => setCopiedShareText(false), 2000);
+                }}
+                className="w-full bg-[#8B7FE8] hover:bg-[#786BD6] text-white font-extrabold text-xs gap-2"
+              >
+                <Copy className="w-4 h-4" />
+                {copiedShareText ? "Copied to Clipboard! 🎉" : "Copy Share Text"}
+              </Button>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* STREAK FREEZE AUTO-CONSUMED CELEBRATION MODAL */}
+      <AnimatePresence>
+        {freezeConsumedModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md">
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              className="w-full max-w-sm bg-gradient-to-br from-[#1E293B] to-[#0F172A] border-2 border-[#3B82F6] p-6 rounded-3xl text-white text-center space-y-4 shadow-glow-primary"
+            >
+              <div className="w-16 h-16 mx-auto rounded-full bg-[#3B82F6]/20 border-2 border-[#3B82F6] flex items-center justify-center animate-bounce">
+                <Snowflake className="w-8 h-8 text-[#60A5FA]" />
+              </div>
+
+              <div className="space-y-1">
+                <h3 className="text-xl font-black text-white">🔥 Streak Saved!</h3>
+                <p className="text-xs text-blue-200">
+                  You missed a day, but your equipped <strong>Streak Freeze</strong> was automatically consumed to keep your unbroken streak alive!
+                </p>
+              </div>
+
+              <Button
+                onClick={() => setFreezeConsumedModal(false)}
+                className="w-full bg-[#3B82F6] hover:bg-[#2563EB] text-white font-extrabold text-xs border-none"
+              >
+                Awesome, Continue Learning!
+              </Button>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

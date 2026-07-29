@@ -48,6 +48,7 @@ export default function DashboardPage() {
   const { user } = useAuth();
   const [courseProgress, setCourseProgress] = useState<number>(0);
   const [isMascotCelebrating, setIsMascotCelebrating] = useState<boolean>(false);
+  const [dashboardData, setDashboardData] = useState<any>(null);
 
   // DOM Refs for GSAP
   const pageRef = useRef<HTMLDivElement>(null);
@@ -57,6 +58,26 @@ export default function DashboardPage() {
   const stat2Ref = useRef<HTMLSpanElement>(null);
   const stat3Ref = useRef<HTMLSpanElement>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
+
+  // Fetch live backend data
+  useEffect(() => {
+    const fetchDashboard = async () => {
+      try {
+        const res = await fetch("/api/dashboard");
+        const json = await res.json();
+        if (res.ok && json.success) {
+          setDashboardData(json.data);
+        }
+      } catch (err) {
+        console.error("Dashboard fetch error:", err);
+      }
+    };
+    fetchDashboard();
+  }, []);
+
+  const totalLessons = dashboardData?.progress?.totalLessons ?? 125;
+  const totalXP = dashboardData?.progress?.totalXP ?? 3420;
+  const currentStreak = dashboardData?.progress?.currentStreak ?? 14;
 
   // GSAP Entrance & Count-up Animations
   useEffect(() => {
@@ -97,7 +118,7 @@ export default function DashboardPage() {
       if (stat1Ref.current) {
         const obj = { val: 0 };
         gsap.to(obj, {
-          val: 125,
+          val: totalLessons,
           duration: 1.4,
           ease: "power2.out",
           onUpdate: () => {
@@ -121,7 +142,7 @@ export default function DashboardPage() {
       if (stat3Ref.current) {
         const obj = { val: 0 };
         gsap.to(obj, {
-          val: 3420,
+          val: totalXP,
           duration: 1.6,
           ease: "power2.out",
           onUpdate: () => {
@@ -148,7 +169,7 @@ export default function DashboardPage() {
     }, pageRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [totalLessons, totalXP]);
 
   return (
     <div ref={pageRef} className="relative min-h-screen bg-[#FCFBFF] text-[#1E1B2E] overflow-hidden">
@@ -167,7 +188,7 @@ export default function DashboardPage() {
               Hello, {user?.name || "Bhargavi"}! 👋
             </h1>
             <p className="text-xs sm:text-sm text-[#6B6785] mt-1">
-              You are on a <strong>14-day streak</strong>. Continue your AI Mastery pathway.
+              You are on a <strong>{currentStreak}-day streak</strong>. Continue your AI Mastery pathway.
             </p>
           </div>
 
