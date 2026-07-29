@@ -18,7 +18,9 @@ const createPrismaClient = () =>
 export const prisma =
   globalForPrisma.prisma &&
   (globalForPrisma.prisma as any).certificate &&
-  (globalForPrisma.prisma as any).promptCategory
+  (globalForPrisma.prisma as any).promptCategory &&
+  (globalForPrisma.prisma as any).milestone &&
+  (globalForPrisma.prisma as any).userProgress
     ? globalForPrisma.prisma
     : createPrismaClient();
 
