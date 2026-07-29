@@ -15,14 +15,21 @@ const createPrismaClient = () =>
         : [{ emit: "event", level: "error" }],
   });
 
-export const prisma =
-  globalForPrisma.prisma &&
-  (globalForPrisma.prisma as any).certificate &&
-  (globalForPrisma.prisma as any).promptCategory &&
-  (globalForPrisma.prisma as any).milestone &&
-  (globalForPrisma.prisma as any).userProgress
-    ? globalForPrisma.prisma
-    : createPrismaClient();
+const isValidPrismaClient = (client: unknown): client is PrismaClient => {
+  const c = client as Record<string, Record<string, unknown>> | undefined;
+  return (
+    !!c &&
+    typeof c.user?.findUnique === "function" &&
+    typeof c.userProgress?.findUnique === "function" &&
+    typeof c.dailyActivity?.findUnique === "function" &&
+    typeof c.milestone?.findUnique === "function" &&
+    typeof c.achievement?.findUnique === "function"
+  );
+};
+
+export const prisma = isValidPrismaClient(globalForPrisma.prisma)
+  ? globalForPrisma.prisma
+  : createPrismaClient();
 
 if (process.env.NODE_ENV !== "production") {
   globalForPrisma.prisma = prisma;

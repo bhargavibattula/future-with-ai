@@ -37,6 +37,11 @@ export function logAudit(userId: string, action: string, details: Record<string,
 
 // Seed default milestones and achievements into DB if not existing
 export async function seedDefaultMilestonesAndAchievements() {
+  if (!prisma.milestone || !prisma.achievement) {
+    console.warn("[learning-journey] milestone or achievement model not initialized on Prisma client.");
+    return;
+  }
+
   const defaultMilestones = [
     { requiredDays: 1, title: "1 Day Streak", description: "First step on your AI journey!", rewardXP: 50, rewardCoins: 25, badgeColor: "#8B7FE8" },
     { requiredDays: 3, title: "3 Days Streak", description: "Building momentum!", rewardXP: 100, rewardCoins: 50, badgeColor: "#8B7FE8" },
@@ -480,6 +485,7 @@ export async function getUserDashboardData(userId: string) {
   if (!user) throw new Error("User not found.");
 
   const progress = await getOrCreateUserProgress(userId);
+  if (!progress) throw new Error("Failed to initialize user progress.");
 
   // Fetch 365 days of activity
   const dailyActivities = await prisma.dailyActivity.findMany({
