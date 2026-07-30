@@ -20,10 +20,13 @@ import TestimonialsMarquee from "@/components/animations/TestimonialsMarquee";
 import ExploreAICourses from "@/components/ExploreAICourses";
 import ToolModal from "@/components/ToolModal";
 import Footer from "@/components/Footer";
+import ReminderTrigger, { ReminderItem } from "@/components/notifications/ReminderTrigger";
+import ReminderPopup from "@/components/notifications/ReminderPopup";
 import { AITool } from "@/data/tools";
 
 export default function Home() {
   const [activeModalTool, setActiveModalTool] = useState<AITool | null>(null);
+  const [activeReminder, setActiveReminder] = useState<ReminderItem | null>(null);
 
   const handleSearchClick = () => {
     const exploreSection = document.getElementById("explore");
@@ -88,6 +91,9 @@ export default function Home() {
 
       {/* Footer */}
       <Footer />
+
+      <ReminderTrigger onReminderTriggered={(r) => setActiveReminder(r)} />
+      <ReminderPopup reminder={activeReminder} onClose={() => setActiveReminder(null)} />
     </div>
   );
 }

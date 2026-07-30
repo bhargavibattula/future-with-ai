@@ -125,3 +125,137 @@ enum PromptType {
   PREMIUM
   ONE_TIME_PREMIUM
 }
+
+model DailyActivity {
+  id                     String   @id @default(cuid())
+  userId                 String
+  date                   String
+  lessonCompleted        Int      @default(0)
+  quizCompleted          Int      @default(0)
+  challengeCompleted     Int      @default(0)
+  assessmentCompleted    Int      @default(0)
+  practiceCompleted      Int      @default(0)
+  projectCompleted       Int      @default(0)
+  xpEarned               Int      @default(0)
+  coinsEarned            Int      @default(0)
+  studyMinutes           Int      @default(0)
+  dailyGoalCompleted     Boolean  @default(false)
+  dailyLessonCompleted   Boolean  @default(false)
+  dailyQuizCompleted     Boolean  @default(false)
+  dailyChallengeCompleted Boolean @default(false)
+  dailyGoalRewardClaimed Boolean  @default(false)
+  perfectDay             Boolean  @default(false)
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+
+  @@unique([userId, date])
+  @@index([userId])
+}
+
+model Achievement {
+  id          String   @id @default(cuid())
+  code        String   @unique
+  title       String
+  description String
+  category    String   @default("Streak")
+  iconBg      String?
+  createdAt   DateTime @default(now())
+
+  userAchievements UserAchievement[]
+}
+
+model UserAchievement {
+  id            String      @id @default(cuid())
+  userId        String
+  achievementId String
+  unlockedAt    DateTime    @default(now())
+  achievement   Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, achievementId])
+  @@index([userId])
+}
+
+model UserProgress {
+  id                 String   @id @default(cuid())
+  userId             String   @unique
+  currentStreak      Int      @default(0)
+  longestStreak      Int      @default(0)
+  totalXP            Int      @default(0)
+  totalCoins         Int      @default(0)
+  currentLevel       Int      @default(1)
+  lastActivityDate   String?
+  daysLearned        Int      @default(0)
+  perfectDays        Int      @default(0)
+  totalLessons       Int      @default(0)
+  totalQuizzes       Int      @default(0)
+  totalChallenges    Int      @default(0)
+  totalAssessments   Int      @default(0)
+  totalStudyMinutes  Int      @default(0)
+  streakFreezes      Int      @default(0)
+  lastFreezeUsedDate String?
+  weeklyXP           Int      @default(0)
+  monthlyXP          Int      @default(0)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model ActivityLog {
+  id                   String   @id @default(cuid())
+  userId               String
+  dailyActivityId      String?
+  activityType         String
+  activityId           String?
+  courseId             String?
+  lessonId             String?
+  xp                   Int      @default(0)
+  coins                Int      @default(0)
+  timeSpent            Int      @default(0)
+  completionPercentage Float    @default(100.0)
+  createdAt            DateTime @default(now())
+
+  @@index([userId])
+}
+
+model Milestone {
+  id           String          @id @default(cuid())
+  title        String
+  description  String
+  requiredDays Int
+  rewardXP     Int
+  rewardCoins  Int
+  badgeImage   String?
+  badgeColor   String?
+  createdAt    DateTime        @default(now())
+  userMilestones UserMilestone[]
+}
+
+model UserMilestone {
+  id          String    @id @default(cuid())
+  userId      String
+  milestoneId String
+  claimed     Boolean   @default(false)
+  claimedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  milestone   Milestone @relation(fields: [milestoneId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, milestoneId])
+  @@index([userId])
+}
+
+model Reminder {
+  id        String   @id @default(cuid())
+  userId    String
+  type      String
+  title     String
+  message   String
+  emoji     String   @default("💡")
+  ctaLabel  String   @default("Let's Go")
+  ctaHref   String   @default("/dashboard")
+  read      Boolean  @default(false)
+  dismissed Boolean  @default(false)
+  date      String
+  createdAt DateTime @default(now())
+
+  @@unique([userId, type, date])
+  @@index([userId])
+}

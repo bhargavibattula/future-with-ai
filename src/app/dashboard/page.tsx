@@ -6,6 +6,12 @@ import { useAuth } from "@/lib/auth";
 import Link from "next/link";
 import FlameMascot from "@/components/dashboard/FlameMascot";
 import DashboardCourseGrid from "@/components/DashboardCourseGrid";
+import DailyGoalsCard from "@/components/dashboard/DailyGoalsCard";
+import AchievementTimeline from "@/components/dashboard/AchievementTimeline";
+import LearningReports from "@/components/dashboard/LearningReports";
+import ReminderTrigger, { ReminderItem } from "@/components/notifications/ReminderTrigger";
+import ReminderPopup from "@/components/notifications/ReminderPopup";
+import PendingTasksModal from "@/components/dashboard/PendingTasksModal";
 import {
   Sparkles,
   Target,
@@ -48,6 +54,7 @@ export default function DashboardPage() {
   const { user } = useAuth();
   const [courseProgress, setCourseProgress] = useState<number>(0);
   const [isMascotCelebrating, setIsMascotCelebrating] = useState<boolean>(false);
+  const [activeReminder, setActiveReminder] = useState<ReminderItem | null>(null);
 
   // DOM Refs for GSAP
   const pageRef = useRef<HTMLDivElement>(null);
@@ -384,7 +391,21 @@ export default function DashboardPage() {
           </Card>
         </div>
 
+        {/* DAILY GOALS & ACHIEVEMENT TIMELINE SECTION */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          <div className="lg:col-span-6">
+            <DailyGoalsCard />
+          </div>
+          <div className="lg:col-span-6">
+            <AchievementTimeline />
+          </div>
+        </div>
+
+        {/* LEARNING REPORTS (WEEKLY & MONTHLY) */}
+        <LearningReports />
+
         {/* 4. SECOND ROW: AI INSIGHTS & RECENT ACTIVITY TIMELINE */}
+
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* AI RECOMMENDATION CARD (6 Cols) */}
           <Card className="lg:col-span-6 bg-gradient-to-br from-[#F3F0FE] via-white to-[#EDF9F5] border border-[#D8D2FA] shadow-soft-md">
@@ -493,6 +514,10 @@ export default function DashboardPage() {
           <DashboardCourseGrid />
         </Card>
       </div>
+
+      <ReminderTrigger onReminderTriggered={(r) => setActiveReminder(r)} />
+      <ReminderPopup reminder={activeReminder} onClose={() => setActiveReminder(null)} />
+      <PendingTasksModal />
     </div>
   );
 }

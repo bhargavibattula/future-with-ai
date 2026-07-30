@@ -7,6 +7,9 @@ export interface UserProfile {
   name: string;
   email: string;
   avatarUrl?: string;
+  xp?: number;
+  coins?: number;
+  streak?: number;
 }
 
 const AUTH_STORAGE_KEY = "future_ai_user_session";

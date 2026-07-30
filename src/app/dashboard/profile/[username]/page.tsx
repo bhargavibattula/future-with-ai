@@ -1,15 +1,22 @@
 "use client";
 
 import { useAuth } from "@/lib/auth";
-import ActivityHeatmap from "@/components/profile/ActivityHeatmap";
+import AnnualLearningCalendar from "@/components/profile/AnnualLearningCalendar";
+import ShareProgressModal from "@/components/profile/ShareProgressModal";
 import BadgeShowcase from "@/components/profile/BadgeShowcase";
 import ProfileCertificates from "@/components/profile/ProfileCertificates";
-import { User, Mail, Calendar, Settings, Share2, Copy, Check } from "lucide-react";
+import LearningReports from "@/components/dashboard/LearningReports";
+import SmartMotivationBanner from "@/components/notifications/SmartMotivationBanner";
+import ReminderTrigger, { ReminderItem } from "@/components/notifications/ReminderTrigger";
+import ReminderPopup from "@/components/notifications/ReminderPopup";
+import { User, Mail, Calendar, Settings, Share2, Copy, Check, Sparkles } from "lucide-react";
 import { useState, use } from "react";
 
 export default function ProfilePage({ params }: { params: Promise<{ username: string }> }) {
   const { user } = useAuth();
   const [copied, setCopied] = useState(false);
+  const [shareModalOpen, setShareModalOpen] = useState(false);
+  const [activeReminder, setActiveReminder] = useState<ReminderItem | null>(null);
   const resolvedParams = use(params);
   
   // Format the username from the URL (e.g. "bhargavi" -> "Bhargavi")
@@ -45,13 +52,24 @@ export default function ProfilePage({ params }: { params: Promise<{ username: st
             View your activity, earned badges, and account details.
           </p>
         </div>
-        <button
-          onClick={handleShare}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-[#EAE6FE] text-[#1E1B2E] font-bold text-sm shadow-sm hover:border-[#8B7FE8] hover:bg-[#F3F0FE] hover:text-[#8B7FE8] transition-all active:scale-95"
-        >
-          {copied ? <Check className="w-4 h-4 text-emerald-500" /> : <Share2 className="w-4 h-4" />}
-          {copied ? "Link Copied!" : "Share Profile"}
-        </button>
+
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setShareModalOpen(true)}
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 text-white font-extrabold text-sm shadow-md hover:bg-indigo-700 transition-all active:scale-95"
+          >
+            <Sparkles className="w-4 h-4 text-amber-300" />
+            Share Progress
+          </button>
+
+          <button
+            onClick={handleShare}
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-[#EAE6FE] text-[#1E1B2E] font-bold text-sm shadow-sm hover:border-[#8B7FE8] hover:bg-[#F3F0FE] hover:text-[#8B7FE8] transition-all active:scale-95"
+          >
+            {copied ? <Check className="w-4 h-4 text-emerald-500" /> : <Share2 className="w-4 h-4" />}
+            {copied ? "Link Copied!" : "Share Profile"}
+          </button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
@@ -96,7 +114,7 @@ export default function ProfilePage({ params }: { params: Promise<{ username: st
                 <Calendar className="w-4 h-4" />
                 Current Streak
               </h3>
-              <p className="text-5xl font-black mb-2">5 <span className="text-2xl font-bold text-white/80">days</span></p>
+              <p className="text-5xl font-black mb-2">{user?.streak || 5} <span className="text-2xl font-bold text-white/80">days</span></p>
               <p className="text-sm text-white/90 font-medium">Keep it up! You're in the top 15% this week.</p>
             </div>
           </div>
@@ -105,7 +123,7 @@ export default function ProfilePage({ params }: { params: Promise<{ username: st
              <h3 className="text-[#6B6785] font-bold text-sm mb-1 uppercase tracking-wider">
                Total Points
              </h3>
-             <p className="text-5xl font-black text-[#1E1B2E] mb-2">1,240</p>
+             <p className="text-5xl font-black text-[#1E1B2E] mb-2">{user?.xp || 1240}</p>
              <p className="text-sm text-[#8B7FE8] font-bold flex items-center gap-1">
                <span className="w-2 h-2 rounded-full bg-emerald-400" />
                +200 points this week
@@ -114,14 +132,48 @@ export default function ProfilePage({ params }: { params: Promise<{ username: st
         </div>
       </div>
 
-      {/* Heatmap Section */}
-      <ActivityHeatmap />
-      
+      {/* SMART MOTIVATION BANNER */}
+      <div className="mb-8">
+        <SmartMotivationBanner />
+      </div>
+
+      {/* LEARNING REPORTS (WEEKLY & MONTHLY) */}
+      <div className="mb-8">
+        <LearningReports />
+      </div>
+
+      {/* ANNUAL LEARNING CALENDAR (GITHUB STYLE) */}
+      <div className="mb-8">
+        <AnnualLearningCalendar />
+      </div>
+
       {/* Certificates Section */}
       <ProfileCertificates username={displayUsername} />
 
       {/* Badges Section */}
       <BadgeShowcase />
+
+      {/* Share Progress Modal */}
+      <ShareProgressModal
+        isOpen={shareModalOpen}
+        onClose={() => setShareModalOpen(false)}
+        userData={{
+          name: displayUsername || user?.name || "Guest Learner",
+          email: user?.email || undefined,
+          currentStreak: user?.streak || 5,
+          longestStreak: Math.max(user?.streak || 5, 14),
+          lessonsCompleted: 12,
+          xpEarned: user?.xp || 1240,
+          coinsEarned: user?.coins || 250,
+          achievementsEarned: 8,
+          currentLevel: Math.floor((user?.xp || 1240) / 500) + 1,
+          memberSince: "Jul 2026",
+        }}
+      />
+
+      <ReminderTrigger onReminderTriggered={(r) => setActiveReminder(r)} />
+      <ReminderPopup reminder={activeReminder} onClose={() => setActiveReminder(null)} />
     </div>
   );
 }
+

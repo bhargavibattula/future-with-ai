@@ -94,10 +94,6 @@ export default function CoursePathClient({ slug }: CoursePathClientProps) {
       return newState;
     });
 
-    // Update active lesson state
-    if (selectedLesson && selectedLesson.id === lessonId) {
-      setSelectedLesson((prev) => prev ? { ...prev, completed: true } : null);
-    }
   };
 
   // Pass Quiz & Unlock Next Module

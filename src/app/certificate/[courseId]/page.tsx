@@ -296,10 +296,10 @@ export default function CertificatePage({ params }: CertificatePageProps) {
                 issuedDate={
                   certificate.issuedDate
                     ? new Date(certificate.issuedDate).toLocaleDateString("en-US", {
-                        day: "2-digit",
-                        month: "long",
-                        year: "numeric",
-                      })
+                      day: "2-digit",
+                      month: "long",
+                      year: "numeric",
+                    })
                     : "July 2026"
                 }
                 courseDuration={certificate.courseDuration || course.duration}

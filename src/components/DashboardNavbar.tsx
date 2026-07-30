@@ -20,10 +20,12 @@ import {
   Terminal,
   Trophy,
   Compass,
+  Bell,
 } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { useRouter, usePathname } from "next/navigation";
 import DarkModeToggle from "@/components/DarkModeToggle";
+import NotificationCenter from "@/components/notifications/NotificationCenter";
 
 export default function DashboardNavbar() {
   const { user, logout } = useAuth();
@@ -34,11 +36,14 @@ export default function DashboardNavbar() {
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const [learnDropdownOpen, setLearnDropdownOpen] = useState(false);
   const [toolsDropdownOpen, setToolsDropdownOpen] = useState(false);
+  const [notificationOpen, setNotificationOpen] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
   const [streakCount, setStreakCount] = useState<number>(14);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
   const learnRef = useRef<HTMLDivElement>(null);
   const toolsRef = useRef<HTMLDivElement>(null);
+  const notifRef = useRef<HTMLDivElement>(null);
 
   // Sync streak count dynamically from localStorage & custom events
   useEffect(() => {
@@ -83,6 +88,9 @@ export default function DashboardNavbar() {
       }
       if (toolsRef.current && !toolsRef.current.contains(target)) {
         setToolsDropdownOpen(false);
+      }
+      if (notifRef.current && !notifRef.current.contains(target)) {
+        setNotificationOpen(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -314,6 +322,32 @@ export default function DashboardNavbar() {
 
         {/* Right side Actions / Profile */}
         <div className="hidden md:flex items-center space-x-4">
+          {/* Notification Bell Center */}
+          <div className="relative" ref={notifRef}>
+            <button
+              type="button"
+              onClick={() => {
+                setNotificationOpen(!notificationOpen);
+                setProfileDropdownOpen(false);
+                setLearnDropdownOpen(false);
+                setToolsDropdownOpen(false);
+              }}
+              className="relative p-2 rounded-xl text-[var(--foreground-secondary)] hover:text-[var(--foreground)] hover:bg-[#F3F0FE] dark:hover:bg-[#282142] transition-colors"
+              aria-label="Open notifications"
+            >
+              <Bell className="w-5 h-5" />
+              {unreadCount > 0 && (
+                <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full ring-2 ring-white dark:ring-[#1A1827] animate-pulse" />
+              )}
+            </button>
+
+            <NotificationCenter
+              isOpen={notificationOpen}
+              onClose={() => setNotificationOpen(false)}
+              onUnreadCountChange={(count) => setUnreadCount(count)}
+            />
+          </div>
+
           <DarkModeToggle />
 
           {/* Flame / Streak Badge */}
