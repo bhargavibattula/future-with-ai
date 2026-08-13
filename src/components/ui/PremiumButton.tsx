@@ -9,10 +9,11 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-interface PremiumButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+import { HTMLMotionProps } from "framer-motion";
+
+interface PremiumButtonProps extends HTMLMotionProps<"button"> {
   variant?: "primary" | "secondary" | "outline" | "ghost";
   size?: "sm" | "md" | "lg" | "icon";
-  children: React.ReactNode;
 }
 
 export function PremiumButton({
