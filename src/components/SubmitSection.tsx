@@ -32,7 +32,7 @@ export default function SubmitSection() {
             Have an AI tool to share?
           </h2>
           <p className="text-base text-[#6B6785] mb-8 leading-relaxed">
-            Submit your AI product or recommendation to get featured in the toolkit.ai directory and reach over 50,000 monthly creators.
+            Submit your AI product or recommendation to get featured in the future.ai directory and reach over 50,000 monthly creators.
           </p>
 
           {submitted ? (

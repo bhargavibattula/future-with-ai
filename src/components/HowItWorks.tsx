@@ -36,7 +36,7 @@ export default function HowItWorks() {
             Simple Workflow
           </span>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-[#1E1B2E] mt-3 mb-4">
-            How toolkit.ai works
+            How future.ai works
           </h2>
           <p className="text-base text-[#6B6785]">
             Curated human reviews combined with real-time performance telemetry help you discover trustworthy productivity tools.

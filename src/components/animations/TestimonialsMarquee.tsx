@@ -17,7 +17,7 @@ const defaultTestimonials: Testimonial[] = [
     avatar: "https://i.pravatar.cc/150?img=68",
     username: "Sarah Chen",
     handle: "@sarah_codes",
-    review: "Toolkit.ai has become the ultimate directory for my team. This level of curation doesn't exist anywhere else. Saved us hours of research.",
+    review: "Future.ai has become the ultimate directory for my team. This level of curation doesn't exist anywhere else. Saved us hours of research.",
   },
   {
     id: "2",
@@ -38,14 +38,14 @@ const defaultTestimonials: Testimonial[] = [
     avatar: "https://i.pravatar.cc/150?img=12",
     username: "David Kim",
     handle: "@davidk_ai",
-    review: "Just discovered Toolkit.ai — a sleek, minimal, and super dev-friendly AI directory. Clean UI, easy to use, and perfect for modern stacks.",
+    review: "Just discovered Future.ai — a sleek, minimal, and super dev-friendly AI directory. Clean UI, easy to use, and perfect for modern stacks.",
   },
   {
     id: "5",
     avatar: "https://i.pravatar.cc/150?img=47",
     username: "Jessica Walsh",
     handle: "@jessbuilds",
-    review: "Have you heard of Toolkit.ai? The team has lovingly put together a collection of the best AI models and tools. It's my new homepage.",
+    review: "Have you heard of Future.ai? The team has lovingly put together a collection of the best AI models and tools. It's my new homepage.",
   },
   {
     id: "6",
@@ -66,7 +66,7 @@ const defaultTestimonials: Testimonial[] = [
     avatar: "https://i.pravatar.cc/150?img=44",
     username: "Nina S.",
     handle: "@ninascript",
-    review: "Got to know about Toolkit.ai and its just wow, the tools are incredibly well organized! Really loved the overall feel and quality.",
+    review: "Got to know about Future.ai and its just wow, the tools are incredibly well organized! Really loved the overall feel and quality.",
   },
   {
     id: "9",

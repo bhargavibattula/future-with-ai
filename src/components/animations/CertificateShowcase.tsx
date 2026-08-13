@@ -71,7 +71,7 @@ export default function CertificateShowcase() {
             {/* Header */}
             <div className="flex justify-between items-start mb-12 relative z-10">
               <div className="font-[var(--font-display)] font-black text-2xl text-[#8B7FE8]">
-                Toolkit.ai
+                Future.ai
               </div>
               <div className="text-right">
                 <div className="text-[10px] text-gray-400 font-mono uppercase tracking-widest">Certificate ID</div>

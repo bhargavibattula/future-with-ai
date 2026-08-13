@@ -20,7 +20,7 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "Toolkit.ai — Curated AI Directory & Productivity Tools",
+  title: "Future.ai — Curated AI Directory & Productivity Tools",
   description:
     "Find the right AI tool for writing, coding, design, and productivity in seconds. Ranked, reviewed, and categorized directory.",
   keywords: ["AI Tools", "Productivity", "Toolkit", "Writing Assistants", "Code Generators", "AI Directory"],

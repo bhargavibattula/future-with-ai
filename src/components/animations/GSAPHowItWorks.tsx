@@ -130,7 +130,7 @@ export default function GSAPHowItWorks() {
         .set("#step2-cont_text", { text: "" })
         .to("#step2-cont_text", {
           duration: 2,
-          text: "Toolkit.ai accelerates your workflow-",
+          text: "Future.ai accelerates your workflow-",
           ease: "none",
         })
         .from(
@@ -255,7 +255,7 @@ export default function GSAPHowItWorks() {
                 className="font-semibold text-2xl lg:text-5xl capitalize text-[#6B6785]"
               ></span>
               <span className="lg:hidden font-semibold text-xl text-[#6B6785]">
-                Toolkit.ai accelerates your workflow-
+                Future.ai accelerates your workflow-
               </span>
 
               <span className="step2-word font-bold lg:text-5xl text-xl lowercase text-[#8B7FE8]">
