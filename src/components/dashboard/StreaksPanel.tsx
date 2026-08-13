@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import FlameMascot from "./FlameMascot";
+import { useAuth } from "@/lib/auth";
 import {
   Flame,
   Check,
@@ -111,6 +112,7 @@ const motivationalQuotes = [
 const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 export default function StreaksPanel() {
+  const { user: authUser } = useAuth();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [dashboardData, setDashboardData] = useState<any>(null);
@@ -411,7 +413,7 @@ export default function StreaksPanel() {
                 Learning Journey Dashboard
               </div>
               <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-[var(--foreground)]">
-                Welcome back, {user.name.split(" ")[0]}! 👋
+                {authUser?.name ? `Welcome back, ${authUser.name.split(" ")[0]}! 👋` : "Welcome! 👋"}
               </h2>
 
               <p className="text-xs sm:text-sm text-[#8B7FE8] dark:text-[#FFC9DE] font-black h-6">
