@@ -390,11 +390,11 @@ export default function AuthCard({
             data = resData;
           }
         } else {
-          // For Forgot Password, just verify the OTP via API
+          // For Forgot Password, just verify the OTP via API but don't delete it yet (peek: true)
           const res = await fetch("/api/auth/verify-otp", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, otp: fullOtp }),
+            body: JSON.stringify({ email, otp: fullOtp, peek: true }),
           });
           data = await res.json();
         }
@@ -453,19 +453,57 @@ export default function AuthCard({
       }
 
       setLoading(true);
-      setTimeout(() => {
+      
+      try {
+        const fullOtp = otpValues.join("");
+        
+        // Call the new API to reset the password in the DB
+        const res = await fetch("/api/auth/reset-password", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password: newPassword, otp: fullOtp }),
+        });
+        const data = await res.json();
+        
+        if (data.success) {
+          // Log the user in with their new credentials
+          const signInRes = await nextAuthSignIn("credentials", {
+            redirect: false,
+            email,
+            password: newPassword,
+            twoFactorCode: fullOtp,
+          });
+          
+          setLoading(false);
+          
+          if (signInRes?.error) {
+            setErrorMsg("Password updated, but auto-login failed. Please log in manually.");
+            showToast("info", "Password Updated", "Please log in with your new password.");
+            setTimeout(() => switchMode("login"), 2000);
+          } else {
+            setSuccessMsg("Password reset successfully! Redirecting to dashboard...");
+            showToast(
+              "success",
+              "Password Updated",
+              "Password reset successfully! Redirecting to dashboard..."
+            );
+            setTimeout(() => {
+              if (isModal && onClose) onClose();
+              router.push("/dashboard");
+            }, 1200);
+          }
+        } else {
+          setLoading(false);
+          const err = data.error || "Failed to reset password. Please try again.";
+          setErrorMsg(err);
+          showToast("error", "Reset Failed", err);
+        }
+      } catch (err: any) {
         setLoading(false);
-        setSuccessMsg("Password reset successfully! Redirecting to dashboard...");
-        showToast(
-          "success",
-          "Password Updated",
-          "Password reset successfully! Redirecting to dashboard..."
-        );
-        setTimeout(() => {
-          if (isModal && onClose) onClose();
-          router.push("/dashboard");
-        }, 1200);
-      }, 1000);
+        const serviceErr = "Service unavailable. Try again.";
+        setErrorMsg(serviceErr);
+        showToast("error", "Service Error", serviceErr);
+      }
     }
   };
 
