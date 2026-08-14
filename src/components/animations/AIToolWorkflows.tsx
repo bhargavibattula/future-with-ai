@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { FaMobileAlt, FaPenNib, FaBullhorn } from "react-icons/fa";
+import { FaMobileAlt, FaPenNib, FaBullhorn, FaChartLine, FaCode, FaRobot } from "react-icons/fa";
 
 const workflows = [
   {
@@ -16,7 +16,7 @@ const workflows = [
     icon: <FaPenNib className="text-[#8B7FE8] text-xl" />,
     title: "Copywriting & Content Strategy",
     description: "Draft high-converting sales copy, script viral social media content, and maintain engaging blogs that resonate with your audience.",
-    tags: ["AI in SMM", "AI Social Influence & Blogging"],
+    tags: ["AI in SMM", "Content Strategy"],
   },
   {
     id: 3,
@@ -27,10 +27,24 @@ const workflows = [
   },
   {
     id: 4,
-    icon: <FaMobileAlt className="text-[#8B7FE8] text-xl" />,
-    title: "Social Influence & Blogging",
-    description: "Craft viral social media scripts, build a powerful personal brand, and manage consistent content calendars for all your channels.",
-    tags: ["AI in SMM", "AI Social Influence & Blogging"],
+    icon: <FaChartLine className="text-[#8B7FE8] text-xl" />,
+    title: "Data Analysis & Strategy",
+    description: "Process complex datasets in seconds, generate actionable business insights, and forecast trends with predictive AI models.",
+    tags: ["Data Science", "Business Intelligence"],
+  },
+  {
+    id: 5,
+    icon: <FaCode className="text-[#8B7FE8] text-xl" />,
+    title: "Software Development",
+    description: "Accelerate your coding workflow, debug complex issues instantly, and write cleaner, more efficient code with AI assistance.",
+    tags: ["AI Coding", "Development"],
+  },
+  {
+    id: 6,
+    icon: <FaRobot className="text-[#8B7FE8] text-xl" />,
+    title: "Automation & Operations",
+    description: "Build intelligent workflows, automate repetitive tasks, and streamline your entire business operations effortlessly.",
+    tags: ["Process Automation", "Efficiency"],
   },
 ];
 
