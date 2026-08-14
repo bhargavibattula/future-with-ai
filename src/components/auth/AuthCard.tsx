@@ -165,7 +165,7 @@ export default function AuthCard({
       const res = await fetch("/api/auth/send-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: targetEmail, purpose }),
+        body: JSON.stringify({ email: targetEmail, purpose, password }),
       });
 
       const data = await res.json();
@@ -322,18 +322,30 @@ export default function AuthCard({
         let data: any = {};
         
         if (otpPurpose === "2FA") {
-          // Use NextAuth signIn for login
-          const res = await nextAuthSignIn("credentials", {
-            redirect: false,
-            email,
-            password,
-            twoFactorCode: fullOtp,
+          // Pre-verify OTP without deleting it
+          const verifyRes = await fetch("/api/auth/verify-otp", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, otp: fullOtp, peek: true }),
           });
-          
-          if (res?.error) {
-            data = { success: false, error: res.error };
+          const verifyData = await verifyRes.json();
+
+          if (!verifyData.success) {
+            data = { success: false, error: verifyData.error };
           } else {
-            data = { success: true };
+            // Use NextAuth signIn for login
+            const res = await nextAuthSignIn("credentials", {
+              redirect: false,
+              email,
+              password,
+              twoFactorCode: fullOtp,
+            });
+            
+            if (res?.error) {
+              data = { success: false, error: res.error };
+            } else {
+              data = { success: true };
+            }
           }
         } else if (otpPurpose === "Sign Up 2FA") {
           // Call new registration API route

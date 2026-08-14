@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 
 export async function POST(req: Request) {
   try {
-    const { email, otp } = await req.json();
+    const { email, otp, peek } = await req.json();
 
     if (!email || !otp) {
       return NextResponse.json(
@@ -40,10 +40,12 @@ export async function POST(req: Request) {
       );
     }
 
-    // OTP Verified successfully! Remove used OTP from database.
-    await prisma.verificationToken.delete({
-      where: { token: stored.token },
-    });
+    // OTP Verified successfully! Remove used OTP from database unless peek is true.
+    if (!peek) {
+      await prisma.verificationToken.delete({
+        where: { token: stored.token },
+      });
+    }
 
     return NextResponse.json({
       success: true,
