@@ -53,10 +53,10 @@ export async function POST(req: Request) {
       data: { password: hashedPassword },
     });
 
-    // 4. Delete the OTP
-    await prisma.verificationToken.delete({
-      where: { token: storedToken.token },
-    });
+    // 4. Do not delete the OTP here, let nextAuthSignIn consume it during auto-login
+    // await prisma.verificationToken.delete({
+    //   where: { token: storedToken.token },
+    // });
 
     return NextResponse.json({
       success: true,

@@ -94,7 +94,7 @@ export async function POST(req: Request) {
     return NextResponse.json(
       {
         success: false,
-        error: "Unable to process OTP request. Please try again.",
+        error: `Unable to process OTP request: ${error instanceof Error ? error.message : String(error)}`
       },
       { status: 500 }
     );
