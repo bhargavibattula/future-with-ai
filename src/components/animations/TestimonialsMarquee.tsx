@@ -74,6 +74,34 @@ const defaultTestimonials: Testimonial[] = [
     username: "Leo Messi",
     handle: "@leo_dev",
     review: "The next big AI hub is emerging this year 👀 It's sleek, fast, and constantly updated.",
+  },
+  {
+    id: "10",
+    avatar: "https://i.pravatar.cc/150?img=49",
+    username: "Mark H.",
+    handle: "@mark_teaches",
+    review: "As a high school teacher with no tech background, Future.ai made it incredibly easy to find AI tools to help with lesson planning and grading.",
+  },
+  {
+    id: "11",
+    avatar: "https://i.pravatar.cc/150?img=31",
+    username: "Chloe V.",
+    handle: "@chloe_creates",
+    review: "The content creation tools section is a goldmine. I've completely revamped my YouTube and TikTok workflow using the AI apps I found here.",
+  },
+  {
+    id: "12",
+    avatar: "https://i.pravatar.cc/150?img=17",
+    username: "Prof. Jenkins",
+    handle: "@dr_jenkins",
+    review: "I recommend this platform to all my university students. The learning paths demystify AI for non-technical researchers perfectly.",
+  },
+  {
+    id: "13",
+    avatar: "https://i.pravatar.cc/150?img=28",
+    username: "Emma R.",
+    handle: "@emma_writes",
+    review: "I'm a copywriter, not a coder. Future.ai helped me discover AI writing assistants that actually understand tone and brand voice. Game changer!",
   }
 ];
 
@@ -87,7 +115,7 @@ export default function TestimonialsMarquee({ testimonials = defaultTestimonials
     <section className="relative w-full bg-[#FCFBFF] py-24 overflow-hidden border-t border-[#EAE6FE]">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <h2 className="text-4xl lg:text-5xl font-[var(--font-display)] font-bold text-[#1E1B2E] mb-16 tracking-tight text-center">
-          Loved by developers
+          Loved by creators, teachers, and professionals
         </h2>
 
         {/* Marquee Container with Masking */}
