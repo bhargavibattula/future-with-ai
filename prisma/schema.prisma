@@ -1,0 +1,256 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id                String        @id @default(cuid())
+  name              String?
+  email             String?       @unique
+  emailVerified     DateTime?
+  image             String?
+  password          String?
+  role              String        @default("Learner")
+  coins             Int           @default(0)
+  xp                Int           @default(0)
+  streak            Int           @default(0)
+  certificatesCount Int           @default(0)
+  twoFactorEnabled  Boolean       @default(true)
+  twoFactorSecret   String?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  accounts          Account[]
+  promptClaims      PromptClaim[]
+  sessions          Session[]
+  certificates      Certificate[]
+  progress          UserProgress?
+  dailyActivities   DailyActivity[]
+  activityLogs      ActivityLog[]
+  userMilestones    UserMilestone[]
+  userAchievements  UserAchievement[]
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Certificate {
+  id                  String   @id @default(cuid())
+  userId              String
+  courseId            String
+  studentName         String
+  courseTitle         String
+  certificateId       String   @unique
+  issuedDate          DateTime @default(now())
+  courseDuration      String
+  certificateImageUrl String
+  pdfUrl              String
+  qrCodeUrl           String
+  isGenerated         Boolean  @default(true)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId])
+}
+
+model PromptCategory {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  prompts     Prompt[]
+}
+
+model Prompt {
+  id         String         @id @default(cuid())
+  title      String
+  content    String         @db.Text
+  type       PromptType     @default(FREE)
+  categoryId String
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+  category   PromptCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  claims     PromptClaim[]
+
+  @@index([categoryId])
+}
+
+model PromptClaim {
+  id        String   @id @default(cuid())
+  userId    String
+  promptId  String
+  claimedAt DateTime @default(now())
+  prompt    Prompt   @relation(fields: [promptId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, promptId])
+  @@index([userId])
+  @@index([promptId])
+}
+
+enum PromptType {
+  FREE
+  PREMIUM
+  ONE_TIME_PREMIUM
+}
+
+model UserProgress {
+  id                String   @id @default(cuid())
+  userId            String   @unique
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  currentStreak     Int      @default(0)
+  longestStreak     Int      @default(0)
+  totalXP           Int      @default(0)
+  totalCoins        Int      @default(0)
+  currentLevel      Int      @default(1)
+  lastActivityDate  String?  // "YYYY-MM-DD"
+  daysLearned       Int      @default(0)
+  perfectDays       Int      @default(0)
+  totalLessons      Int      @default(0)
+  totalQuizzes      Int      @default(0)
+  totalChallenges   Int      @default(0)
+  totalAssessments  Int      @default(0)
+  totalStudyMinutes Int      @default(0)
+  streakFreezes     Int      @default(0)
+  lastFreezeUsedDate String?
+  weeklyXP          Int      @default(0)
+  monthlyXP         Int      @default(0)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model DailyActivity {
+  id                  String        @id @default(cuid())
+  userId              String
+  user                User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date                String        // "YYYY-MM-DD"
+  lessonCompleted     Int           @default(0)
+  quizCompleted       Int           @default(0)
+  challengeCompleted  Int           @default(0)
+  assessmentCompleted Int           @default(0)
+  practiceCompleted   Int           @default(0)
+  projectCompleted    Int           @default(0)
+  xpEarned            Int           @default(0)
+  coinsEarned         Int           @default(0)
+  studyMinutes        Int           @default(0)
+  dailyGoalCompleted     Boolean       @default(false)
+  dailyGoalRewardClaimed Boolean       @default(false)
+  dailyLessonCompleted   Boolean       @default(false)
+  dailyQuizCompleted     Boolean       @default(false)
+  dailyChallengeCompleted Boolean       @default(false)
+  perfectDay             Boolean       @default(false)
+  createdAt              DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+  logs                ActivityLog[]
+
+  @@unique([userId, date])
+  @@index([userId, date])
+}
+
+model ActivityLog {
+  id                   String         @id @default(cuid())
+  userId               String
+  user                 User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  dailyActivityId      String?
+  dailyActivity        DailyActivity? @relation(fields: [dailyActivityId], references: [id], onDelete: SetNull)
+  activityType         String         // LESSON, QUIZ, CHALLENGE, ASSESSMENT, PRACTICE, PROJECT
+  activityId           String?
+  courseId             String?
+  lessonId             String?
+  xp                   Int            @default(0)
+  coins                Int            @default(0)
+  timeSpent            Int            @default(0) // in minutes
+  completionPercentage Float          @default(100.0)
+  createdAt            DateTime       @default(now())
+
+  @@index([userId])
+  @@index([dailyActivityId])
+}
+
+model Milestone {
+  id             String          @id @default(cuid())
+  title          String
+  description    String
+  requiredDays   Int             @unique
+  rewardXP       Int
+  rewardCoins    Int
+  badgeImage     String?
+  badgeColor     String?
+  createdAt      DateTime        @default(now())
+  userMilestones UserMilestone[]
+}
+
+model UserMilestone {
+  id          String    @id @default(cuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  milestoneId String
+  milestone   Milestone @relation(fields: [milestoneId], references: [id], onDelete: Cascade)
+  claimed     Boolean   @default(false)
+  claimedAt   DateTime?
+  createdAt   DateTime  @default(now())
+
+  @@unique([userId, milestoneId])
+  @@index([userId])
+}
+
+model Achievement {
+  id               String            @id @default(cuid())
+  code             String            @unique
+  title            String
+  description      String
+  category         String            @default("Streak")
+  iconBg           String?
+  createdAt        DateTime          @default(now())
+  userAchievements UserAchievement[]
+}
+
+model UserAchievement {
+  id            String      @id @default(cuid())
+  userId        String
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievementId String
+  achievement   Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+  unlockedAt    DateTime    @default(now())
+
+  @@unique([userId, achievementId])
+  @@index([userId])
+}
+
