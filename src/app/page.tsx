@@ -21,6 +21,7 @@ import TestimonialsMarquee from "@/components/animations/TestimonialsMarquee";
 import ExploreAICourses from "@/components/ExploreAICourses";
 import ToolModal from "@/components/ToolModal";
 import Footer from "@/components/Footer";
+import FAQSection from "@/components/FAQSection";
 import { AITool } from "@/data/tools";
 
 export default function Home() {
@@ -82,6 +83,9 @@ export default function Home() {
 
         {/* Premium Loved by Developers Testimonials Marquee */}
         <TestimonialsMarquee />
+
+        {/* Frequently Asked Questions */}
+        <FAQSection />
       </main>
 
       {/* Quick View Detail Modal */}
