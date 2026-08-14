@@ -5,6 +5,15 @@ import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { authConfig } from "@/auth.config";
 
+import { CredentialsSignin } from "next-auth";
+
+class CustomAuthError extends CredentialsSignin {
+  constructor(msg: string) {
+    super();
+    this.code = msg;
+  }
+}
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
   ...authConfig,
   adapter: PrismaAdapter(prisma),
@@ -19,7 +28,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          return null;
+          throw new CustomAuthError("Please provide both email and password.");
         }
 
         const emailStr = String(credentials.email).toLowerCase().trim();
@@ -31,13 +40,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         });
 
         if (!user || !user.password) {
-          return null;
+          throw new CustomAuthError("Invalid email or password.");
         }
 
         // 2. Validate Password via bcrypt
         const isPasswordValid = await bcrypt.compare(passwordStr, user.password);
         if (!isPasswordValid) {
-          return null;
+          throw new CustomAuthError("Invalid email or password.");
         }
 
         // 3. Enforce 2FA verification step if enabled
@@ -46,7 +55,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
           // If no 2FA code passed yet, trigger frontend to show 2FA screen
           if (!code) {
-            throw new Error("2FA_REQUIRED");
+            throw new CustomAuthError("Please complete the 2FA verification.");
           }
 
           // Verify 2FA OTP code against database
@@ -55,7 +64,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           });
 
           if (!stored || Date.now() > stored.expires.getTime() || stored.token !== code) {
-            throw new Error("INVALID_2FA_CODE");
+            throw new CustomAuthError("Invalid 6-digit OTP code. Please check your email and try again.");
           }
 
           // Clear used 2FA code
