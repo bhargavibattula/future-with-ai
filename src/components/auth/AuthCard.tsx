@@ -233,7 +233,7 @@ export default function AuthCard({
     setErrorMsg(null);
     setSuccessMsg(null);
 
-    // Mode 1: Login Submit -> Trigger 2FA
+    // Mode 1: Login Submit -> Validate credentials FIRST, then Trigger 2FA
     if (mode === "login") {
       if (!email.trim() || !email.includes("@")) {
         const msg = "Please enter a valid email address.";
@@ -248,6 +248,32 @@ export default function AuthCard({
         return;
       }
 
+      // Pre-validate credentials before sending OTP
+      setLoading(true);
+      try {
+        const validateRes = await fetch("/api/auth/validate-credentials", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: email.trim(), password }),
+        });
+        const validateData = await validateRes.json();
+        setLoading(false);
+
+        if (!validateData.success) {
+          const msg = validateData.error || "Invalid email or password.";
+          setErrorMsg(msg);
+          showToast("error", "Authentication Failed", msg);
+          return;
+        }
+      } catch (err: unknown) {
+        setLoading(false);
+        const msg = "Unable to validate credentials. Please try again.";
+        setErrorMsg(msg);
+        showToast("error", "Connection Error", msg);
+        return;
+      }
+
+      // Credentials valid — now send OTP
       await requestOtpDispatch(email, "2FA");
       return;
     }
@@ -331,7 +357,8 @@ export default function AuthCard({
           });
           
           if (res?.error) {
-            data = { success: false, error: res.error };
+            // NextAuth v5 returns generic "CredentialsSignin" — show user-friendly message
+            data = { success: false, error: "Authentication failed. Please verify your credentials and OTP code, then try again." };
           } else {
             data = { success: true };
           }
@@ -354,7 +381,8 @@ export default function AuthCard({
             });
             
             if (signInRes?.error) {
-              data = { success: false, error: signInRes.error };
+              // NextAuth v5 returns generic "CredentialsSignin" — show user-friendly message
+              data = { success: false, error: "Sign-up succeeded but auto-login failed. Please log in manually with your credentials." };
             } else {
               data = { success: true };
             }
