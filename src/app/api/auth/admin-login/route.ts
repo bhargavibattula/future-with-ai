@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { generateOTP, sendOTPEmail, otpStore } from "@/lib/email";
+import { generateOTP, sendOTPEmail } from "@/lib/email";
+import { prisma } from "@/lib/prisma";
 
 export async function POST(req: Request) {
   try {
@@ -24,10 +25,19 @@ export async function POST(req: Request) {
 
     // Generate 6-digit 2FA OTP code
     const otp = generateOTP();
-    const expiresAt = Date.now() + 10 * 60 * 1000; // 10 mins expiry
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 mins expiry
 
-    // Save in OTP store
-    otpStore.set(envAdminEmail, { otp, expiresAt });
+    // Save in database
+    await prisma.verificationToken.deleteMany({
+      where: { identifier: envAdminEmail },
+    });
+    await prisma.verificationToken.create({
+      data: {
+        identifier: envAdminEmail,
+        token: otp,
+        expires: expiresAt,
+      },
+    });
 
     // Send 2FA email via SMTP
     const mailResult = await sendOTPEmail(envAdminEmail, otp, "2FA");

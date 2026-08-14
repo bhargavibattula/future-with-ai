@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { otpStore } from "@/lib/email";
+import { prisma } from "@/lib/prisma";
 
 export async function POST(req: Request) {
   try {
@@ -16,7 +16,9 @@ export async function POST(req: Request) {
       );
     }
 
-    const record = otpStore.get(envAdminEmail);
+    const record = await prisma.verificationToken.findFirst({
+      where: { identifier: envAdminEmail },
+    });
 
     if (!record) {
       return NextResponse.json(
@@ -25,15 +27,17 @@ export async function POST(req: Request) {
       );
     }
 
-    if (Date.now() > record.expiresAt) {
-      otpStore.delete(envAdminEmail);
+    if (Date.now() > record.expires.getTime()) {
+      await prisma.verificationToken.delete({
+        where: { token: record.token },
+      });
       return NextResponse.json(
         { success: false, error: "2FA OTP code has expired (10 min limit). Please request a new code." },
         { status: 400 }
       );
     }
 
-    if (record.otp !== inputOtp) {
+    if (record.token !== inputOtp) {
       return NextResponse.json(
         { success: false, error: "Invalid 2FA code. Please check your email and try again." },
         { status: 400 }
@@ -41,7 +45,9 @@ export async function POST(req: Request) {
     }
 
     // Clear used OTP code
-    otpStore.delete(envAdminEmail);
+    await prisma.verificationToken.delete({
+      where: { token: record.token },
+    });
 
     const adminProfile = {
       name: "Shanmukha Rani",
