@@ -57,14 +57,14 @@ export default function FAQSection() {
   const rightColumn = faqs.filter((_, i) => i % 2 !== 0);
 
   return (
-    <section className="w-full bg-[#0A061E] py-24 px-6 sm:px-12 lg:px-24 overflow-hidden">
+    <section className="w-full bg-[var(--background)] py-24 px-6 sm:px-12 lg:px-24 overflow-hidden transition-colors duration-300">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white font-['Space_Grotesk'] tracking-tight mb-4">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[var(--foreground)] font-['Space_Grotesk'] tracking-tight mb-4">
             Frequently asked questions
           </h2>
-          <p className="text-gray-400 text-lg">
+          <p className="text-[var(--muted)] text-lg">
             Find answers to common questions about Future With AI
           </p>
         </div>
@@ -123,18 +123,18 @@ function FAQItem({
     <div
       className={`rounded-xl border transition-all duration-300 cursor-pointer ${
         isOpen
-          ? "bg-[#1A1535] border-[#8B7FE8]/40"
-          : "bg-[#12101F] border-[#2A2545] hover:border-[#8B7FE8]/30"
+          ? "bg-[var(--primary-soft)] border-[var(--primary)]/40"
+          : "bg-[var(--elevated)] border-[var(--border)] hover:border-[var(--primary)]/30"
       }`}
       onClick={onClick}
     >
       <div className="flex items-center justify-between px-6 py-5">
-        <span className="text-white font-medium text-[15px] pr-4">
+        <span className="text-[var(--foreground)] font-medium text-[15px] pr-4">
           {question}
         </span>
         <ChevronDown
-          className={`w-5 h-5 text-gray-400 flex-shrink-0 transition-transform duration-300 ${
-            isOpen ? "rotate-180 text-[#8B7FE8]" : ""
+          className={`w-5 h-5 text-[var(--muted)] flex-shrink-0 transition-transform duration-300 ${
+            isOpen ? "rotate-180 text-[var(--primary)]" : ""
           }`}
         />
       </div>
@@ -143,7 +143,7 @@ function FAQItem({
           isOpen ? "max-h-60 opacity-100" : "max-h-0 opacity-0"
         }`}
       >
-        <p className="px-6 pb-5 text-gray-400 text-sm leading-relaxed">
+        <p className="px-6 pb-5 text-[var(--foreground-secondary)] text-sm leading-relaxed">
           {answer}
         </p>
       </div>
