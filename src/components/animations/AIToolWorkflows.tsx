@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { FaMobileAlt, FaPenNib, FaBullhorn, FaChartLine, FaCode, FaRobot } from "react-icons/fa";
+import { FaMobileAlt, FaPenNib, FaBullhorn, FaChartLine, FaCode, FaRobot, FaPalette, FaUserTie, FaHeadset, FaChartPie, FaShoppingCart, FaGraduationCap, FaBuilding, FaShieldAlt, FaBalanceScale, FaHeartbeat } from "react-icons/fa";
 
 const workflows = [
   {
@@ -46,6 +46,76 @@ const workflows = [
     description: "Build intelligent workflows, automate repetitive tasks, and streamline your entire business operations effortlessly.",
     tags: ["Process Automation", "Efficiency"],
   },
+  {
+    id: 7,
+    icon: <FaPalette className="text-[#8B7FE8] text-xl" />,
+    title: "Creative Design & Video",
+    description: "Generate stunning visuals, automate video editing, and conceptualize brand assets instantly with AI-driven design tools.",
+    tags: ["AI Design", "Visual Content"],
+  },
+  {
+    id: 8,
+    icon: <FaUserTie className="text-[#8B7FE8] text-xl" />,
+    title: "Human Resources",
+    description: "Screen candidates efficiently, automate onboarding workflows, and analyze employee sentiment for a better workplace.",
+    tags: ["HR Tech", "Recruiting"],
+  },
+  {
+    id: 9,
+    icon: <FaHeadset className="text-[#8B7FE8] text-xl" />,
+    title: "Customer Support",
+    description: "Deploy intelligent chatbots, resolve queries 10x faster, and provide 24/7 personalized customer experiences.",
+    tags: ["AI Chatbots", "Support Automation"],
+  },
+  {
+    id: 10,
+    icon: <FaChartPie className="text-[#8B7FE8] text-xl" />,
+    title: "Financial Planning",
+    description: "Automate expense tracking, generate accurate financial forecasts, and optimize budgets with machine learning.",
+    tags: ["FinTech AI", "Financial Analysis"],
+  },
+  {
+    id: 11,
+    icon: <FaShoppingCart className="text-[#8B7FE8] text-xl" />,
+    title: "E-commerce & Retail",
+    description: "Personalize product recommendations, optimize pricing dynamically, and manage inventory seamlessly.",
+    tags: ["AI in Retail", "E-commerce"],
+  },
+  {
+    id: 12,
+    icon: <FaGraduationCap className="text-[#8B7FE8] text-xl" />,
+    title: "Education & E-Learning",
+    description: "Create personalized learning paths, grade assignments instantly, and develop interactive AI tutors.",
+    tags: ["EdTech", "AI Tutors"],
+  },
+  {
+    id: 13,
+    icon: <FaBuilding className="text-[#8B7FE8] text-xl" />,
+    title: "Real Estate & Architecture",
+    description: "Generate 3D property tours, predict market valuations, and draft architectural concepts in minutes.",
+    tags: ["PropTech", "AI Architecture"],
+  },
+  {
+    id: 14,
+    icon: <FaShieldAlt className="text-[#8B7FE8] text-xl" />,
+    title: "Cybersecurity & IT",
+    description: "Detect threats in real-time, automate incident response, and secure your infrastructure proactively.",
+    tags: ["AI Security", "IT Ops"],
+  },
+  {
+    id: 15,
+    icon: <FaBalanceScale className="text-[#8B7FE8] text-xl" />,
+    title: "Legal & Compliance",
+    description: "Review contracts instantly, automate legal research, and ensure regulatory compliance with precision.",
+    tags: ["LegalTech AI", "Contract Analysis"],
+  },
+  {
+    id: 16,
+    icon: <FaHeartbeat className="text-[#8B7FE8] text-xl" />,
+    title: "Health & Wellness",
+    description: "Analyze medical data efficiently, personalize fitness plans, and streamline administrative healthcare tasks.",
+    tags: ["HealthTech", "AI Wellness"],
+  }
 ];
 
 export default function AIToolWorkflows() {
