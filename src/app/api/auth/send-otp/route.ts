@@ -1,16 +1,48 @@
 import { NextResponse } from "next/server";
 import { generateOTP, sendOTPEmail } from "@/lib/email";
 import { prisma } from "@/lib/prisma";
+import bcrypt from "bcryptjs";
 
 export async function POST(req: Request) {
   try {
-    const { email, purpose = "2FA" } = await req.json();
+    const { email, purpose = "2FA", password } = await req.json();
 
     if (!email || typeof email !== "string" || !email.includes("@")) {
       return NextResponse.json(
         { success: false, error: "Please enter a valid email address." },
         { status: 400 }
       );
+    }
+
+    if (purpose === "2FA") {
+      const user = await prisma.user.findUnique({
+        where: { email: email.toLowerCase().trim() },
+      });
+      if (!user || !user.password) {
+        return NextResponse.json(
+          { success: false, error: "Invalid email or password." },
+          { status: 400 }
+        );
+      }
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+      if (!isPasswordValid) {
+        return NextResponse.json(
+          { success: false, error: "Invalid email or password." },
+          { status: 400 }
+        );
+      }
+    }
+
+    if (purpose === "Sign Up 2FA") {
+      const existingUser = await prisma.user.findUnique({
+        where: { email: email.toLowerCase().trim() },
+      });
+      if (existingUser) {
+        return NextResponse.json(
+          { success: false, error: "An account with this email already exists." },
+          { status: 400 }
+        );
+      }
     }
 
     const otp = generateOTP();
