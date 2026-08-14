@@ -9,7 +9,7 @@ import { CredentialsSignin } from "next-auth";
 
 class CustomAuthError extends CredentialsSignin {
   constructor(msg: string) {
-    super();
+    super(msg);
     this.code = msg;
   }
 }
