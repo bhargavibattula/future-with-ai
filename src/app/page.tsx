@@ -12,6 +12,7 @@ import GSAPStreakHeatmap from "@/components/animations/GSAPStreakHeatmap";
 import GSAPHowItWorks from "@/components/animations/GSAPHowItWorks";
 import CertificateShowcase from "@/components/animations/CertificateShowcase";
 import InteractiveLearningDashboard from "@/components/InteractiveLearningDashboard";
+import PracticalAISkills from "@/components/animations/PracticalAISkills";
 
 import PlatformFeatures from "@/components/PlatformFeatures";
 import AIToolWorkflows from "@/components/animations/AIToolWorkflows";
@@ -66,6 +67,9 @@ export default function Home() {
 
         {/* Dedicated Dark Certificate Showcase Section */}
         <CertificateShowcase />
+
+        {/* Practical AI Skills Animated Grid */}
+        <PracticalAISkills />
 
         {/* Interactive Role Dashboard Experience (Learner, Instructor, Admin) */}
         <InteractiveLearningDashboard />
