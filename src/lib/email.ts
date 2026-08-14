@@ -1,5 +1,5 @@
 import nodemailer from "nodemailer";
-
+// Cache bust: Force Vercel to recompile this file without otpStore
 
 export function generateOTP(): string {
   return Math.floor(100000 + Math.random() * 900000).toString();
