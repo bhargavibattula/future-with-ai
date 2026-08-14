@@ -335,8 +335,34 @@ export default function AuthCard({
           } else {
             data = { success: true };
           }
+        } else if (otpPurpose === "Sign Up 2FA") {
+          // Call new registration API route
+          const res = await fetch("/api/auth/register", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password, name: fullName, otp: fullOtp }),
+          });
+          const resData = await res.json();
+          
+          if (resData.success) {
+            // Once user is registered, create secure NextAuth session
+            const signInRes = await nextAuthSignIn("credentials", {
+              redirect: false,
+              email,
+              password,
+              twoFactorCode: fullOtp,
+            });
+            
+            if (signInRes?.error) {
+              data = { success: false, error: signInRes.error };
+            } else {
+              data = { success: true };
+            }
+          } else {
+            data = resData;
+          }
         } else {
-          // For Signup / Forgot Password, just verify the OTP via API
+          // For Forgot Password, just verify the OTP via API
           const res = await fetch("/api/auth/verify-otp", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
