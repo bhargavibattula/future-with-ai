@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { otpStore } from "@/lib/email";
+import { prisma } from "@/lib/prisma";
 
 export async function POST(req: Request) {
   try {
@@ -12,7 +12,9 @@ export async function POST(req: Request) {
       );
     }
 
-    const stored = otpStore.get(email.toLowerCase());
+    const stored = await prisma.verificationToken.findFirst({
+      where: { identifier: email.toLowerCase() },
+    });
 
     if (!stored) {
       return NextResponse.json(
@@ -21,23 +23,27 @@ export async function POST(req: Request) {
       );
     }
 
-    if (Date.now() > stored.expiresAt) {
-      otpStore.delete(email.toLowerCase());
+    if (Date.now() > stored.expires.getTime()) {
+      await prisma.verificationToken.delete({
+        where: { token: stored.token },
+      });
       return NextResponse.json(
         { success: false, error: "OTP has expired. Please request a new code." },
         { status: 400 }
       );
     }
 
-    if (stored.otp !== otp.toString().trim()) {
+    if (stored.token !== otp.toString().trim()) {
       return NextResponse.json(
         { success: false, error: "Invalid 6-digit OTP code. Please check and try again." },
         { status: 400 }
       );
     }
 
-    // OTP Verified successfully! Remove used OTP from memory.
-    otpStore.delete(email.toLowerCase());
+    // OTP Verified successfully! Remove used OTP from database.
+    await prisma.verificationToken.delete({
+      where: { token: stored.token },
+    });
 
     return NextResponse.json({
       success: true,

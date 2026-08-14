@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { generateOTP, sendOTPEmail, otpStore } from "@/lib/email";
+import { generateOTP, sendOTPEmail } from "@/lib/email";
+import { prisma } from "@/lib/prisma";
 
 export async function POST(req: Request) {
   try {
@@ -13,10 +14,20 @@ export async function POST(req: Request) {
     }
 
     const otp = generateOTP();
-    const expiresAt = Date.now() + 10 * 60 * 1000; // 10 minutes expiry
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes expiry
 
-    // Save OTP in memory store
-    otpStore.set(email.toLowerCase(), { otp, expiresAt });
+    // Save OTP in database
+    await prisma.verificationToken.deleteMany({
+      where: { identifier: email.toLowerCase() },
+    });
+    
+    await prisma.verificationToken.create({
+      data: {
+        identifier: email.toLowerCase(),
+        token: otp,
+        expires: expiresAt,
+      },
+    });
 
     // Send real email via Gmail SMTP (shanmukharani20@gmail.com)
     const mailResult = await sendOTPEmail(email, otp, purpose);

@@ -3,7 +3,6 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
-import { otpStore } from "@/lib/email";
 import { authConfig } from "@/auth.config";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
@@ -50,14 +49,19 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             throw new Error("2FA_REQUIRED");
           }
 
-          // Verify 2FA OTP code against memory store
-          const stored = otpStore.get(emailStr);
-          if (!stored || Date.now() > stored.expiresAt || stored.otp !== code) {
+          // Verify 2FA OTP code against database
+          const stored = await prisma.verificationToken.findFirst({
+            where: { identifier: emailStr },
+          });
+
+          if (!stored || Date.now() > stored.expires.getTime() || stored.token !== code) {
             throw new Error("INVALID_2FA_CODE");
           }
 
           // Clear used 2FA code
-          otpStore.delete(emailStr);
+          await prisma.verificationToken.delete({
+            where: { token: stored.token },
+          });
         }
 
         return {

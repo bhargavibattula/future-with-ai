@@ -1,16 +1,5 @@
 import nodemailer from "nodemailer";
 
-// In-memory global OTP store (persisted across Next.js dev reloads)
-const globalForOtp = globalThis as unknown as {
-  otpStore?: Map<string, { otp: string; expiresAt: number }>;
-};
-
-export const otpStore =
-  globalForOtp.otpStore ?? new Map<string, { otp: string; expiresAt: number }>();
-
-if (process.env.NODE_ENV !== "production") {
-  globalForOtp.otpStore = otpStore;
-}
 
 export function generateOTP(): string {
   return Math.floor(100000 + Math.random() * 900000).toString();
