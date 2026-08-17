@@ -101,7 +101,8 @@ This document provides an up-to-date, comprehensive audit of the **Future With A
 
 | Feature | Status | Current Codebase State | Pending Work Required |
 | :--- | :---: | :--- | :--- |
-| **Authentication & Auth.js v5** | 🟢 DONE | `auth.ts`, `auth.config.ts`, Credentials provider, Prisma adapter setup. | Add Google OAuth provider configuration. |
+| **Authentication & Auth.js v5** | 🟢 DONE | `auth.ts`, `auth.config.ts`, Credentials provider, Prisma adapter setup, Google OAuth integrated. | None — Complete. |
+| **2FA & Password Reset Flow** | 🟢 DONE | Nodemailer 2FA OTP, API routes (`/api/auth/send-otp`, `/api/auth/reset-password`), UI pages (`/forgot-password`, `/verify`). | None — Complete. |
 | **Role-Based Access Control (RBAC)** | 🟡 FRONTEND ONLY | Roles (`Learner`, `Admin`, etc.) defined in User model. | Implement Next.js Middleware protection restricting `/admin` and `/instructor` routes based on user role. |
 | **Instructor Dashboard** | 🔴 PENDING | No instructor views. | Create Course Builder, Quiz Builder, and Student Revenue analytics views for content creators. |
 | **Admin Dashboard** | 🟡 FRONTEND ONLY | `src/app/admin` UI present with mock data (`adminData.ts`). | Connect Admin pages to live database statistics (Revenue, Users, Subscriptions, Audit Logs). |
