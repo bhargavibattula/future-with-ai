@@ -103,7 +103,7 @@ export default function GSAPHero() {
   return (
     <section
       ref={heroRef}
-      className="relative min-h-screen flex flex-col justify-center px-[6vw] overflow-hidden bg-[#FCFBFF]"
+      className="relative min-h-screen flex flex-col justify-center px-4 sm:px-[6vw] overflow-hidden bg-[#FCFBFF]"
     >
       {/* ═══ Eyebrow ═══ */}
       <div className="hero-eyebrow opacity-0 text-xs font-semibold tracking-[0.14em] uppercase text-[#6B6785] mb-5 flex items-center gap-2.5">

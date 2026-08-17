@@ -15,6 +15,7 @@ import {
   LogOut,
   ChevronDown,
   X,
+  Menu,
 } from "lucide-react";
 import { AdminTab } from "./AdminSidebar";
 import DarkModeToggle from "@/components/DarkModeToggle";
@@ -22,9 +23,10 @@ import DarkModeToggle from "@/components/DarkModeToggle";
 interface AdminNavbarProps {
   onSelectTab: (tab: AdminTab) => void;
   onOpenQuickCreate: (type: string) => void;
+  onToggleMobileSidebar?: () => void;
 }
 
-export default function AdminNavbar({ onSelectTab, onOpenQuickCreate }: AdminNavbarProps) {
+export default function AdminNavbar({ onSelectTab, onOpenQuickCreate, onToggleMobileSidebar }: AdminNavbarProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [quickCreateOpen, setQuickCreateOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
@@ -49,20 +51,41 @@ export default function AdminNavbar({ onSelectTab, onOpenQuickCreate }: AdminNav
 
   return (
     <header className="sticky top-0 z-40 w-full bg-white/85 backdrop-blur-xl border-b border-[#E8E3FF] select-none">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between gap-4">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between gap-2 sm:gap-4">
+        {/* MOBILE SIDEBAR TOGGLE & LOGO COMPACT */}
+        <div className="flex lg:hidden items-center gap-2 mr-2">
+          <button
+            type="button"
+            onClick={onToggleMobileSidebar}
+            className="p-1.5 rounded-xl bg-[#F5F2FF] text-[#8B7FE8] hover:bg-[#8B7FE8] hover:text-white transition-colors"
+          >
+            <Menu className="w-5 h-5" />
+          </button>
+          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#8B7FE8] to-[#D8D2FA] flex items-center justify-center text-white shadow-soft-sm shrink-0">
+            <Sparkles className="w-4 h-4" />
+          </div>
+        </div>
+
         {/* GLOBAL SEARCH INPUT */}
-        <div className="flex-1 max-w-md relative">
+        <div className="flex-1 max-w-md relative hidden sm:block">
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8B7FE8]" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Global Search (Users, Courses, Lessons, Certificates)..."
+            placeholder="Global Search (Users, Courses, Lessons)..."
             className="w-full pl-10 pr-12 py-2 rounded-2xl bg-[#FCFBFF] border border-[#E8E3FF] focus:border-[#8B7FE8] focus:ring-4 focus:ring-[#8B7FE8]/15 text-[#1E1B2E] placeholder-[#6B6785] text-xs font-semibold outline-none transition-all"
           />
           <kbd className="absolute right-3 top-1/2 -translate-y-1/2 px-1.5 py-0.5 text-[10px] font-extrabold bg-white border border-[#E8E3FF] text-[#6B6785] rounded-md shadow-soft-sm">
             ⌘K
           </kbd>
+        </div>
+        
+        {/* MOBILE COMPACT SEARCH */}
+        <div className="flex-1 flex sm:hidden justify-end">
+          <button className="p-2 rounded-xl bg-[#FCFBFF] border border-[#E8E3FF] text-[#8B7FE8]">
+             <Search className="w-4 h-4" />
+          </button>
         </div>
 
         {/* RIGHT NAVBAR ACTIONS */}

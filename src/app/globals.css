@@ -1,4 +1,4 @@
-﻿@import "tailwindcss";
+@import "tailwindcss";
 
 /* Dark mode via .dark class on <html> (Tailwind v4) */
 @custom-variant dark (&:where(.dark, .dark *));
@@ -86,6 +86,16 @@
     color: #FFFFFF;
   }
 
+  /* ── Responsive base utilities ── */
+  img, video, svg, canvas, iframe {
+    max-width: 100%;
+    height: auto;
+  }
+
+  * {
+    min-width: 0;
+  }
+
   ::-webkit-scrollbar {
     width: 6px;
     background-color: var(--background);
@@ -98,6 +108,35 @@
 
   html.dark ::-webkit-scrollbar-thumb:hover {
     background-color: #3A3A3A;
+  }
+}
+
+/* ── Responsive Utilities ── */
+
+/* Table wrapper for horizontal scrolling on mobile */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Responsive typography for very small screens */
+@media (max-width: 374px) {
+  html { font-size: 14px; }
+}
+
+/* Prevent horizontal overflow globally */
+@media (max-width: 768px) {
+  .glass-nav {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+}
+
+/* Mobile touch target minimum size */
+@media (max-width: 768px) {
+  button, a, [role="button"] {
+    min-height: 36px;
   }
 }
 

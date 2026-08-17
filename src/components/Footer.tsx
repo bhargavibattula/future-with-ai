@@ -27,7 +27,7 @@ export default function Footer() {
           {/* Newsletter Input Form */}
           <form
             onSubmit={(e) => e.preventDefault()}
-            className="w-full md:w-auto flex flex-col sm:flex-row gap-3 min-w-[320px]"
+            className="w-full md:w-auto flex flex-col sm:flex-row gap-3 min-w-0 md:min-w-[320px]"
           >
             <input
               type="email"

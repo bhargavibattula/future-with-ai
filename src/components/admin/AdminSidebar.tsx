@@ -86,7 +86,7 @@ export default function AdminSidebar({ activeTab, onSelectTab }: AdminSidebarPro
   return (
     <aside
       className={`sticky top-24 z-30 transition-all duration-300 ease-in-out shrink-0 select-none ${
-        collapsed ? "w-20" : "w-64"
+        collapsed ? "w-20" : "w-full lg:w-64"
       }`}
     >
       {/* Floating Glass Sidebar Card */}
@@ -116,7 +116,7 @@ export default function AdminSidebar({ activeTab, onSelectTab }: AdminSidebarPro
             <button
               type="button"
               onClick={() => setCollapsed(!collapsed)}
-              className="w-7 h-7 rounded-xl bg-[#F5F2FF] border border-[#E8E3FF] flex items-center justify-center text-[#8B7FE8] hover:bg-[#8B7FE8] hover:text-white transition-colors"
+              className="hidden lg:flex w-7 h-7 rounded-xl bg-[#F5F2FF] border border-[#E8E3FF] items-center justify-center text-[#8B7FE8] hover:bg-[#8B7FE8] hover:text-white transition-colors"
               title={collapsed ? "Expand Sidebar" : "Collapse Sidebar"}
             >
               {collapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}

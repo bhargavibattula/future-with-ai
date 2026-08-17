@@ -22,6 +22,7 @@ export default function AdminPage() {
   const [loadingCheck, setLoadingCheck] = useState(true);
   const [activeTab, setActiveTab] = useState<AdminTab>("overview");
   const [quickCreateModal, setQuickCreateModal] = useState<string | null>(null);
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   // Check for admin session cookie on mount
   useEffect(() => {
@@ -91,16 +92,35 @@ export default function AdminPage() {
       <AdminNavbar
         onSelectTab={(tab) => setActiveTab(tab)}
         onOpenQuickCreate={(type) => setQuickCreateModal(type)}
+        onToggleMobileSidebar={() => setMobileSidebarOpen(!mobileSidebarOpen)}
       />
 
       {/* MAIN LAYOUT: FLOATING GLASS SIDEBAR + TAB CONTENT */}
-      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 relative z-10">
+      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-4 sm:py-8 relative z-10">
         <div className="flex gap-6 items-start">
-          {/* Floating Glass Sidebar */}
-          <AdminSidebar
-            activeTab={activeTab}
-            onSelectTab={(tab) => setActiveTab(tab)}
-          />
+          {/* Floating Glass Sidebar — hidden on mobile, visible on lg+ */}
+          <div className="hidden lg:block">
+            <AdminSidebar
+              activeTab={activeTab}
+              onSelectTab={(tab) => setActiveTab(tab)}
+            />
+          </div>
+
+          {/* Mobile Sidebar Overlay */}
+          {mobileSidebarOpen && (
+            <div className="lg:hidden fixed inset-0 z-50">
+              <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setMobileSidebarOpen(false)} />
+              <div className="absolute left-0 top-0 h-full w-72 max-w-[85vw] overflow-y-auto bg-[var(--background)] p-2 shadow-2xl animate-in slide-in-from-left duration-300">
+                <AdminSidebar
+                  activeTab={activeTab}
+                  onSelectTab={(tab) => {
+                    setActiveTab(tab);
+                    setMobileSidebarOpen(false);
+                  }}
+                />
+              </div>
+            </div>
+          )}
 
           {/* Active Tab View Panel */}
           <div className="flex-1 w-full min-w-0">

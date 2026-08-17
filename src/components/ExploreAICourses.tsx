@@ -171,11 +171,7 @@ function CourseCard({ course }: { course: AICourse }) {
       ref={cardRef}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="relative shrink-0 select-none group transition-all duration-300 ease-out"
-      style={{
-        width: "340px",
-        height: "480px",
-      }}
+      className="relative shrink-0 select-none group transition-all duration-300 ease-out w-[280px] h-[400px] sm:w-[340px] sm:h-[480px]"
     >
       {/* Card Container */}
       <div

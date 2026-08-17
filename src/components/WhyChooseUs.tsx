@@ -18,7 +18,7 @@ export default function WhyChooseUs() {
         </p>
 
         {/* Bento Grid */}
-        <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[340px]">
+        <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-auto md:auto-rows-[340px]">
 
           {/* Card 1: 28-Day Challenge (Spans 2 columns) */}
           <div className="md:col-span-2 bg-gradient-to-br from-[#8B7FE8] to-[#6A47F9] rounded-3xl p-8 lg:p-10 flex flex-col sm:flex-row items-center justify-between overflow-hidden relative shadow-xl shadow-[#8B7FE8]/20">
@@ -63,7 +63,7 @@ export default function WhyChooseUs() {
           </div>
 
           {/* Card 3: AI Tools */}
-          <div className="bento-card group bg-white border border-[#EAE6FE] rounded-3xl p-8 lg:p-10 flex flex-col justify-end relative overflow-hidden shadow-sm hover:shadow-xl hover:border-[#D8D2FA] transition-all duration-500 cursor-pointer">
+          <div className="bento-card group bg-white border border-[#EAE6FE] rounded-3xl p-8 lg:p-10 flex flex-col justify-end relative overflow-hidden shadow-sm hover:shadow-xl hover:border-[#D8D2FA] transition-all duration-500 cursor-pointer min-h-[340px] md:min-h-0">
             <div className="absolute top-8 left-8 right-8 h-32 bg-gradient-to-r from-[#F3F0FF] to-white rounded-2xl border border-[#D8D2FA] flex items-center justify-center overflow-hidden transition-transform duration-500 group-hover:-translate-y-2">
               <div className="relative w-full h-full group-hover:scale-110 transition-transform duration-500">
                 <Image src="/images/dog-doctor.png" alt="Dog doctor" fill className="object-cover object-top" />
@@ -79,7 +79,7 @@ export default function WhyChooseUs() {
           </div>
 
           {/* Card 4: Learn on the go */}
-          <div className="bg-white border border-[#EAE6FE] rounded-3xl p-8 lg:p-10 flex flex-col shadow-sm relative overflow-hidden">
+          <div className="bg-white border border-[#EAE6FE] rounded-3xl p-8 lg:p-10 flex flex-col shadow-sm relative overflow-hidden min-h-[340px] md:min-h-0">
             <h3 className="text-xl font-bold text-[#1E1B2E] mb-2 font-['Space_Grotesk']">Learn on the go</h3>
             <p className="text-[#6B6785] text-sm mb-8">
               Listen to lessons like a podcast and master AI hands-free.
@@ -96,7 +96,7 @@ export default function WhyChooseUs() {
           </div>
 
           {/* Card 5: Certificates */}
-          <div className="bg-gradient-to-br from-[#8B7FE8] to-[#4F46E5] rounded-3xl p-8 flex flex-col justify-end shadow-lg shadow-[#8B7FE8]/20 relative overflow-hidden">
+          <div className="bg-gradient-to-br from-[#8B7FE8] to-[#4F46E5] rounded-3xl p-8 flex flex-col justify-end shadow-lg shadow-[#8B7FE8]/20 relative overflow-hidden min-h-[340px] md:min-h-0">
             <div className="absolute top-4 left-0 right-0 h-40 flex items-center justify-center opacity-80">
               {/* Badges mockup */}
               <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl rotate-12 absolute top-4 left-10"></div>

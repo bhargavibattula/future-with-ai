@@ -39,7 +39,7 @@ export default function InteractiveLearningDashboard() {
         </p>
 
         {/* Role Switcher Pills */}
-        <div className="inline-flex p-1.5 rounded-full bg-white border border-[#EAE6FE] shadow-soft-sm mt-6 gap-1">
+        <div className="inline-flex flex-wrap justify-center p-1.5 rounded-3xl sm:rounded-full bg-white border border-[#EAE6FE] shadow-soft-sm mt-6 gap-1">
           <button
             onClick={() => setActiveRoleTab("learner")}
             className={`px-5 py-2 rounded-full text-xs sm:text-sm font-extrabold transition-all ${

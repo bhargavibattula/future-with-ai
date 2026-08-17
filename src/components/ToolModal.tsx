@@ -14,7 +14,7 @@ export default function ToolModal({ tool, onClose }: ToolModalProps) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-[#1E1B2E]/40 backdrop-blur-md animate-in fade-in duration-200">
       <div
-        className="relative w-full max-w-2xl bg-white rounded-3xl shadow-soft-lg border border-[#EAE6FE] overflow-hidden animate-in zoom-in-95 duration-200"
+        className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto scrollbar-none bg-white rounded-3xl shadow-soft-lg border border-[#EAE6FE] animate-in zoom-in-95 duration-200"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Banner Background */}
@@ -60,8 +60,8 @@ export default function ToolModal({ tool, onClose }: ToolModalProps) {
           </div>
 
           {/* Key Stats Bar */}
-          <div className="grid grid-cols-3 gap-3 p-4 rounded-2xl bg-[#FCFBFF] border border-[#EAE6FE] mb-6">
-            <div className="flex flex-col items-center justify-center text-center border-r border-[#EAE6FE]">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-4 rounded-2xl bg-[#FCFBFF] border border-[#EAE6FE] mb-6">
+            <div className="flex flex-col items-center justify-center text-center border-b sm:border-b-0 sm:border-r border-[#EAE6FE] pb-3 sm:pb-0">
               <div className="flex items-center gap-1 text-xs font-bold text-[#6B6785] mb-1">
                 <Star className="w-3.5 h-3.5 fill-[#8B7FE8] text-[#8B7FE8]" />
                 Rating
@@ -69,7 +69,7 @@ export default function ToolModal({ tool, onClose }: ToolModalProps) {
               <span className="text-base font-extrabold text-[#1E1B2E]">{tool.rating} / 5.0</span>
             </div>
 
-            <div className="flex flex-col items-center justify-center text-center border-r border-[#EAE6FE]">
+            <div className="flex flex-col items-center justify-center text-center border-b sm:border-b-0 sm:border-r border-[#EAE6FE] py-3 sm:py-0">
               <div className="flex items-center gap-1 text-xs font-bold text-[#6B6785] mb-1">
                 <Users className="w-3.5 h-3.5 text-[#8B7FE8]" />
                 Active Users
@@ -77,7 +77,7 @@ export default function ToolModal({ tool, onClose }: ToolModalProps) {
               <span className="text-base font-extrabold text-[#1E1B2E]">{tool.stats.monthlyUsers}</span>
             </div>
 
-            <div className="flex flex-col items-center justify-center text-center">
+            <div className="flex flex-col items-center justify-center text-center pt-3 sm:pt-0">
               <div className="flex items-center gap-1 text-xs font-bold text-[#6B6785] mb-1">
                 <Zap className="w-3.5 h-3.5 text-[#8B7FE8]" />
                 Performance
