@@ -138,6 +138,14 @@ export default function StreaksPanel() {
   const fetchDashboard = async () => {
     try {
       setError(null);
+
+      // Check if user is authenticated
+      if (!authUser) {
+        setError("Authentication required. Please log in to view your learning journey.");
+        setLoading(false);
+        return;
+      }
+
       const res = await fetch("/api/streak");
       const json = await res.json();
       if (!res.ok || !json.success) {
@@ -161,7 +169,7 @@ export default function StreaksPanel() {
 
   useEffect(() => {
     fetchDashboard();
-  }, []);
+  }, [authUser]);
 
   // Motivational quote rotator
   useEffect(() => {

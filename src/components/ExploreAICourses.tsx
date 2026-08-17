@@ -204,7 +204,7 @@ function CourseCard({ course }: { course: AICourse }) {
               </h3>
               <div className="flex items-center gap-1 bg-[#F3F0FE] border border-[#EAE6FE] px-2.5 py-0.5 rounded-full text-xs font-bold text-[#1E1B2E]">
                 <Star className="w-3.5 h-3.5 fill-[#8B7FE8] text-[#8B7FE8]" />
-                <span>{course.rating}</span>
+                <span>{course.rating ?? 0}</span>
               </div>
             </div>
 
@@ -214,15 +214,15 @@ function CourseCard({ course }: { course: AICourse }) {
             </p>
 
             {/* 3 Technology Tags */}
-            <div className="flex flex-wrap gap-1.5 mb-4">
+              <div className="flex flex-wrap gap-1.5 mb-4">
               <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#B8E8D8] text-[#1E1B2E] border border-[#9DD9C5]">
-                {course.tags[0]}
+                {course.tags?.[0] ?? ""}
               </span>
               <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#D8D2FA] text-[#4B3FBF] border border-[#C4BDFA]">
-                {course.tags[1]}
+                {course.tags?.[1] ?? ""}
               </span>
               <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#FFF0F5] text-[#C0336A] border border-[#FFC9DE]">
-                {course.tags[2]}
+                {course.tags?.[2] ?? ""}
               </span>
             </div>
           </div>
@@ -235,7 +235,7 @@ function CourseCard({ course }: { course: AICourse }) {
             </span>
 
             <Link
-              href={`/courses/${course.id.replace("course-", "")}`}
+              href={course?.id ? `/courses/${course.id.replace("course-", "")}` : '#'}
               className="relative group/btn inline-flex items-center gap-2 px-4 py-2 rounded-2xl text-xs font-extrabold text-white bg-[#8B7FE8] hover:bg-[#786BD6] shadow-soft-sm transition-all duration-300 active:scale-95"
             >
               <span>Start Learning</span>
@@ -257,7 +257,35 @@ export default function ExploreAICourses() {
   const progressFillRef = useRef<HTMLDivElement>(null);
 
   // Duplicated 9 courses internally for perfect infinite horizontal loop
-  const [coursesList, setCoursesList] = useState(COURSES);
+  // NOTE: Do not preload all courses for client-side filtering; load from API
+  const [coursesList, setCoursesList] = useState<AICourse[]>([]);
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [searchError, setSearchError] = useState<string | null>(null);
+
+  // Initial load: fetch default course list from API, fallback to COURSES if API unavailable
+  useEffect(() => {
+    const loadInitial = async () => {
+      setSearchError(null);
+      setSearchLoading(true);
+      try {
+        const res = await fetch(`/api/courses/search`);
+        if (!res.ok) throw new Error(`Status ${res.status}`);
+        const json = await res.json();
+        if (json?.courses && Array.isArray(json.courses) && json.courses.length > 0) {
+          setCoursesList(json.courses);
+        } else {
+          // Fallback to mock COURSES if API returns empty
+          setCoursesList(COURSES);
+        }
+      } catch (err: any) {
+        // API unavailable: fallback to mock courses
+        setCoursesList(COURSES);
+      } finally {
+        setSearchLoading(false);
+      }
+    };
+    loadInitial();
+  }, []);
   const doubledCourses = [...coursesList, ...coursesList, ...coursesList];
 
   // Drag & Wheel & Velocity State
@@ -275,6 +303,12 @@ export default function ExploreAICourses() {
 
   // Auto Scroll Engine Loop
   const updatePosition = useCallback(() => {
+    // Skip if no courses loaded
+    if (!carouselTrackRef.current || coursesList.length === 0 || SINGLE_SET_WIDTH === 0) {
+      animFrameRef.current = requestAnimationFrame(updatePosition);
+      return;
+    }
+
     let newPos = scrollPosRef.current;
 
     // Apply auto scroll speed if not paused or dragging
@@ -419,38 +453,34 @@ export default function ExploreAICourses() {
         {/* Search Filters */}
         <div className="mt-8 mb-6">
           <SearchFilters
-            onSearch={async (q, filters) => {
-              // Try backend search first
-              try {
-                const params = new URLSearchParams();
-                if (q) params.set("q", q);
-                if (filters?.category) params.set("category", filters.category);
-                if (filters?.difficulty) params.set("difficulty", filters.difficulty);
-                const res = await fetch(`/api/courses/search?${params.toString()}`);
-                if (!res.ok) throw new Error(`Status ${res.status}`);
-                const json = await res.json();
-                if (json?.courses && Array.isArray(json.courses)) {
-                  setCoursesList(json.courses);
-                  return;
+              onSearch={async (q, filters) => {
+                setSearchError(null);
+                setSearchLoading(true);
+                try {
+                  const params = new URLSearchParams();
+                  if (q) params.set("q", q);
+                  if (filters?.category) params.set("category", filters.category);
+                  if (filters?.difficulty) params.set("difficulty", filters.difficulty);
+                  if (filters?.language) params.set("language", filters.language);
+                  if (filters?.duration) params.set("duration", filters.duration);
+
+                  const res = await fetch(`/api/courses/search?${params.toString()}`);
+                  if (!res.ok) throw new Error(`Status ${res.status}`);
+                  const json = await res.json();
+                  if (json?.courses && Array.isArray(json.courses)) {
+                    setCoursesList(json.courses);
+                  } else {
+                    setCoursesList([]);
+                    setSearchError("No results or invalid response from server.");
+                  }
+                } catch (err: any) {
+                  setCoursesList([]);
+                  setSearchError(err?.message || "Search failed. Try again later.");
+                } finally {
+                  setSearchLoading(false);
                 }
-                throw new Error("Invalid response");
-              } catch (err) {
-                // Fallback to client-side filtering of COURSES
-                const qLower = (q || "").toLowerCase();
-                const filtered = COURSES.filter((c) => {
-                  return (
-                    c.title.toLowerCase().includes(qLower) ||
-                    c.description.toLowerCase().includes(qLower) ||
-                    c.tags.join(" ").toLowerCase().includes(qLower)
-                  );
-                }).filter((c) => {
-                  if (filters?.category) return c.tags.includes(filters.category);
-                  return true;
-                });
-                setCoursesList(filtered);
-              }
-            }}
-          />
+              }}
+            />
         </div>
 
         {/* INFINITE CAROUSEL SCROLL CONTAINER */}
@@ -475,9 +505,17 @@ export default function ExploreAICourses() {
             ref={carouselTrackRef}
             className="flex items-center gap-7 w-max will-change-transform"
           >
-            {doubledCourses.map((course, idx) => (
-              <CourseCard key={`${course.id}-${idx}`} course={course} />
-            ))}
+            {coursesList.length > 0 ? (
+              doubledCourses.map((course, idx) => (
+                <CourseCard key={`course-${idx}`} course={course} />
+              ))
+            ) : searchLoading ? (
+              <div className="w-full flex items-center justify-center p-8">Loading courses…</div>
+            ) : searchError ? (
+              <div className="w-full flex items-center justify-center p-8 text-sm text-red-600">{searchError}</div>
+            ) : (
+              <div className="w-full flex items-center justify-center p-8 text-sm text-muted">No courses found.</div>
+            )}
           </div>
         </div>
 

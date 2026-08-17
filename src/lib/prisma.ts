@@ -23,7 +23,8 @@ const isValidPrismaClient = (client: unknown): client is PrismaClient => {
     typeof c.userProgress?.findUnique === "function" &&
     typeof c.dailyActivity?.findUnique === "function" &&
     typeof c.milestone?.findUnique === "function" &&
-    typeof c.achievement?.findUnique === "function"
+    typeof c.achievement?.findUnique === "function" &&
+    typeof c.course?.findMany === "function"
   );
 };
 
