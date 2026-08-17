@@ -18,6 +18,8 @@ import {
   Shield,
   LayoutDashboard,
 } from "lucide-react";
+import { Coins } from "lucide-react";
+import CoinStoreModal from "@/components/store/CoinStoreModal";
 import { Button } from "@/components/ui/button";
 import AuthModal from "@/components/auth/AuthModal";
 import { AuthMode } from "@/components/auth/AuthCard";
@@ -34,6 +36,7 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [authModalMode, setAuthModalMode] = useState<AuthMode>("login");
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+  const [storeOpen, setStoreOpen] = useState(false);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -114,6 +117,10 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
           <div className="hidden md:flex items-center space-x-3">
             {/* Dark mode toggle */}
             <DarkModeToggle />
+
+            <Button variant="ghost" size="icon" onClick={() => setStoreOpen(true)} title="Coin Store">
+              <Coins className="w-5 h-5 text-[#6B6785]" />
+            </Button>
 
             {onSearchClick && (
               <Button
@@ -365,6 +372,7 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
         onClose={() => setAuthModalOpen(false)}
         initialMode={authModalMode}
       />
+      <CoinStoreModal isOpen={storeOpen} onClose={() => setStoreOpen(false)} />
     </>
   );
 }

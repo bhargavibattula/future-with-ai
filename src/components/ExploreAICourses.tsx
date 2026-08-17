@@ -17,6 +17,7 @@ if (typeof window !== "undefined") {
 
 import Link from "next/link";
 import { AICourse, COURSES } from "@/data/courses";
+import SearchFilters from "@/components/search/SearchFilters";
 
 // ----------------------------------------------------
 // FLOATING PARTICLES CANVAS
@@ -256,7 +257,7 @@ export default function ExploreAICourses() {
   const progressFillRef = useRef<HTMLDivElement>(null);
 
   // Duplicated 9 courses internally for perfect infinite horizontal loop
-  const coursesList = COURSES;
+  const [coursesList, setCoursesList] = useState(COURSES);
   const doubledCourses = [...coursesList, ...coursesList, ...coursesList];
 
   // Drag & Wheel & Velocity State
@@ -397,7 +398,7 @@ export default function ExploreAICourses() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* SECTION HEADER */}
-        <div className="explore-courses-header flex flex-col items-center text-center mb-12">
+        <div className="explore-courses-header flex flex-col items-center text-center mb-12"> 
           {/* Category Pill */}
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#F3F0FE] border border-[#EAE6FE] text-xs font-bold text-[#8B7FE8] mb-4 shadow-soft-sm">
             <Sparkles className="w-4 h-4 text-[#8B7FE8]" />
@@ -413,6 +414,43 @@ export default function ExploreAICourses() {
           <p className="max-w-2xl text-base sm:text-lg text-[#6B6785] font-medium leading-relaxed">
             Learn the world&apos;s most powerful AI tools through beautifully designed interactive courses.
           </p>
+        </div>
+
+        {/* Search Filters */}
+        <div className="mt-8 mb-6">
+          <SearchFilters
+            onSearch={async (q, filters) => {
+              // Try backend search first
+              try {
+                const params = new URLSearchParams();
+                if (q) params.set("q", q);
+                if (filters?.category) params.set("category", filters.category);
+                if (filters?.difficulty) params.set("difficulty", filters.difficulty);
+                const res = await fetch(`/api/courses/search?${params.toString()}`);
+                if (!res.ok) throw new Error(`Status ${res.status}`);
+                const json = await res.json();
+                if (json?.courses && Array.isArray(json.courses)) {
+                  setCoursesList(json.courses);
+                  return;
+                }
+                throw new Error("Invalid response");
+              } catch (err) {
+                // Fallback to client-side filtering of COURSES
+                const qLower = (q || "").toLowerCase();
+                const filtered = COURSES.filter((c) => {
+                  return (
+                    c.title.toLowerCase().includes(qLower) ||
+                    c.description.toLowerCase().includes(qLower) ||
+                    c.tags.join(" ").toLowerCase().includes(qLower)
+                  );
+                }).filter((c) => {
+                  if (filters?.category) return c.tags.includes(filters.category);
+                  return true;
+                });
+                setCoursesList(filtered);
+              }
+            }}
+          />
         </div>
 
         {/* INFINITE CAROUSEL SCROLL CONTAINER */}
