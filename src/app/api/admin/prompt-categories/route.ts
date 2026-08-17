@@ -89,7 +89,6 @@ export async function POST(req: Request) {
       where: {
         name: {
           equals: trimmedName,
-          mode: "insensitive",
         },
       },
     });

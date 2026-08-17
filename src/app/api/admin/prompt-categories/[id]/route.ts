@@ -79,7 +79,6 @@ export async function PATCH(
         id: { not: id },
         name: {
           equals: trimmedName,
-          mode: "insensitive",
         },
       },
     });
