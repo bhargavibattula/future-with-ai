@@ -39,7 +39,7 @@ This document provides an up-to-date, comprehensive audit of the **Future With A
 | Feature | Status | Current Codebase State | Pending Work Required |
 | :--- | :---: | :--- | :--- |
 | **Category, Course, Module, Lesson Hierarchy** | 🟡 FRONTEND ONLY | Mock datasets in `src/data/courses.tsx` & `src/data/coursePathData.ts`. | Add Prisma models: `Category`, `Course`, `Module`, `Lesson`. Implement CRUD API routes. |
-| **Lesson Reader & Interactive Player** | 🟡 FRONTEND ONLY | `CourseModuleModal.tsx` renders interactive layout, steps, and reading time. | Build dynamic lesson viewer connected to database content, saving progress and completion state. |
+| **Lesson Reader & Interactive Player** | 🟢 DONE | Dynamic lesson viewer (`CourseLessonClient.tsx`) integrated with `CourseEnrollment` schema for saving progress and completion state. | None — Complete. |
 | **Bookmarks & Lesson Notes** | 🔴 PENDING | No UI drawer or database models for saving notes or bookmarking lessons. | Create `Bookmark` and `LessonNote` Prisma models & frontend note drawer inside lesson player. |
 | **AI Voice Playback (ElevenLabs)** | 🔴 PENDING | Audio controls in UI use HTML audio tags. | Integrate ElevenLabs API route (`/api/ai/voice`) to stream lesson narration in English & Telugu. |
 
