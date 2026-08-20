@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { creditCoins, debitCoins } from "@/lib/coins";
 
 export interface ActivityPayload {
   activityType: "LESSON" | "QUIZ" | "CHALLENGE" | "ASSESSMENT" | "PRACTICE" | "PROJECT";
@@ -6,9 +7,24 @@ export interface ActivityPayload {
   courseId?: string;
   lessonId?: string;
   xp?: number;
-  coins?: number;
   timeSpent?: number; // in minutes
   completionPercentage?: number;
+}
+
+function getActivityCoinReward(activityType: string): number {
+  switch (activityType) {
+    case "LESSON":
+      return 20;
+    case "QUIZ":
+      return 35;
+    case "CHALLENGE":
+    case "DAILY_CHALLENGE":
+      return 50;
+    case "ASSESSMENT":
+      return 50;
+    default:
+      return 20;
+  }
 }
 
 export function getTodayDateString(d = new Date()): string {
@@ -117,9 +133,9 @@ export async function recordActivityCompletion(userId: string, payload: Activity
   const twoDaysAgoStr = getTwoDaysAgoDateString();
 
   const xpAmount = Math.max(0, payload.xp ?? 50);
-  const coinAmount = Math.max(0, payload.coins ?? 20);
   const timeSpent = Math.max(1, payload.timeSpent ?? 15);
   const actType = payload.activityType.toUpperCase();
+  const coinAmount = getActivityCoinReward(actType);
 
   return await prisma.$transaction(async (tx) => {
     // 1. Fetch user progress & user
@@ -266,7 +282,6 @@ export async function recordActivityCompletion(userId: string, payload: Activity
 
     // 5. Update UserProgress totals & Level calculation
     const totalXP = progress.totalXP + xpAmount + bonusXP;
-    const totalCoins = progress.totalCoins + coinAmount + bonusCoins;
     const newLevel = Math.max(1, Math.floor(totalXP / 500) + 1);
 
     const updatedProgress = await tx.userProgress.update({
@@ -277,7 +292,6 @@ export async function recordActivityCompletion(userId: string, payload: Activity
         lastActivityDate: todayStr,
         daysLearned: newDaysLearned,
         totalXP,
-        totalCoins,
         currentLevel: newLevel,
         totalLessons: progress.totalLessons + (isLesson ? 1 : 0),
         totalQuizzes: progress.totalQuizzes + (isQuiz ? 1 : 0),
@@ -292,12 +306,22 @@ export async function recordActivityCompletion(userId: string, payload: Activity
       },
     });
 
+    const coinReward = await creditCoins(
+      userId,
+      {
+        amount: coinAmount + bonusCoins,
+        type: "REWARD",
+        reason: `${actType} completion reward`,
+        relatedId: payload.activityId,
+      },
+      tx,
+    );
+
     // Sync User model
     await tx.user.update({
       where: { id: userId },
       data: {
         xp: totalXP,
-        coins: totalCoins,
         streak: newCurrentStreak,
       },
     });
@@ -360,7 +384,7 @@ export async function recordActivityCompletion(userId: string, payload: Activity
 
     return {
       success: true,
-      progress: updatedProgress,
+      progress: { ...updatedProgress, totalCoins: coinReward.balanceAfter },
       freezeConsumed,
       dailyGoalNewlyCompleted,
       newlyUnlockedMilestones,
@@ -392,22 +416,27 @@ export async function purchaseStreakFreeze(userId: string) {
     const updated = await tx.userProgress.update({
       where: { userId },
       data: {
-        totalCoins: progress.totalCoins - 500,
         streakFreezes: progress.streakFreezes + 1,
       },
     });
 
-    await tx.user.update({
-      where: { id: userId },
-      data: { coins: updated.totalCoins },
-    });
+    const coinDebit = await debitCoins(
+      userId,
+      {
+        amount: 500,
+        type: "PURCHASE",
+        reason: "Purchase streak freeze",
+        relatedId: "streak-freeze",
+      },
+      tx,
+    );
 
     logAudit(userId, "PURCHASE_FREEZE", {
       newCount: updated.streakFreezes,
-      remainingCoins: updated.totalCoins,
+      remainingCoins: coinDebit.balanceAfter,
     });
 
-    return updated;
+    return { ...updated, totalCoins: coinDebit.balanceAfter };
   }, { timeout: 25000, maxWait: 10000 });
 }
 
@@ -443,24 +472,32 @@ export async function claimMilestoneReward(userId: string, milestoneId: string) 
 
     const progress = await tx.userProgress.findUnique({ where: { userId } });
     const currentXP = progress?.totalXP || 0;
-    const currentCoins = progress?.totalCoins || 0;
 
     const newXP = currentXP + milestone.rewardXP;
-    const newCoins = currentCoins + milestone.rewardCoins;
     const newLevel = Math.max(1, Math.floor(newXP / 500) + 1);
 
     const updatedProgress = await tx.userProgress.update({
       where: { userId },
       data: {
         totalXP: newXP,
-        totalCoins: newCoins,
         currentLevel: newLevel,
       },
     });
 
+    const coinReward = await creditCoins(
+      userId,
+      {
+        amount: milestone.rewardCoins,
+        type: "REWARD",
+        reason: `Milestone reward: ${milestone.title}`,
+        relatedId: milestone.id,
+      },
+      tx,
+    );
+
     await tx.user.update({
       where: { id: userId },
-      data: { xp: newXP, coins: newCoins },
+      data: { xp: newXP },
     });
 
     logAudit(userId, "CLAIM_MILESTONE", {
@@ -469,7 +506,12 @@ export async function claimMilestoneReward(userId: string, milestoneId: string) 
       rewardCoins: milestone.rewardCoins,
     });
 
-    return { success: true, rewardXP: milestone.rewardXP, rewardCoins: milestone.rewardCoins, progress: updatedProgress };
+    return {
+      success: true,
+      rewardXP: milestone.rewardXP,
+      rewardCoins: milestone.rewardCoins,
+      progress: { ...updatedProgress, totalCoins: coinReward.balanceAfter },
+    };
   }, { timeout: 25000, maxWait: 10000 });
 }
 
@@ -479,7 +521,7 @@ export async function getUserDashboardData(userId: string) {
 
   const user = await prisma.user.findUnique({
     where: { id: userId },
-    select: { id: true, name: true, email: true, image: true, coins: true, xp: true, streak: true },
+    select: { id: true, name: true, email: true, image: true, xp: true, streak: true },
   });
 
   if (!user) throw new Error("User not found.");

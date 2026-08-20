@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { auth } from "@/auth";
 
 // Seed default store items if none exist
 const DEFAULT_ITEMS = [
@@ -30,10 +29,10 @@ const DEFAULT_ITEMS = [
 export async function GET() {
   try {
     // Ensure items exist (non-destructive)
-    const count = await (prisma as any).storeItem.count();
+    const count = await prisma.storeItem.count();
     if (count === 0) {
       for (const it of DEFAULT_ITEMS) {
-        await (prisma as any).storeItem.upsert({
+        await prisma.storeItem.upsert({
           where: { sku: it.sku },
           update: {},
           create: {
@@ -47,10 +46,22 @@ export async function GET() {
       }
     }
 
-    const items = await (prisma as any).storeItem.findMany({ orderBy: { createdAt: "asc" } });
+    const items = await prisma.storeItem.findMany({
+      orderBy: { createdAt: "asc" },
+      select: {
+        id: true,
+        sku: true,
+        name: true,
+        description: true,
+        type: true,
+        price: true,
+        image: true,
+        purchasable: true,
+      },
+    });
 
     return NextResponse.json({ items });
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("GET /api/store/catalog error:", err);
     return NextResponse.json({ items: [], error: "Failed to load store catalog." }, { status: 500 });
   }

@@ -1,6 +1,6 @@
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 generator client {
@@ -35,6 +35,9 @@ model User {
   reviews           Review[]
   userItems         UserItem[]
   coinTransactions  CoinTransaction[]
+  sentGifts         Gift[]          @relation("GiftSender")
+  receivedGifts     Gift[]          @relation("GiftRecipient")
+  bookmarks         Bookmark[]
 }
 
 model Account {
@@ -269,6 +272,64 @@ model Course {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   reviews     Review[]
+  modules     CourseModule[]
+}
+
+model CourseModule {
+  id          String   @id @default(cuid())
+  courseId    String
+  staticId    String
+  order       Int
+  title       String
+  subtitle    String?
+  description String?
+  duration    String?
+  xp          Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  course  Course         @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  lessons CourseLesson[]
+
+  @@unique([courseId, staticId])
+  @@index([courseId, order])
+}
+
+model CourseLesson {
+  id                 String   @id @default(cuid())
+  moduleId           String
+  staticId           String
+  order              Int
+  title              String
+  subtitle           String?
+  description        String?
+  estimatedDuration  String?
+  readingTimeMinutes Int?
+  type               String
+  xpReward           Int      @default(0)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  module    CourseModule @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  bookmarks Bookmark[]
+
+  @@unique([moduleId, staticId])
+  @@index([moduleId, order])
+}
+
+model Bookmark {
+  id        String       @id @default(cuid())
+  userId    String
+  lessonId  String
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  user   User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lesson CourseLesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, lessonId])
+  @@index([userId, createdAt])
+  @@index([lessonId])
 }
 
 model Review {
@@ -298,9 +359,11 @@ model StoreItem {
   image       String?
   metadata    Json?
   purchasable Boolean  @default(true)
+  giftable    Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   userItems   UserItem[]
+  gifts       Gift[]
 }
 
 model UserItem {
@@ -318,12 +381,36 @@ model UserItem {
   @@index([itemId])
 }
 
+model Gift {
+  id                   String     @id @default(cuid())
+  senderId             String
+  recipientId          String
+  itemId               String?
+  coinAmount           Int?
+  status               String     @default("COMPLETED")
+  senderTransactionId  String?
+  recipientTransactionId String?
+  createdAt            DateTime   @default(now())
+  updatedAt            DateTime   @updatedAt
+  completedAt          DateTime?
+
+  sender    User       @relation("GiftSender", fields: [senderId], references: [id], onDelete: Cascade)
+  recipient User       @relation("GiftRecipient", fields: [recipientId], references: [id], onDelete: Cascade)
+  item      StoreItem? @relation(fields: [itemId], references: [id], onDelete: SetNull)
+
+  @@index([senderId])
+  @@index([recipientId])
+  @@index([status])
+  @@index([itemId])
+}
+
 model CoinTransaction {
   id         String   @id @default(cuid())
   userId     String
   amount     Int
   type       String   // PURCHASE, GIFT_SEND, GIFT_RECEIVE, REWARD, ADJUSTMENT
   credit     Boolean  @default(false)
+  balanceAfter Int     @default(0)
   reason     String?
   relatedId  String?  // e.g., StoreItem id, Course id, Gift id
   createdAt  DateTime @default(now())

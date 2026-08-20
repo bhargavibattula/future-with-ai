@@ -37,7 +37,6 @@ export async function POST(req: Request) {
       courseId: body.courseId,
       lessonId: body.lessonId,
       xp: typeof body.xp === "number" ? body.xp : 50,
-      coins: typeof body.coins === "number" ? body.coins : 20,
       timeSpent: typeof body.timeSpent === "number" ? body.timeSpent : 15,
       completionPercentage: typeof body.completionPercentage === "number" ? body.completionPercentage : 100,
     });

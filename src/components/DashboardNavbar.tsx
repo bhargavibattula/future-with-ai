@@ -382,6 +382,15 @@ export default function DashboardNavbar() {
                   <span>Saved AI Tools</span>
                 </Link>
 
+                <Link
+                  href="/dashboard/bookmarks"
+                  onClick={() => setProfileDropdownOpen(false)}
+                  className="flex items-center gap-2.5 px-3 py-2 text-sm font-semibold text-[var(--foreground)] rounded-xl hover:bg-[#F3F0FE] dark:hover:bg-[#282142] transition-colors"
+                >
+                  <Bookmark className="w-4 h-4 text-[#8B7FE8]" />
+                  <span>Saved Lessons</span>
+                </Link>
+
                 <div className="flex items-center gap-2.5 px-3 py-2 text-sm font-semibold text-[var(--foreground)] rounded-xl hover:bg-[#F3F0FE] dark:hover:bg-[#282142] transition-colors cursor-default">
                   <ShieldCheck className="w-4 h-4 text-[#8B7FE8]" />
                   <span>2FA Security Active</span>

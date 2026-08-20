@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
+import { Bookmark, BookmarkCheck } from "lucide-react";
 import {
   CourseModule,
   CourseLesson,
@@ -27,11 +28,63 @@ interface CourseLessonClientProps {
 export default function CourseLessonClient({ slug, lessonId }: CourseLessonClientProps) {
   const router = useRouter();
   const [progressState, setProgressState] = useState<UserCourseProgressState | null>(null);
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [bookmarkLoading, setBookmarkLoading] = useState(true);
+  const [bookmarkSaving, setBookmarkSaving] = useState(false);
+  const [bookmarkError, setBookmarkError] = useState<string | null>(null);
 
   useEffect(() => {
     const saved = getStoredUserProgress(slug);
     setProgressState(saved);
   }, [slug]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadBookmark = async () => {
+      setBookmarkLoading(true);
+      setBookmarkError(null);
+      try {
+        const response = await fetch(
+          `/api/lessons/${encodeURIComponent(lessonId)}/bookmark?courseSlug=${encodeURIComponent(slug)}`,
+        );
+        const data = await response.json();
+        if (!response.ok) throw new Error(data?.error || "Failed to load bookmark state.");
+        if (!cancelled) setIsBookmarked(Boolean(data.bookmarked));
+      } catch (error: unknown) {
+        if (!cancelled) {
+          setBookmarkError(error instanceof Error ? error.message : "Failed to load bookmark state.");
+        }
+      } finally {
+        if (!cancelled) setBookmarkLoading(false);
+      }
+    };
+
+    void loadBookmark();
+    return () => {
+      cancelled = true;
+    };
+  }, [lessonId, slug]);
+
+  const handleBookmarkToggle = async () => {
+    setBookmarkSaving(true);
+    setBookmarkError(null);
+    try {
+      const url = `/api/bookmarks/${encodeURIComponent(lessonId)}?courseSlug=${encodeURIComponent(slug)}`;
+      const response = await fetch(isBookmarked ? url : "/api/bookmarks", {
+        method: isBookmarked ? "DELETE" : "POST",
+        headers: { "Content-Type": "application/json" },
+        body: isBookmarked ? undefined : JSON.stringify({ courseSlug: slug, lessonId }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data?.error || "Failed to update bookmark.");
+      setIsBookmarked(Boolean(data.bookmarked));
+    } catch (error: unknown) {
+      setBookmarkError(error instanceof Error ? error.message : "Failed to update bookmark.");
+    } finally {
+      setBookmarkSaving(false);
+    }
+  };
 
   const pathData = getCoursePathData(slug, progressState || undefined);
 
@@ -211,11 +264,32 @@ export default function CourseLessonClient({ slug, lessonId }: CourseLessonClien
   }
 
   return (
-    <LessonContainer 
-      cards={generatedCards} 
-      onFinishLesson={handleMarkComplete} 
-      onExit={handleExit} 
-      lessonTitle={targetLesson.title}
-    />
+    <div className="min-h-screen bg-[var(--background)]">
+      <div className="mx-auto flex max-w-5xl items-center justify-end gap-3 px-4 pt-4 sm:px-6">
+        {bookmarkError && <span className="text-xs text-red-600">{bookmarkError}</span>}
+        <button
+          type="button"
+          onClick={() => void handleBookmarkToggle()}
+          disabled={bookmarkLoading || bookmarkSaving}
+          aria-label={isBookmarked ? "Remove lesson bookmark" : "Bookmark lesson"}
+          title={isBookmarked ? "Bookmarked" : "Bookmark lesson"}
+          className="inline-flex items-center gap-2 rounded-xl border border-[#EAE6FE] bg-white px-3 py-2 text-xs font-bold text-[#6B6785] shadow-sm transition-colors hover:bg-[#F3F0FE] disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          {bookmarkLoading || bookmarkSaving ? (
+            "Saving..."
+          ) : isBookmarked ? (
+            <><BookmarkCheck className="h-4 w-4 text-[#8B7FE8]" /> Bookmarked</>
+          ) : (
+            <><Bookmark className="h-4 w-4" /> Bookmark</>
+          )}
+        </button>
+      </div>
+      <LessonContainer
+        cards={generatedCards}
+        onFinishLesson={handleMarkComplete}
+        onExit={handleExit}
+        lessonTitle={targetLesson.title}
+      />
+    </div>
   );
 }

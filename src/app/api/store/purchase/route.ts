@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { debitCoins } from "@/lib/coins";
 
 export async function POST(req: Request) {
   try {
@@ -19,51 +20,42 @@ export async function POST(req: Request) {
     if (!itemId) return NextResponse.json({ success: false, error: "Missing itemId." }, { status: 400 });
 
     // Find by id or sku
-    const item = await (prisma as any).storeItem.findFirst({ where: { OR: [{ id: itemId }, { sku: itemId }] } });
+    const item = await prisma.storeItem.findFirst({ where: { OR: [{ id: itemId }, { sku: itemId }] } });
     if (!item) return NextResponse.json({ success: false, error: "Item not found." }, { status: 404 });
 
     if (!item.purchasable) return NextResponse.json({ success: false, error: "Item is not available for purchase." }, { status: 400 });
 
     // Atomic transaction: check balance, deduct, grant, record
     const result = await prisma.$transaction(async (tx) => {
-      // Load userProgress for reliable coin totals
-      const txAny = tx as any;
-      let progress = await txAny.userProgress.findUnique({ where: { userId } });
-      if (!progress) {
-        const user = await tx.user.findUnique({ where: { id: userId } });
-        progress = await tx.userProgress.create({ data: { userId, totalCoins: user?.coins || 0 } });
-      }
-
-      if (progress.totalCoins < item.price) {
-        throw new Error("Insufficient coins.");
-      }
-
       // Prevent duplicate unique ownership for non-consumable items
       if (item.type !== "consumable") {
-        const existing = await txAny.userItem.findUnique({ where: { userId_itemId: { userId, itemId: item.id } } }).catch(() => null);
+        const existing = await tx.userItem.findUnique({ where: { userId_itemId: { userId, itemId: item.id } } });
         if (existing) {
           throw new Error("Item already owned.");
         }
       }
 
-      const updatedProgress = await txAny.userProgress.update({ where: { userId }, data: { totalCoins: { decrement: item.price } } });
-
-      // Sync user coins on User model
-      await tx.user.update({ where: { id: userId }, data: { coins: updatedProgress.totalCoins } });
+      const coinDebit = await debitCoins(
+        userId,
+        {
+          amount: item.price,
+          type: "PURCHASE",
+          reason: `Purchase ${item.sku}`,
+          relatedId: item.id,
+        },
+        tx,
+      );
 
       // Grant item (create UserItem)
-      await txAny.userItem.create({ data: { userId, itemId: item.id, quantity: 1 } }).catch(() => null);
+      await tx.userItem.create({ data: { userId, itemId: item.id, quantity: 1 } });
 
-      // Record transaction
-      await txAny.coinTransaction.create({ data: { userId, amount: item.price, type: "PURCHASE", credit: false, reason: `Purchase ${item.sku}`, relatedId: item.id } });
-
-      return { remainingCoins: updatedProgress.totalCoins };
+      return { remainingCoins: coinDebit.balanceAfter };
     });
 
     return NextResponse.json({ success: true, message: `Purchased ${item.name}`, newBalance: result.remainingCoins });
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("POST /api/store/purchase error:", err);
-    const status = err.message && err.message.includes("Insufficient") ? 400 : 400;
-    return NextResponse.json({ success: false, error: err.message || "Purchase failed." }, { status });
+    const message = err instanceof Error ? err.message : "Purchase failed.";
+    return NextResponse.json({ success: false, error: message }, { status: 400 });
   }
 }

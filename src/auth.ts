@@ -33,6 +33,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           // 1. Fetch user from database
           const user = await prisma.user.findUnique({
             where: { email: emailStr },
+            include: { progress: { select: { totalCoins: true } } },
           });
 
           if (!user || !user.password) {
@@ -93,7 +94,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             name: user.name || emailStr.split("@")[0],
             email: user.email,
             role: user.role || "Learner",
-            coins: user.coins || 0,
+            coins: user.progress?.totalCoins ?? user.coins ?? 0,
             xp: user.xp || 0,
             image: user.image,
           };
