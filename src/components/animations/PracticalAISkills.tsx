@@ -4,23 +4,23 @@ import React from "react";
 import Image from "next/image";
 
 const toolIcons = [
-  { src: "/ai-tools/chatgpt.svg", name: "ChatGPT" },
-  { src: "/ai-tools/claude.svg", name: "Claude" },
-  { src: "/ai-tools/gemini.svg", name: "Gemini" },
-  { src: "/ai-tools/midjourney.svg", name: "Midjourney" },
-  { src: "/ai-tools/dalle.svg", name: "DALL·E" },
-  { src: "/ai-tools/perplexity.svg", name: "Perplexity" },
-  { src: "/ai-tools/runway.svg", name: "Runway" },
-  { src: "/ai-tools/canva.svg", name: "Canva" },
-  { src: "/ai-tools/cursor.svg", name: "Cursor" },
-  { src: "/ai-tools/copilot.svg", name: "Copilot" },
-  { src: "/ai-tools/sora.svg", name: "Sora" },
-  { src: "/ai-tools/elevenlabs.svg", name: "ElevenLabs" },
-  { src: "/ai-tools/jasper.svg", name: "Jasper" },
-  { src: "/ai-tools/synthesia.svg", name: "Synthesia" },
-  { src: "/ai-tools/stable-diffusion.svg", name: "Stable Diffusion" },
-  { src: "/ai-tools/v0.svg", name: "v0" },
-  { src: "/ai-tools/writesonic.svg", name: "Writesonic" },
+  { src: "/ai-tools/chatgpt.png", name: "ChatGPT" },
+  { src: "/ai-tools/claude.png", name: "Claude" },
+  { src: "/ai-tools/gemini.png", name: "Gemini" },
+  { src: "/ai-tools/midjourney.png", name: "Midjourney" },
+  { src: "/ai-tools/dalle.png", name: "DALL·E" },
+  { src: "/ai-tools/perplexity.png", name: "Perplexity" },
+  { src: "/ai-tools/runway.png", name: "Runway" },
+  { src: "/ai-tools/canva.png", name: "Canva" },
+  { src: "/ai-tools/cursor.png", name: "Cursor" },
+  { src: "/ai-tools/copilot.png", name: "Copilot" },
+  { src: "/ai-tools/sora.png", name: "Sora" },
+  { src: "/ai-tools/elevenlabs.png", name: "ElevenLabs" },
+  { src: "/ai-tools/jasper.png", name: "Jasper" },
+  { src: "/ai-tools/synthesia.png", name: "Synthesia" },
+  { src: "/ai-tools/stable-diffusion.png", name: "Stable Diffusion" },
+  { src: "/ai-tools/v0.png", name: "v0" },
+  { src: "/ai-tools/writesonic.png", name: "Writesonic" },
 ];
 
 export default function PracticalAISkills() {
@@ -54,8 +54,8 @@ export default function PracticalAISkills() {
           {/* Column 1 - Moving Down */}
           <div className="flex flex-col gap-5 lg:gap-6 w-[110px] lg:w-[140px] practical-ai-down">
             {col1.map((tool, index) => (
-              <div key={`c1-${index}`} className="w-[110px] h-[110px] lg:w-[140px] lg:h-[140px] rounded-[1.75rem] overflow-hidden shadow-xl shadow-black/20 flex-shrink-0">
-                <Image src={tool.src} alt={tool.name} width={140} height={140} className="w-full h-full object-cover" />
+              <div key={`c1-${index}`} className="w-[110px] h-[110px] lg:w-[140px] lg:h-[140px] rounded-[1.75rem] overflow-hidden shadow-xl shadow-black/20 flex-shrink-0 bg-white dark:bg-slate-900 flex items-center justify-center p-6 border border-slate-100 dark:border-slate-800">
+                <Image src={tool.src} alt={tool.name} width={140} height={140} className="w-full h-full object-contain drop-shadow-md" />
               </div>
             ))}
           </div>
@@ -63,8 +63,8 @@ export default function PracticalAISkills() {
           {/* Column 2 - Moving Up */}
           <div className="flex flex-col gap-5 lg:gap-6 w-[110px] lg:w-[140px] practical-ai-up" style={{ animationDelay: '-3s' }}>
             {col2.map((tool, index) => (
-              <div key={`c2-${index}`} className="w-[110px] h-[110px] lg:w-[140px] lg:h-[140px] rounded-[1.75rem] overflow-hidden shadow-xl shadow-black/20 flex-shrink-0">
-                <Image src={tool.src} alt={tool.name} width={140} height={140} className="w-full h-full object-cover" />
+              <div key={`c2-${index}`} className="w-[110px] h-[110px] lg:w-[140px] lg:h-[140px] rounded-[1.75rem] overflow-hidden shadow-xl shadow-black/20 flex-shrink-0 bg-white dark:bg-slate-900 flex items-center justify-center p-6 border border-slate-100 dark:border-slate-800">
+                <Image src={tool.src} alt={tool.name} width={140} height={140} className="w-full h-full object-contain drop-shadow-md" />
               </div>
             ))}
           </div>
@@ -72,8 +72,8 @@ export default function PracticalAISkills() {
           {/* Column 3 - Moving Down */}
           <div className="flex flex-col gap-5 lg:gap-6 w-[110px] lg:w-[140px] practical-ai-down hidden sm:flex" style={{ animationDelay: '-6s' }}>
             {col3.map((tool, index) => (
-              <div key={`c3-${index}`} className="w-[110px] h-[110px] lg:w-[140px] lg:h-[140px] rounded-[1.75rem] overflow-hidden shadow-xl shadow-black/20 flex-shrink-0">
-                <Image src={tool.src} alt={tool.name} width={140} height={140} className="w-full h-full object-cover" />
+              <div key={`c3-${index}`} className="w-[110px] h-[110px] lg:w-[140px] lg:h-[140px] rounded-[1.75rem] overflow-hidden shadow-xl shadow-black/20 flex-shrink-0 bg-white dark:bg-slate-900 flex items-center justify-center p-6 border border-slate-100 dark:border-slate-800">
+                <Image src={tool.src} alt={tool.name} width={140} height={140} className="w-full h-full object-contain drop-shadow-md" />
               </div>
             ))}
           </div>

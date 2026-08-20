@@ -3,23 +3,23 @@ const https = require('https');
 const path = require('path');
 
 const icons = [
-  { file: 'chatgpt.svg', slug: 'openai' },
-  { file: 'claude.svg', slug: 'anthropic' },
-  { file: 'gemini.svg', slug: 'googlegemini' },
-  { file: 'midjourney.svg', slug: 'midjourney' },
-  { file: 'dalle.svg', slug: 'openai' },
-  { file: 'perplexity.svg', slug: 'perplexity' },
-  { file: 'runway.svg', slug: 'runway' }, // Not in simple-icons usually, but maybe?
-  { file: 'canva.svg', slug: 'canva' },
-  { file: 'cursor.svg', slug: 'cursor' },
-  { file: 'copilot.svg', slug: 'githubcopilot' },
-  { file: 'sora.svg', slug: 'openai' },
-  { file: 'elevenlabs.svg', slug: 'elevenlabs' },
-  { file: 'jasper.svg', slug: 'jasper' },
-  { file: 'synthesia.svg', slug: 'synthesia' },
-  { file: 'stable-diffusion.svg', slug: 'stablediffusion' },
-  { file: 'v0.svg', slug: 'vercel' },
-  { file: 'writesonic.svg', slug: 'writesonic' }
+  { file: 'chatgpt.png', domain: 'chatgpt.com' },
+  { file: 'claude.png', domain: 'anthropic.com' },
+  { file: 'gemini.png', domain: 'gemini.google.com' },
+  { file: 'midjourney.png', domain: 'midjourney.com' },
+  { file: 'dalle.png', domain: 'openai.com' },
+  { file: 'perplexity.png', domain: 'perplexity.ai' },
+  { file: 'runway.png', domain: 'runwayml.com' },
+  { file: 'canva.png', domain: 'canva.com' },
+  { file: 'cursor.png', domain: 'cursor.sh' },
+  { file: 'copilot.png', domain: 'github.com' },
+  { file: 'sora.png', domain: 'openai.com' },
+  { file: 'elevenlabs.png', domain: 'elevenlabs.io' },
+  { file: 'jasper.png', domain: 'jasper.ai' },
+  { file: 'synthesia.png', domain: 'synthesia.io' },
+  { file: 'stable-diffusion.png', domain: 'stability.ai' },
+  { file: 'v0.png', domain: 'v0.dev' },
+  { file: 'writesonic.png', domain: 'writesonic.com' }
 ];
 
 const destDir = path.join(__dirname, 'public', 'ai-tools');
@@ -30,7 +30,12 @@ if (!fs.existsSync(destDir)) {
 
 function download(url, dest) {
   return new Promise((resolve, reject) => {
-    https.get(url, { headers: { 'User-Agent': 'Node.js' } }, (response) => {
+    https.get(url, { headers: { 'User-Agent': 'Mozilla/5.0' } }, (response) => {
+      // Handle redirects
+      if (response.statusCode >= 300 && response.statusCode < 400 && response.headers.location) {
+        return download(response.headers.location, dest).then(resolve).catch(reject);
+      }
+      
       if (response.statusCode === 200) {
         const file = fs.createWriteStream(dest);
         response.pipe(file);
@@ -45,15 +50,12 @@ function download(url, dest) {
 async function main() {
   for (const icon of icons) {
     const dest = path.join(destDir, icon.file);
-    const url = `https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/${icon.slug}.svg`;
+    const url = `https://www.google.com/s2/favicons?domain=${icon.domain}&sz=256`;
     try {
       await download(url, dest);
       console.log(`✅ Downloaded ${icon.file}`);
     } catch (e) {
       console.log(`❌ Failed ${icon.file}: ${e.message}`);
-      // Fallback: Create a placeholder SVG with text
-      const fallbackSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ffffff"><rect width="24" height="24" rx="4" fill="#333333"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-size="6" fill="#ffffff">${icon.slug.substring(0,6)}</text></svg>`;
-      fs.writeFileSync(dest, fallbackSvg);
     }
   }
 }
