@@ -22,7 +22,6 @@ import {
   Check,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { setStoredUser } from "@/lib/auth";
 import { signIn as nextAuthSignIn } from "next-auth/react";
 
 export type AuthMode =
@@ -409,7 +408,6 @@ export default function AuthCard({
           } else {
             // Save user profile session!
             const displayName = fullName.trim() || email.split("@")[0];
-            setStoredUser({ name: displayName, email: email.trim() });
 
             // SUCCESS OTP VERIFICATION FOR LOGIN / SIGNUP -> REDIRECT TO HOME PAGE!
             setSuccessMsg(`Welcome, ${displayName}! Redirecting to dashboard...`);

@@ -154,17 +154,19 @@ export default function DashboardPage() {
       // 3. Staggered Timeline Activity Fade-in
       if (timelineRef.current) {
         const items = timelineRef.current.querySelectorAll(".timeline-item");
-        gsap.fromTo(
-          items,
-          { opacity: 0, y: 15 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.5,
-            stagger: 0.08,
-            ease: "power2.out",
-          }
-        );
+        if (items.length > 0) {
+          gsap.fromTo(
+            items,
+            { opacity: 0, y: 15 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.5,
+              stagger: 0.08,
+              ease: "power2.out",
+            }
+          );
+        }
       }
     }, pageRef);
 

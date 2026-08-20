@@ -4,6 +4,7 @@ import Script from "next/script";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { AuthProvider } from "@/components/AuthProvider";
+import { Toaster } from "react-hot-toast";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -47,6 +48,7 @@ export default function RootLayout({
         <ThemeProvider>
           <AuthProvider>
             {children}
+            <Toaster position="bottom-right" />
           </AuthProvider>
         </ThemeProvider>
       </body>

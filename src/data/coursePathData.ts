@@ -2465,46 +2465,7 @@ export function EngineeringHero({ title }: { title: string }) {
   }
 ];
 
-// Helper to get or calculate user progress from localStorage / state
-export function getStoredUserProgress(slug: string): UserCourseProgressState {
-  if (typeof window === "undefined") {
-    return {
-      completedLessonIds: ["l-101"],
-      completedModuleIds: [],
-      quizScores: {},
-      totalXp: 50,
-      currentStreakDays: 1,
-      lastActiveDate: new Date().toISOString(),
-    };
-  }
-
-  const storageKey = `future_ai_course_progress_${slug}`;
-  const saved = localStorage.getItem(storageKey);
-  if (saved) {
-    try {
-      return JSON.parse(saved);
-    } catch {
-      // fallback
-    }
-  }
-
-  // Initial state for Lovable course: First lesson "l-101" unlocked, 0 modules completed
-  return {
-    completedLessonIds: [],
-    completedModuleIds: [],
-    quizScores: {},
-    totalXp: 0,
-    currentStreakDays: 1,
-    lastActiveDate: new Date().toISOString(),
-  };
-}
-
-export function saveUserProgress(slug: string, state: UserCourseProgressState) {
-  if (typeof window !== "undefined") {
-    const storageKey = `future_ai_course_progress_${slug}`;
-    localStorage.setItem(storageKey, JSON.stringify(state));
-  }
-}
+// Helper removed to force strict backend usage
 
 // Generate tailored pathway data dynamically evaluating user progress state
 export function getCoursePathData(slug: string, progressState?: UserCourseProgressState): DetailedCoursePath {
@@ -2512,7 +2473,14 @@ export function getCoursePathData(slug: string, progressState?: UserCourseProgre
   const course =
     COURSES.find((c) => c.id.replace("course-", "") === cleanSlug) || COURSES[0];
 
-  const userProgress = progressState || getStoredUserProgress(cleanSlug);
+  const userProgress = progressState || {
+    completedLessonIds: [],
+    completedModuleIds: [],
+    quizScores: {},
+    totalXp: 0,
+    currentStreakDays: 0,
+    lastActiveDate: new Date().toISOString(),
+  };
 
   // Base raw modules
   const rawModules = cleanSlug === "lovable" ? LOVABLE_CURRICULUM_MODULES : LOVABLE_CURRICULUM_MODULES;

@@ -231,10 +231,17 @@ export default function StreaksPanel() {
       // Refresh dashboard data
       if (json.dashboard) {
         setDashboardData(json.dashboard);
-        if (typeof window !== "undefined" && json.dashboard?.progress?.currentStreak !== undefined) {
-          window.dispatchEvent(
-            new CustomEvent("streak-updated", { detail: json.dashboard.progress.currentStreak })
-          );
+        if (typeof window !== "undefined") {
+          if (json.dashboard.progress?.currentStreak !== undefined) {
+            window.dispatchEvent(
+              new CustomEvent("streak-updated", { detail: json.dashboard.progress.currentStreak })
+            );
+          }
+          if (json.result?.log?.xp) {
+            window.dispatchEvent(
+              new CustomEvent("xp-updated", { detail: json.result.log.xp })
+            );
+          }
         }
       } else {
         await fetchDashboard();
@@ -290,6 +297,12 @@ export default function StreaksPanel() {
 
       setIsCelebrating(true);
       setCelebrationMessage(`🏆 ${json.message}`);
+
+      if (typeof window !== "undefined" && json.result?.rewardXP) {
+        window.dispatchEvent(
+          new CustomEvent("xp-updated", { detail: json.result.rewardXP })
+        );
+      }
 
       if (json.dashboard) {
         setDashboardData(json.dashboard);

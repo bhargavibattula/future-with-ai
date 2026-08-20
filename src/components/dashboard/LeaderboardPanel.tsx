@@ -45,34 +45,7 @@ export interface AchievementItem {
 }
 
 // Sample Mock Data Array with Sparklines
-const mockTopPerformers: Record<"daily" | "week" | "month" | "allTime", LeaderboardUser[]> = {
-  daily: [
-    { rank: 1, name: "Aarav Sharma", avatarInitials: "AS", avatarBg: "#8B7FE8", level: 12, xp: 950, accuracy: "98%", streak: 18, coursesCompleted: 6, sparklineData: [20, 35, 45, 60, 80, 95] },
-    { rank: 2, name: "Ananya Rao", avatarInitials: "AR", avatarBg: "#5CBFA0", level: 10, xp: 820, accuracy: "95%", streak: 14, coursesCompleted: 5, sparklineData: [15, 30, 40, 55, 70, 82] },
-    { rank: 3, name: "Vikram Patel", avatarInitials: "VP", avatarBg: "#FFC9DE", level: 9, xp: 750, accuracy: "94%", streak: 12, coursesCompleted: 4, sparklineData: [10, 25, 35, 50, 65, 75] },
-    { rank: 4, name: "You (Bhargavi)", avatarInitials: "BB", avatarBg: "#8B7FE8", level: 8, xp: 680, accuracy: "96%", streak: 14, coursesCompleted: 4, sparklineData: [12, 28, 38, 52, 60, 68], isCurrentUser: true },
-    { rank: 5, name: "Sneha Reddy", avatarInitials: "SR", avatarBg: "#D8D2FA", level: 8, xp: 610, accuracy: "92%", streak: 9, coursesCompleted: 3, sparklineData: [10, 20, 30, 45, 55, 61] },
-  ],
-  week: [
-    { rank: 1, name: "Aarav Sharma", avatarInitials: "AS", avatarBg: "#8B7FE8", level: 12, xp: 4850, accuracy: "98%", streak: 18, coursesCompleted: 6, sparklineData: [200, 350, 450, 600, 800, 950] },
-    { rank: 2, name: "Ananya Rao", avatarInitials: "AR", avatarBg: "#5CBFA0", level: 10, xp: 4210, accuracy: "95%", streak: 14, coursesCompleted: 5, sparklineData: [150, 300, 400, 550, 700, 820] },
-    { rank: 3, name: "Vikram Patel", avatarInitials: "VP", avatarBg: "#FFC9DE", level: 9, xp: 3950, accuracy: "94%", streak: 12, coursesCompleted: 4, sparklineData: [100, 250, 350, 500, 650, 750] },
-    { rank: 4, name: "You (Bhargavi)", avatarInitials: "BB", avatarBg: "#8B7FE8", level: 8, xp: 3420, accuracy: "96%", streak: 14, coursesCompleted: 4, sparklineData: [120, 280, 380, 520, 600, 680], isCurrentUser: true },
-    { rank: 5, name: "Sneha Reddy", avatarInitials: "SR", avatarBg: "#D8D2FA", level: 8, xp: 3200, accuracy: "92%", streak: 9, coursesCompleted: 3, sparklineData: [100, 200, 300, 450, 550, 610] },
-  ],
-  month: [
-    { rank: 1, name: "Ananya Rao", avatarInitials: "AR", avatarBg: "#5CBFA0", level: 14, xp: 16400, accuracy: "97%", streak: 28, coursesCompleted: 8, sparklineData: [1200, 2500, 4000, 8000, 12000, 16400] },
-    { rank: 2, name: "Aarav Sharma", avatarInitials: "AS", avatarBg: "#8B7FE8", level: 13, xp: 15200, accuracy: "96%", streak: 25, coursesCompleted: 7, sparklineData: [1000, 2200, 3800, 7500, 11000, 15200] },
-    { rank: 3, name: "You (Bhargavi)", avatarInitials: "BB", avatarBg: "#8B7FE8", level: 8, xp: 13800, accuracy: "96%", streak: 14, coursesCompleted: 4, sparklineData: [900, 2000, 3500, 7000, 10000, 13800], isCurrentUser: true },
-    { rank: 4, name: "Vikram Patel", avatarInitials: "VP", avatarBg: "#FFC9DE", level: 11, xp: 12900, accuracy: "93%", streak: 20, coursesCompleted: 5, sparklineData: [800, 1800, 3200, 6500, 9500, 12900] },
-  ],
-  allTime: [
-    { rank: 1, name: "Aarav Sharma", avatarInitials: "AS", avatarBg: "#8B7FE8", level: 24, xp: 48900, accuracy: "99%", streak: 64, coursesCompleted: 15, sparklineData: [5000, 12000, 22000, 35000, 42000, 48900] },
-    { rank: 2, name: "Ananya Rao", avatarInitials: "AR", avatarBg: "#5CBFA0", level: 22, xp: 44200, accuracy: "98%", streak: 52, coursesCompleted: 14, sparklineData: [4500, 11000, 20000, 32000, 39000, 44200] },
-    { rank: 3, name: "Vikram Patel", avatarInitials: "VP", avatarBg: "#FFC9DE", level: 19, xp: 38100, accuracy: "95%", streak: 41, coursesCompleted: 11, sparklineData: [4000, 9500, 17000, 27000, 33000, 38100] },
-    { rank: 4, name: "You (Bhargavi)", avatarInitials: "BB", avatarBg: "#8B7FE8", level: 8, xp: 31800, accuracy: "96%", streak: 14, coursesCompleted: 4, sparklineData: [3500, 8000, 15000, 22000, 27000, 31800], isCurrentUser: true },
-  ],
-};
+// Remove mockTopPerformers completely
 
 const mockRecentAchievements: AchievementItem[] = [
   { title: "Streak Master II (14 Days)", timeAgo: "2h ago", iconBg: "rgba(139, 127, 232, 0.15)", iconColor: "#8B7FE8" },
@@ -88,7 +61,37 @@ export default function LeaderboardPanel() {
   const podiumRef = useRef<HTMLDivElement>(null);
   const crownRef = useRef<SVGSVGElement>(null);
 
-  const currentData = mockTopPerformers[timeframe].filter((u) =>
+  const [leaderboardData, setLeaderboardData] = useState<LeaderboardUser[]>([]);
+
+  useEffect(() => {
+    const fetchLeaderboard = async () => {
+      try {
+        const res = await fetch("/api/leaderboard");
+        const data = await res.json();
+        if (data.success) {
+          const mapped = data.leaderboard.map((u: any) => ({
+            rank: u.rank,
+            name: u.name,
+            avatarInitials: u.name.substring(0, 2).toUpperCase(),
+            avatarBg: u.rank === 1 ? "#8B7FE8" : u.rank === 2 ? "#5CBFA0" : "#FFC9DE",
+            level: u.level || 1,
+            xp: u.xp,
+            accuracy: "98%", // mock accuracy
+            streak: u.streak,
+            coursesCompleted: Math.max(1, Math.floor(u.level / 2)),
+            sparklineData: [u.xp * 0.5, u.xp * 0.7, u.xp * 0.8, u.xp * 0.9, u.xp],
+            isCurrentUser: u.name === "You" || u.name.includes("Bhargavi") // Simple heuristic
+          }));
+          setLeaderboardData(mapped);
+        }
+      } catch (e) {
+        console.error("Failed to fetch leaderboard", e);
+      }
+    };
+    fetchLeaderboard();
+  }, []);
+
+  const currentData = leaderboardData.filter((u) =>
     u.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
   const first = currentData.find((u) => u.rank === 1);
@@ -105,27 +108,29 @@ export default function LeaderboardPanel() {
       // 1. Podium Rise-Up Entrance
       if (podiumRef.current) {
         const blocks = podiumRef.current.querySelectorAll(".podium-block");
-        gsap.fromTo(
-          blocks,
-          { y: 50, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.8,
-            stagger: 0.15,
-            ease: "back.out(1.6)",
-          }
-        );
+        if (blocks.length > 0) {
+          gsap.fromTo(
+            blocks,
+            { y: 50, opacity: 0 },
+            {
+              y: 0,
+              opacity: 1,
+              duration: 0.8,
+              stagger: 0.15,
+              ease: "back.out(1.6)",
+            }
+          );
 
-        // Continuous Gentle 3D Floating Sine Wave Float for Podium
-        gsap.to(blocks, {
-          y: "-=6",
-          duration: 2.2,
-          repeat: -1,
-          yoyo: true,
-          stagger: 0.2,
-          ease: "sine.easeInOut",
-        });
+          // Continuous Gentle 3D Floating Sine Wave Float for Podium
+          gsap.to(blocks, {
+            y: "-=6",
+            duration: 2.2,
+            repeat: -1,
+            yoyo: true,
+            stagger: 0.2,
+            ease: "sine.easeInOut",
+          });
+        }
       }
 
       // 2. Crown Bounce & Rotation
@@ -145,7 +150,7 @@ export default function LeaderboardPanel() {
     }, containerRef);
 
     return () => ctx.revert();
-  }, [timeframe]);
+  }, [timeframe, leaderboardData.length]);
 
   // Helper to generate SVG sparkline path string
   const renderSparkline = (data: number[]) => {

@@ -13,10 +13,9 @@ import {
   DetailedCoursePath,
   CourseModule,
   getCoursePathData,
-  getStoredUserProgress,
-  saveUserProgress,
   UserCourseProgressState
 } from "@/data/coursePathData";
+import { useAuth } from "@/lib/auth";
 
 interface CoursePathClientProps {
   slug: string;
@@ -24,13 +23,35 @@ interface CoursePathClientProps {
 
 export default function CoursePathClient({ slug }: CoursePathClientProps) {
   const router = useRouter();
+  const { user } = useAuth();
   const [progressState, setProgressState] = useState<UserCourseProgressState | null>(null);
 
   // Load progress state on mount
   useEffect(() => {
-    const saved = getStoredUserProgress(slug);
-    setProgressState(saved);
-  }, [slug]);
+    const fetchProgress = async () => {
+      try {
+        const headers: Record<string, string> = {};
+        if (user?.email) headers["X-User-Email"] = user.email;
+        const res = await fetch(`/api/progress/course/${slug}`, { cache: "no-store", headers });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.success) {
+            setProgressState({
+              completedLessonIds: data.enrollment.completedLessonIds || [],
+              completedModuleIds: data.enrollment.completedModuleIds || [],
+              quizScores: data.enrollment.quizScores || {},
+              totalXp: data.userProgress.totalXP || 0,
+              currentStreakDays: data.userProgress.currentStreak || 1,
+              lastActiveDate: new Date().toISOString(),
+            });
+          }
+        }
+      } catch (err) {
+        console.error("Failed to fetch progress from DB", err);
+      }
+    };
+    fetchProgress();
+  }, [slug, user?.email]);
 
   const [pathData, setPathData] = useState<DetailedCoursePath>(() =>
     getCoursePathData(slug, progressState || undefined)
@@ -61,7 +82,14 @@ export default function CoursePathClient({ slug }: CoursePathClientProps) {
   // Mark lesson completed & award XP
   const handleMarkLessonComplete = (moduleId: string, lessonId: string) => {
     setProgressState((prev) => {
-      const state = prev || getStoredUserProgress(slug);
+      const state = prev || {
+        completedLessonIds: [],
+        completedModuleIds: [],
+        quizScores: {},
+        totalXp: 0,
+        currentStreakDays: 1,
+        lastActiveDate: new Date().toISOString(),
+      };
       if (state.completedLessonIds.includes(lessonId)) return state;
 
       const updatedCompletedLessons = [...state.completedLessonIds, lessonId];
@@ -89,8 +117,7 @@ export default function CoursePathClient({ slug }: CoursePathClientProps) {
         totalXp: state.totalXp + bonusXp,
         lastActiveDate: new Date().toISOString(),
       };
-
-      saveUserProgress(slug, newState);
+      
       return newState;
     });
 
@@ -109,9 +136,11 @@ export default function CoursePathClient({ slug }: CoursePathClientProps) {
     }
 
     // Trigger backend activity complete API for streak & XP tracking
+    const actHeaders: Record<string, string> = { "Content-Type": "application/json" };
+    if (user?.email) actHeaders["X-User-Email"] = user.email;
     fetch("/api/activity/complete", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: actHeaders,
       body: JSON.stringify({
         activityType: "LESSON",
         activityId: lessonId,
@@ -127,7 +156,14 @@ export default function CoursePathClient({ slug }: CoursePathClientProps) {
   // Pass Quiz & Unlock Next Module
   const handleQuizPassed = (moduleId: string, score: number, xpReward: number) => {
     setProgressState((prev) => {
-      const state = prev || getStoredUserProgress(slug);
+      const state = prev || {
+        completedLessonIds: [],
+        completedModuleIds: [],
+        quizScores: {},
+        totalXp: 0,
+        currentStreakDays: 1,
+        lastActiveDate: new Date().toISOString(),
+      };
       const updatedModuleIds = state.completedModuleIds.includes(moduleId)
         ? state.completedModuleIds
         : [...state.completedModuleIds, moduleId];
@@ -140,7 +176,6 @@ export default function CoursePathClient({ slug }: CoursePathClientProps) {
         lastActiveDate: new Date().toISOString(),
       };
 
-      saveUserProgress(slug, newState);
       return newState;
     });
   };
@@ -156,7 +191,6 @@ export default function CoursePathClient({ slug }: CoursePathClientProps) {
         currentStreakDays: 1,
         lastActiveDate: new Date().toISOString(),
       };
-      saveUserProgress(slug, resetState);
       setProgressState(resetState);
     } else {
       const allLessonIds = pathData.modules.flatMap((m) => m.lessons.map((l) => l.id));
@@ -170,7 +204,6 @@ export default function CoursePathClient({ slug }: CoursePathClientProps) {
         currentStreakDays: 12,
         lastActiveDate: new Date().toISOString(),
       };
-      saveUserProgress(slug, completeState);
       setProgressState(completeState);
     }
   };

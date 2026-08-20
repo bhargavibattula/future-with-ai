@@ -143,6 +143,35 @@ export async function recordActivityCompletion(userId: string, payload: Activity
     let newLongestStreak = progress.longestStreak;
     let newDaysLearned = progress.daysLearned;
 
+    // Manage CourseEnrollment if courseId is provided
+    if (payload.courseId) {
+      let enrollment = await tx.courseEnrollment.findUnique({
+        where: { userId_courseId: { userId, courseId: payload.courseId } },
+      });
+
+      if (!enrollment) {
+        enrollment = await tx.courseEnrollment.create({
+          data: { userId, courseId: payload.courseId },
+        });
+      }
+
+      if (actType === "LESSON" && payload.lessonId) {
+        if (!enrollment.completedLessonIds.includes(payload.lessonId)) {
+          await tx.courseEnrollment.update({
+            where: { id: enrollment.id },
+            data: { completedLessonIds: { push: payload.lessonId } },
+          });
+        }
+      } else if (actType === "QUIZ" && payload.lessonId) {
+        if (!enrollment.completedModuleIds.includes(payload.lessonId)) {
+          await tx.courseEnrollment.update({
+            where: { id: enrollment.id },
+            data: { completedModuleIds: { push: payload.lessonId } },
+          });
+        }
+      }
+    }
+
     // 2. Streak logic check
     const lastDate = progress.lastActivityDate;
 

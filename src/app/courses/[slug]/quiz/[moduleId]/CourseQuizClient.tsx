@@ -21,10 +21,9 @@ import {
   CourseModule,
   CourseQuiz,
   getCoursePathData,
-  getStoredUserProgress,
-  saveUserProgress,
   UserCourseProgressState
 } from "@/data/coursePathData";
+import { useAuth } from "@/lib/auth";
 
 interface CourseQuizClientProps {
   slug: string;
@@ -33,14 +32,36 @@ interface CourseQuizClientProps {
 
 export default function CourseQuizClient({ slug, moduleId }: CourseQuizClientProps) {
   const router = useRouter();
+  const { user } = useAuth();
   const [progressState, setProgressState] = useState<UserCourseProgressState | null>(null);
   const [userAnswers, setUserAnswers] = useState<Record<number, string>>({});
   const [submitted, setSubmitted] = useState<boolean>(false);
 
   useEffect(() => {
-    const saved = getStoredUserProgress(slug);
-    setProgressState(saved);
-  }, [slug]);
+    const fetchProgress = async () => {
+      try {
+        const headers: Record<string, string> = {};
+        if (user?.email) headers["X-User-Email"] = user.email;
+        const res = await fetch(`/api/progress/course/${slug}`, { cache: "no-store", headers });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.success) {
+            setProgressState({
+              completedLessonIds: data.enrollment.completedLessonIds || [],
+              completedModuleIds: data.enrollment.completedModuleIds || [],
+              quizScores: data.enrollment.quizScores || {},
+              totalXp: data.userProgress.totalXP || 0,
+              currentStreakDays: data.userProgress.currentStreak || 1,
+              lastActiveDate: new Date().toISOString(),
+            });
+          }
+        }
+      } catch (err) {
+        console.error("Failed to fetch progress from DB", err);
+      }
+    };
+    fetchProgress();
+  }, [slug, user?.email]);
 
   const pathData = getCoursePathData(slug, progressState || undefined);
   const targetModule = pathData.modules.find((m) => m.id === moduleId);
@@ -105,11 +126,44 @@ export default function CourseQuizClient({ slug, moduleId }: CourseQuizClientPro
   const score = calculateScore();
   const isPassed = score > 50;
 
-  const handleSubmitQuiz = () => {
+  const handleSubmitQuiz = async () => {
     setSubmitted(true);
     if (score > 50) {
+      const bonusXp = quiz.xpReward || 100;
+      
+      // Update backend via API
+      try {
+        const fetchHeaders: Record<string, string> = { "Content-Type": "application/json" };
+        if (user?.email) fetchHeaders["X-User-Email"] = user.email;
+        await fetch("/api/activity/complete", {
+          method: "POST",
+          headers: fetchHeaders,
+          body: JSON.stringify({
+            activityType: "QUIZ",
+            activityId: moduleId,
+            courseId: slug,
+            lessonId: moduleId,
+            xp: bonusXp,
+            timeSpent: 10,
+            completionPercentage: score,
+          })
+        });
+        window.dispatchEvent(new CustomEvent("xp-updated", { detail: bonusXp }));
+      } catch (err) {
+        console.error("Failed to update quiz completion", err);
+      }
+
+      // Update local state for immediate UI feedback
       setProgressState((prev) => {
-        const state = prev || getStoredUserProgress(slug);
+        const state = prev || {
+          completedLessonIds: [],
+          completedModuleIds: [],
+          quizScores: {},
+          totalXp: 0,
+          currentStreakDays: 1,
+          lastActiveDate: new Date().toISOString(),
+        };
+        
         const updatedModuleIds = state.completedModuleIds.includes(moduleId)
           ? state.completedModuleIds
           : [...state.completedModuleIds, moduleId];
@@ -118,11 +172,10 @@ export default function CourseQuizClient({ slug, moduleId }: CourseQuizClientPro
           ...state,
           completedModuleIds: updatedModuleIds,
           quizScores: { ...state.quizScores, [moduleId]: score },
-          totalXp: state.totalXp + (quiz.xpReward || 100),
+          totalXp: state.totalXp + bonusXp,
           lastActiveDate: new Date().toISOString(),
         };
 
-        saveUserProgress(slug, newState);
         return newState;
       });
     }

@@ -34,7 +34,8 @@ export default function DashboardNavbar() {
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const [learnDropdownOpen, setLearnDropdownOpen] = useState(false);
   const [toolsDropdownOpen, setToolsDropdownOpen] = useState(false);
-  const [streakCount, setStreakCount] = useState<number>(14);
+  const [streakCount, setStreakCount] = useState<number>(0);
+  const [xpCount, setXpCount] = useState<number>(0);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
   const learnRef = useRef<HTMLDivElement>(null);
@@ -46,8 +47,13 @@ export default function DashboardNavbar() {
       try {
         const res = await fetch("/api/streak");
         const json = await res.json();
-        if (res.ok && json.success && json.data?.progress?.currentStreak !== undefined) {
-          setStreakCount(json.data.progress.currentStreak);
+        if (res.ok && json.success) {
+          if (json.data?.progress?.currentStreak !== undefined) {
+            setStreakCount(json.data.progress.currentStreak);
+          }
+          if (json.data?.progress?.totalXP !== undefined) {
+            setXpCount(json.data.progress.totalXP);
+          }
         }
       } catch (err) {
         console.error("Failed to fetch streak in navbar:", err);
@@ -65,10 +71,21 @@ export default function DashboardNavbar() {
       }
     };
 
+    const handleXpUpdate = (e: Event) => {
+      const customEvt = e as CustomEvent<number>;
+      if (customEvt.detail !== undefined && typeof customEvt.detail === "number") {
+        setXpCount((prev) => prev + customEvt.detail);
+      } else {
+        fetchStreak();
+      }
+    };
+
     window.addEventListener("streak-updated", handleStreakUpdate);
+    window.addEventListener("xp-updated", handleXpUpdate);
     window.addEventListener("storage", handleStreakUpdate);
     return () => {
       window.removeEventListener("streak-updated", handleStreakUpdate);
+      window.removeEventListener("xp-updated", handleXpUpdate);
       window.removeEventListener("storage", handleStreakUpdate);
     };
   }, []);
@@ -327,6 +344,15 @@ export default function DashboardNavbar() {
             <span>{streakCount}</span>
           </Link>
 
+          {/* XP Badge */}
+          <Link 
+            href="/dashboard/leaderboard"
+            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#F0FDF4] dark:bg-[#142A1D] border border-[#BBF7D0] dark:border-[#22C55E]/40 text-[#166534] dark:text-[#86EFAC] font-black text-sm shadow-soft-sm cursor-pointer hover:scale-105 transition-all duration-200"
+          >
+            <Trophy className="w-4 h-4 text-amber-500 fill-amber-500" />
+            <span>{xpCount} XP</span>
+          </Link>
+
           {/* User Profile Avatar & Dropdown */}
           <div className="relative" ref={dropdownRef}>
             <button
@@ -415,6 +441,13 @@ export default function DashboardNavbar() {
           >
             <Flame className="w-3.5 h-3.5 text-orange-500 fill-orange-500" />
             <span>{streakCount}</span>
+          </Link>
+          <Link 
+            href="/dashboard/leaderboard"
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#F0FDF4] dark:bg-[#142A1D] border border-[#BBF7D0] dark:border-[#22C55E]/40 text-[#166534] dark:text-[#86EFAC] font-black text-xs shadow-soft-sm"
+          >
+            <Trophy className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
+            <span>{xpCount}</span>
           </Link>
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}

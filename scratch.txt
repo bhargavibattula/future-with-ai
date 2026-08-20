@@ -24,12 +24,10 @@ import {
   CourseModule,
   CourseLesson,
   getCoursePathData,
+  getStoredUserProgress,
+  saveUserProgress,
   UserCourseProgressState
 } from "@/data/coursePathData";
-import { useAuth } from "@/lib/auth";
-
-import confetti from "canvas-confetti";
-import toast from "react-hot-toast";
 
 interface CourseLessonClientProps {
   slug: string;
@@ -38,37 +36,14 @@ interface CourseLessonClientProps {
 
 export default function CourseLessonClient({ slug, lessonId }: CourseLessonClientProps) {
   const router = useRouter();
-  const { user } = useAuth();
   const [progressState, setProgressState] = useState<UserCourseProgressState | null>(null);
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
   const [scrollProgress, setScrollProgress] = useState<number>(0);
 
-  // Fetch progress from Database on mount
   useEffect(() => {
-    const fetchProgress = async () => {
-      try {
-        const headers: Record<string, string> = {};
-        if (user?.email) headers["X-User-Email"] = user.email;
-        const res = await fetch(`/api/progress/course/${slug}`, { cache: "no-store", headers });
-        if (res.ok) {
-          const data = await res.json();
-          if (data.success) {
-            setProgressState({
-              completedLessonIds: data.enrollment.completedLessonIds || [],
-              completedModuleIds: data.enrollment.completedModuleIds || [],
-              quizScores: data.enrollment.quizScores || {},
-              totalXp: data.userProgress.totalXP || 0,
-              currentStreakDays: data.userProgress.currentStreak || 1,
-              lastActiveDate: new Date().toISOString(),
-            });
-          }
-        }
-      } catch (err) {
-        console.error("Failed to fetch progress from DB", err);
-      }
-    };
-    fetchProgress();
-  }, [slug, user?.email]);
+    const saved = getStoredUserProgress(slug);
+    setProgressState(saved);
+  }, [slug]);
 
   const pathData = getCoursePathData(slug, progressState || undefined);
 
@@ -117,105 +92,28 @@ export default function CourseLessonClient({ slug, lessonId }: CourseLessonClien
     );
   }
 
-  const currentLessonIndex = parentModule.lessons.findIndex((l) => l.id === targetLesson!.id);
+  const currentLessonIndex = parentModule.lessons.findIndex((l) => l.id === targetLesson.id);
   const previousLesson = currentLessonIndex > 0 ? parentModule.lessons[currentLessonIndex - 1] : null;
   const nextLesson = currentLessonIndex < parentModule.lessons.length - 1 ? parentModule.lessons[currentLessonIndex + 1] : null;
 
-  const handleMarkComplete = async (skipRedirect = false, nextRoute?: string) => {
-    if (!parentModule || !targetLesson) return;
-    
-    // Prevent double clicking / completing if already completed
-    if (progressState?.completedLessonIds.includes(lessonId)) {
-      if (!skipRedirect) router.push(`/courses/${slug}`);
-      if (nextRoute) router.push(nextRoute);
-      return;
-    }
-
-    // 1. Calculate XP locally
-    let bonusXp = targetLesson.xpReward || 50;
-    const allLessonsDone = parentModule.lessons.every(
-      (l) => l.id === lessonId || progressState?.completedLessonIds.includes(l.id)
-    );
-    if (allLessonsDone && !parentModule.quiz && !progressState?.completedModuleIds.includes(parentModule.id)) {
-      bonusXp += parentModule.xp;
-    }
-
-    // 2. Visual Effects (Confetti and Toast) - Side Cannons
-    confetti({
-      particleCount: 150,
-      spread: 70,
-      origin: { x: 0.1, y: 0.6 },
-      colors: ["#8B7FE8", "#5CBFA0", "#F0879B", "#FFD700"]
-    });
-    confetti({
-      particleCount: 150,
-      spread: 70,
-      origin: { x: 0.9, y: 0.6 },
-      colors: ["#8B7FE8", "#5CBFA0", "#F0879B", "#FFD700"]
-    });
-    
-    toast.success(`Lesson Completed! +${bonusXp} XP gained!`, {
-      icon: "🏆",
-      style: {
-        borderRadius: '10px',
-        background: '#333',
-        color: '#fff',
-      },
-    });
-
-    // 3. Make API request to update backend in background (don't await)
-    try {
-      const fetchHeaders: Record<string, string> = { "Content-Type": "application/json" };
-      if (user?.email) fetchHeaders["X-User-Email"] = user.email;
-      
-      // Fire and forget fetch to not block navigation
-      fetch("/api/activity/complete", {
-        method: "POST",
-        headers: fetchHeaders,
-        body: JSON.stringify({
-          activityType: "LESSON",
-          activityId: lessonId,
-          courseId: slug,
-          lessonId: lessonId,
-          xp: bonusXp,
-          coins: 20,
-          timeSpent: 10
-        })
-      }).then(async (res) => {
-        if (res.ok) {
-          const result = await res.json();
-          console.log("Activity recorded:", result);
-          window.dispatchEvent(new CustomEvent("xp-updated", { detail: bonusXp }));
-        } else {
-          const err = await res.json();
-          console.error("Backend activity error:", err);
-        }
-      }).catch(err => {
-        console.error("Failed to update activity completion on backend:", err);
-      });
-    } catch (err) {
-      console.error("Failed to initiate activity completion fetch:", err);
-    }
-
-    // 4. Update local state just for immediate UI feedback on this page
+  const handleMarkComplete = () => {
     setProgressState((prev) => {
-      const state = prev || {
-        completedLessonIds: [],
-        completedModuleIds: [],
-        quizScores: {},
-        totalXp: 0,
-        currentStreakDays: 1,
-        lastActiveDate: new Date().toISOString(),
-      };
+      const state = prev || getStoredUserProgress(slug);
+      if (state.completedLessonIds.includes(lessonId)) return state;
+
       const updatedCompletedLessons = [...state.completedLessonIds, lessonId];
       let updatedCompletedModules = [...state.completedModuleIds];
+      let bonusXp = 50;
 
-      const reEvalAllLessonsDone = parentModule!.lessons.every(
-        (l) => l.id === lessonId || updatedCompletedLessons.includes(l.id)
-      );
+      if (parentModule) {
+        const allLessonsDone = parentModule.lessons.every(
+          (l) => l.id === lessonId || updatedCompletedLessons.includes(l.id)
+        );
 
-      if (reEvalAllLessonsDone && !parentModule!.quiz && !updatedCompletedModules.includes(parentModule!.id)) {
-        updatedCompletedModules.push(parentModule!.id);
+        if (allLessonsDone && !parentModule.quiz && !updatedCompletedModules.includes(parentModule.id)) {
+          updatedCompletedModules.push(parentModule.id);
+          bonusXp += parentModule.xp;
+        }
       }
 
       const newState: UserCourseProgressState = {
@@ -225,22 +123,10 @@ export default function CourseLessonClient({ slug, lessonId }: CourseLessonClien
         totalXp: state.totalXp + bonusXp,
         lastActiveDate: new Date().toISOString(),
       };
-      
+
+      saveUserProgress(slug, newState);
       return newState;
     });
-
-    // 5. Navigate immediately without delay for seamless experience
-    if (nextRoute) {
-      router.push(nextRoute);
-    } else if (!skipRedirect) {
-      if (nextLesson) {
-        router.push(`/courses/${slug}/lessons/${nextLesson.id}`);
-      } else if (parentModule!.quiz) {
-        router.push(`/courses/${slug}/quiz/${parentModule!.id}`);
-      } else {
-        router.push(`/courses/${slug}`);
-      }
-    }
   };
 
   const handleCopy = (codeText: string) => {
@@ -296,7 +182,7 @@ export default function CourseLessonClient({ slug, lessonId }: CourseLessonClien
             ) : (
               <button
                 type="button"
-                onClick={() => handleMarkComplete(false)}
+                onClick={handleMarkComplete}
                 className="px-4 py-2 rounded-xl text-xs font-extrabold bg-[#8B7FE8] hover:bg-[#786BD6] text-white shadow-soft-sm transition-all flex items-center gap-1.5 cursor-pointer"
               >
                 <Check className="w-4 h-4 stroke-[3]" />
@@ -561,7 +447,7 @@ export default function CourseLessonClient({ slug, lessonId }: CourseLessonClien
                 {!targetLesson.completed && (
                   <button
                     type="button"
-                    onClick={() => handleMarkComplete(false)}
+                    onClick={handleMarkComplete}
                     className="px-5 py-3 rounded-2xl text-xs font-extrabold bg-[#8B7FE8] hover:bg-[#786BD6] text-white shadow-md transition-all flex items-center gap-2 cursor-pointer"
                   >
                     <Check className="w-4 h-4 stroke-[3]" />
@@ -582,7 +468,8 @@ export default function CourseLessonClient({ slug, lessonId }: CourseLessonClien
                   <button
                     type="button"
                     onClick={() => {
-                      handleMarkComplete(true, `/courses/${slug}/quiz/${parentModule!.id}`);
+                      handleMarkComplete();
+                      router.push(`/courses/${slug}/quiz/${parentModule.id}`);
                     }}
                     className="px-5 py-3 rounded-2xl text-xs font-extrabold bg-[#8B7FE8] hover:bg-[#786BD6] text-white shadow-md transition-all flex items-center gap-2 cursor-pointer"
                   >

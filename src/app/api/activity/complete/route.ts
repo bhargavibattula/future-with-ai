@@ -16,11 +16,18 @@ export async function POST(req: Request) {
     }
 
     if (!userId) {
-      const defaultUser = await prisma.user.findFirst();
-      if (!defaultUser) {
-        return NextResponse.json({ success: false, error: "Authentication required." }, { status: 401 });
+      // Try custom auth: X-User-Email header from frontend
+      const emailHeader = req.headers.get("X-User-Email");
+      if (emailHeader) {
+        const dbUser = await prisma.user.findUnique({
+          where: { email: emailHeader.toLowerCase().trim() },
+        });
+        if (dbUser) userId = dbUser.id;
       }
-      userId = defaultUser.id;
+    }
+
+    if (!userId) {
+      return NextResponse.json({ success: false, error: "Authentication required." }, { status: 401 });
     }
 
     const body = await req.json();

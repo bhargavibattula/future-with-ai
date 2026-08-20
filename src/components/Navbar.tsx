@@ -17,6 +17,8 @@ import {
   Settings,
   Shield,
   LayoutDashboard,
+  Flame,
+  Trophy,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import AuthModal from "@/components/auth/AuthModal";
@@ -52,6 +54,44 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  const [localXp, setLocalXp] = useState<number>(0);
+  const [localStreak, setLocalStreak] = useState<number>(0);
+
+  useEffect(() => {
+    const fetchFromDB = async () => {
+      try {
+        const headers: Record<string, string> = {};
+        if (user?.email) headers["X-User-Email"] = user.email;
+        const res = await fetch("/api/user/progress", { cache: "no-store", headers });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.success) {
+            setLocalXp(data.xp);
+            setLocalStreak(data.streak);
+          }
+        }
+      } catch (err) {
+        console.error("Failed to fetch progress for Navbar", err);
+      }
+    };
+
+    if (user) {
+      fetchFromDB();
+    } else {
+      setLocalXp(0);
+      setLocalStreak(0);
+    }
+
+    // When a lesson/quiz is completed, re-fetch the REAL values from DB
+    const handleXpUpdate = () => {
+      // Small delay to let the backend transaction commit
+      setTimeout(() => fetchFromDB(), 500);
+    };
+    
+    window.addEventListener("xp-updated", handleXpUpdate);
+    return () => window.removeEventListener("xp-updated", handleXpUpdate);
+  }, [user]);
 
   const openAuth = (mode: AuthMode) => {
     setAuthModalMode(mode);
@@ -129,7 +169,20 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
 
             {user ? (
               /* LOGGED IN STATE: User Profile Avatar & Dropdown Menu */
-              <div className="relative" ref={dropdownRef}>
+              <div className="flex items-center gap-3">
+                {/* XP and Streak Badges */}
+                <div className="hidden sm:flex items-center gap-2 mr-1">
+                  <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-orange-50 border border-orange-100 text-orange-600 font-extrabold text-[13px] shadow-sm">
+                    <Flame className="w-4 h-4 fill-orange-500" />
+                    <span>{localStreak}</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#FFFBF0] border border-[#FDE29F] text-[#D97706] font-extrabold text-[13px] shadow-sm">
+                    <Trophy className="w-4 h-4 fill-yellow-500 text-yellow-500" />
+                    <span>{localXp} XP</span>
+                  </div>
+                </div>
+
+                <div className="relative" ref={dropdownRef}>
                 <button
                   type="button"
                   onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
@@ -216,6 +269,7 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
                     </div>
                   </div>
                 )}
+              </div>
               </div>
             ) : (
               /* LOGGED OUT STATE: Log in & Sign Up Buttons */
