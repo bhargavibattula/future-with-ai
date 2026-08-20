@@ -41,7 +41,7 @@ export async function POST(req: Request) {
           amount: item.price,
           type: "PURCHASE",
           reason: `Purchase ${item.sku}`,
-          relatedId: item.id,
+          referenceId: item.id,
         },
         tx,
       );

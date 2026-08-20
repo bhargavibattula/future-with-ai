@@ -256,37 +256,15 @@ export default function ExploreAICourses() {
   const carouselTrackRef = useRef<HTMLDivElement>(null);
   const progressFillRef = useRef<HTMLDivElement>(null);
 
-  // Duplicated 9 courses internally for perfect infinite horizontal loop
-  // NOTE: Do not preload all courses for client-side filtering; load from API
-  const [coursesList, setCoursesList] = useState<AICourse[]>([]);
+  // Always use static COURSES data (which has LogoComponent) — filter client-side for search
+  const [coursesList, setCoursesList] = useState<AICourse[]>(COURSES);
   const [searchLoading, setSearchLoading] = useState(false);
   const [searchError, setSearchError] = useState<string | null>(null);
 
-  // Initial load: fetch default course list from API, fallback to COURSES if API unavailable
-  useEffect(() => {
-    const loadInitial = async () => {
-      setSearchError(null);
-      setSearchLoading(true);
-      try {
-        const res = await fetch(`/api/courses/search`);
-        if (!res.ok) throw new Error(`Status ${res.status}`);
-        const json = await res.json();
-        if (json?.courses && Array.isArray(json.courses) && json.courses.length > 0) {
-          setCoursesList(json.courses);
-        } else {
-          // Fallback to mock COURSES if API returns empty
-          setCoursesList(COURSES);
-        }
-      } catch (err: any) {
-        // API unavailable: fallback to mock courses
-        setCoursesList(COURSES);
-      } finally {
-        setSearchLoading(false);
-      }
-    };
-    loadInitial();
-  }, []);
-  const doubledCourses = [...coursesList, ...coursesList, ...coursesList];
+  const doubledCourses = React.useMemo(
+    () => [...coursesList, ...coursesList, ...coursesList],
+    [coursesList]
+  );
 
   // Drag & Wheel & Velocity State
   const [isPaused, setIsPaused] = useState(false);
@@ -331,11 +309,9 @@ export default function ExploreAICourses() {
 
     scrollPosRef.current = newPos;
 
-    // Apply GSAP translation to carousel track
+    // Apply translation directly via style — avoids GSAP internal tracking conflicting with React
     if (carouselTrackRef.current) {
-      gsap.set(carouselTrackRef.current, {
-        x: -newPos,
-      });
+      carouselTrackRef.current.style.transform = `translateX(${-newPos}px)`;
     }
 
     // Update bottom progress bar (0% to 100%)
@@ -347,6 +323,14 @@ export default function ExploreAICourses() {
     animFrameRef.current = requestAnimationFrame(updatePosition);
   }, [isPaused, SINGLE_SET_WIDTH]);
 
+  // Reset scroll position when coursesList changes
+  useEffect(() => {
+    scrollPosRef.current = 0;
+    if (carouselTrackRef.current) {
+      carouselTrackRef.current.style.transform = `translateX(0px)`;
+    }
+  }, [coursesList]);
+
   // Start Animation Loop on Mount
   useEffect(() => {
     animFrameRef.current = requestAnimationFrame(updatePosition);
@@ -355,38 +339,42 @@ export default function ExploreAICourses() {
     };
   }, [updatePosition]);
 
-  // GSAP ScrollTrigger Entrance Reveal
+  // Entrance reveal via CSS animation class — avoids gsap.from() conflicting with React reconciliation
   useEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
+    const header = section.querySelector(".explore-courses-header") as HTMLElement | null;
+    const carousel = section.querySelector(".explore-courses-carousel") as HTMLElement | null;
 
-    const ctx = gsap.context(() => {
-      gsap.from(".explore-courses-header", {
-        opacity: 0,
-        y: 40,
-        duration: 0.8,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: section,
-          start: "top 80%",
-        },
-      });
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            if (header) {
+              header.style.transition = "opacity 0.8s ease, transform 0.8s ease";
+              header.style.opacity = "1";
+              header.style.transform = "translateY(0)";
+            }
+            if (carousel) {
+              carousel.style.transition = "opacity 1s ease 0.2s, transform 1s ease 0.2s";
+              carousel.style.opacity = "1";
+              carousel.style.transform = "translateY(0)";
+            }
+            observer.disconnect();
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
 
-      gsap.from(".explore-courses-carousel", {
-        opacity: 0,
-        y: 60,
-        duration: 1.0,
-        delay: 0.2,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: section,
-          start: "top 75%",
-        },
-      });
-    }, section);
+    // Set initial hidden state
+    if (header) { header.style.opacity = "0"; header.style.transform = "translateY(40px)"; }
+    if (carousel) { carousel.style.opacity = "0"; carousel.style.transform = "translateY(60px)"; }
 
-    return () => ctx.revert();
-  }, []);
+    observer.observe(section);
+    return () => observer.disconnect();
+     }, []);
+
 
   // Mouse Wheel Handler for Horizontal Scrolling
   const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
@@ -457,25 +445,22 @@ export default function ExploreAICourses() {
                 setSearchError(null);
                 setSearchLoading(true);
                 try {
-                  const params = new URLSearchParams();
-                  if (q) params.set("q", q);
-                  if (filters?.category) params.set("category", filters.category);
-                  if (filters?.difficulty) params.set("difficulty", filters.difficulty);
-                  if (filters?.language) params.set("language", filters.language);
-                  if (filters?.duration) params.set("duration", filters.duration);
-
-                  const res = await fetch(`/api/courses/search?${params.toString()}`);
-                  if (!res.ok) throw new Error(`Status ${res.status}`);
-                  const json = await res.json();
-                  if (json?.courses && Array.isArray(json.courses)) {
-                    setCoursesList(json.courses);
-                  } else {
-                    setCoursesList([]);
-                    setSearchError("No results or invalid response from server.");
+                  // Filter static COURSES client-side — guarantees LogoComponent always exists
+                  const qLower = (q || "").toLowerCase().trim();
+                  let results = COURSES;
+                  if (qLower) {
+                    results = results.filter(
+                      (c) =>
+                        c.title.toLowerCase().includes(qLower) ||
+                        c.description.toLowerCase().includes(qLower) ||
+                        c.tags.some((t) => t.toLowerCase().includes(qLower))
+                    );
                   }
+                  setCoursesList(results.length > 0 ? results : COURSES);
+                  if (results.length === 0) setSearchError("No courses found.");
                 } catch (err: any) {
-                  setCoursesList([]);
-                  setSearchError(err?.message || "Search failed. Try again later.");
+                  setCoursesList(COURSES);
+                  setSearchError(err?.message || "Search failed.");
                 } finally {
                   setSearchLoading(false);
                 }
@@ -503,6 +488,7 @@ export default function ExploreAICourses() {
           {/* Horizontal Track */}
           <div
             ref={carouselTrackRef}
+            suppressHydrationWarning
             className="flex items-center gap-7 w-max will-change-transform"
           >
             {coursesList.length > 0 ? (

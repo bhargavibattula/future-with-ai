@@ -1,0 +1,11 @@
+* [33mbcf9e9c[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mpending-tasks[m[33m)[m Implement wallet store gifting and learning features
+[31m|[m * [33m923ba89[m[33m ([m[1;31morigin/pending-tasks[m[33m)[m Implement wallet store gifting and learning features
+[31m|[m[31m/[m  
+* [33m48d2320[m[33m ([m[1;31morigin/shannu[m[33m, [m[1;32mshannu[m[33m)[m changes
+* [33mfc28580[m Update admin prompt categories
+* [33mf13779c[m Implement store, search, and reviews
+* [33m5872b52[m[33m ([m[1;32mmaster[m[33m)[m feat: make entire website fully responsive and mobile-friendly
+* [33mf19b926[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m feat: implement advanced course search and global AI tutor chatbot
+* [33m18d4c5d[m docs: update audit report to mark Lesson Reader as done
+* [33mc381610[m fix: seamless lesson completion, dynamic milestone UI updates, and Next.js 16 build errors
+* [33m394937e[m changed colors of logos in ui

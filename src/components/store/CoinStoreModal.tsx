@@ -226,6 +226,7 @@ export default function CoinStoreModal({ isOpen, onClose }: { isOpen: boolean; o
                 ownedQuantity={ownedByItemId.get(it.id) || 0}
                 purchasing={purchasingId === it.id}
                 onBuy={() => void handlePurchase(it.id)}
+                balance={balance}
               />
             ))
           )}

@@ -183,11 +183,11 @@ export default function CoursePathLeftPanel({
                 </div>
                 <div className="bg-[#F8F9FC] dark:bg-[#0A0A0A] p-2 rounded-xl border border-[#E8E3FF] dark:border-[#2A2540] flex items-center gap-1.5">
                   <Flame className="w-3.5 h-3.5 text-[#F0879B]" />
-                  <span>{data.currentStreak}</span>
+                  <span suppressHydrationWarning>{data.currentStreak}</span>
                 </div>
                 <div className="bg-[#F8F9FC] dark:bg-[#0A0A0A] p-2 rounded-xl border border-[#E8E3FF] dark:border-[#2A2540] flex items-center gap-1.5">
                   <Zap className="w-3.5 h-3.5 text-[#8B7FE8]" />
-                  <span>{data.xpEarned} XP</span>
+                  <span suppressHydrationWarning>{data.xpEarned} XP</span>
                 </div>
               </div>
             </div>

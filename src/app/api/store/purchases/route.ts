@@ -50,7 +50,7 @@ export async function GET(request: Request) {
           amount: true,
           type: true,
           reason: true,
-          relatedId: true,
+          referenceId: true,
           balanceAfter: true,
           createdAt: true,
         },
@@ -58,7 +58,7 @@ export async function GET(request: Request) {
     ]);
 
     const itemIds = transactions
-      .map((transaction) => transaction.relatedId)
+      .map((transaction) => transaction.referenceId)
       .filter((itemId): itemId is string => Boolean(itemId));
     const items = await prisma.storeItem.findMany({
       where: { id: { in: itemIds } },
@@ -83,10 +83,10 @@ export async function GET(request: Request) {
         amount: transaction.amount,
         type: transaction.type,
         reason: transaction.reason,
-        referenceId: transaction.relatedId,
+        referenceId: transaction.referenceId,
         balanceAfter: transaction.balanceAfter,
         createdAt: transaction.createdAt,
-        item: transaction.relatedId ? itemsById.get(transaction.relatedId) || null : null,
+        item: transaction.referenceId ? itemsById.get(transaction.referenceId) || null : null,
       })),
       pagination: {
         page,

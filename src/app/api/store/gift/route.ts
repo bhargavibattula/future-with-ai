@@ -103,7 +103,7 @@ export async function POST(req: Request) {
             amount: item.price,
             type: "GIFT_SEND",
             reason: `Gifted ${item.sku} to ${recipientUser.id}`,
-            relatedId: gift.id,
+            referenceId: gift.id,
           },
           tx,
         );
@@ -132,7 +132,7 @@ export async function POST(req: Request) {
           amount,
           type: "GIFT_SEND",
           reason: `Sent gift to ${recipientUser.id}`,
-          relatedId: gift.id,
+          referenceId: gift.id,
         },
         tx,
       );
@@ -142,7 +142,7 @@ export async function POST(req: Request) {
           amount,
           type: "GIFT_RECEIVE",
           reason: `Received gift from ${senderId}`,
-          relatedId: gift.id,
+          referenceId: gift.id,
         },
         tx,
       );

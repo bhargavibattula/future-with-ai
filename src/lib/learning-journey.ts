@@ -312,7 +312,7 @@ export async function recordActivityCompletion(userId: string, payload: Activity
         amount: coinAmount + bonusCoins,
         type: "REWARD",
         reason: `${actType} completion reward`,
-        relatedId: payload.activityId,
+        referenceId: payload.activityId,
       },
       tx,
     );
@@ -426,7 +426,7 @@ export async function purchaseStreakFreeze(userId: string) {
         amount: 500,
         type: "PURCHASE",
         reason: "Purchase streak freeze",
-        relatedId: "streak-freeze",
+        referenceId: "streak-freeze",
       },
       tx,
     );
@@ -490,7 +490,7 @@ export async function claimMilestoneReward(userId: string, milestoneId: string) 
         amount: milestone.rewardCoins,
         type: "REWARD",
         reason: `Milestone reward: ${milestone.title}`,
-        relatedId: milestone.id,
+        referenceId: milestone.id,
       },
       tx,
     );

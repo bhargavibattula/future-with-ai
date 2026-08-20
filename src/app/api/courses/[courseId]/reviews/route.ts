@@ -2,9 +2,9 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
 
-export async function GET(req: Request, { params }: { params: { courseId: string } }) {
+export async function GET(req: Request, { params }: { params: Promise<{ courseId: string }> }) {
   try {
-    const courseId = params.courseId;
+    const { courseId } = await params;
     if (!courseId) return NextResponse.json({ reviews: [], avgRating: 0, count: 0 });
 
     const course = await (prisma as any).course.findUnique({ where: { id: courseId } });
@@ -21,7 +21,7 @@ export async function GET(req: Request, { params }: { params: { courseId: string
   }
 }
 
-export async function POST(req: Request, { params }: { params: { courseId: string } }) {
+export async function POST(req: Request, { params }: { params: Promise<{ courseId: string }> }) {
   try {
     const session = await auth();
     let userId = session?.user?.id;
@@ -31,7 +31,7 @@ export async function POST(req: Request, { params }: { params: { courseId: strin
     }
     if (!userId) return NextResponse.json({ success: false, error: "Authentication required." }, { status: 401 });
 
-    const courseId = params.courseId;
+    const { courseId } = await params;
     if (!courseId) return NextResponse.json({ success: false, error: "Missing courseId." }, { status: 400 });
 
     const course = await (prisma as any).course.findUnique({ where: { id: courseId } });

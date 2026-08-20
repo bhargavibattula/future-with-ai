@@ -12,7 +12,7 @@ export interface CoinOperationInput {
   amount: number;
   type: CoinTransactionType;
   reason?: string;
-  relatedId?: string;
+  referenceId?: string;
 }
 
 export interface CoinOperationResult {
@@ -101,10 +101,9 @@ async function applyCoinChange(
       userId,
       amount,
       type: input.type,
-      credit,
       balanceAfter: updatedProgress.totalCoins,
       reason: input.reason,
-      relatedId: input.relatedId,
+      referenceId: input.referenceId,
     },
   });
 

@@ -214,6 +214,46 @@ export default function DashboardNavbar() {
                     </div>
                   </div>
                 </Link>
+
+                <Link
+                  href="/dashboard/bookmarks"
+                  onClick={() => setLearnDropdownOpen(false)}
+                  className={`flex items-start gap-3 p-2.5 rounded-xl transition-colors ${
+                    pathname === "/dashboard/bookmarks"
+                      ? "bg-[#F3F0FE] dark:bg-[#282142] text-[#8B7FE8]"
+                      : "hover:bg-[#F8F6FF] dark:hover:bg-[#231E38] text-[var(--foreground)]"
+                  }`}
+                >
+                  <div className="p-2 rounded-lg bg-[#F5F2FF] dark:bg-[#2A2440] text-[#8B7FE8] mt-0.5">
+                    <Bookmark className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <div className="font-extrabold text-xs">Saved Lessons</div>
+                    <div className="text-[11px] font-normal text-[var(--foreground-secondary)]">
+                      Your bookmarked lessons
+                    </div>
+                  </div>
+                </Link>
+
+                <Link
+                  href="/dashboard/wallet"
+                  onClick={() => setLearnDropdownOpen(false)}
+                  className={`flex items-start gap-3 p-2.5 rounded-xl transition-colors ${
+                    pathname === "/dashboard/wallet"
+                      ? "bg-[#F3F0FE] dark:bg-[#282142] text-[#8B7FE8]"
+                      : "hover:bg-[#F8F6FF] dark:hover:bg-[#231E38] text-[var(--foreground)]"
+                  }`}
+                >
+                  <div className="p-2 rounded-lg bg-[#F5F2FF] dark:bg-[#2A2440] text-[#8B7FE8] mt-0.5">
+                    <Trophy className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <div className="font-extrabold text-xs">AI Coins Wallet</div>
+                    <div className="text-[11px] font-normal text-[var(--foreground-secondary)]">
+                      Balance & transaction history
+                    </div>
+                  </div>
+                </Link>
               </div>
             )}
           </div>

@@ -37,20 +37,11 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const page = parsePositiveInteger(searchParams.get("page"), 1);
     const limit = Math.min(parsePositiveInteger(searchParams.get("limit"), 20), 100);
-    const direction = searchParams.get("direction")?.trim().toUpperCase();
     const type = searchParams.get("type")?.trim();
     const reason = searchParams.get("reason")?.trim();
 
-    if (direction && direction !== "CREDIT" && direction !== "DEBIT") {
-      return NextResponse.json(
-        { success: false, error: "direction must be CREDIT or DEBIT." },
-        { status: 400 },
-      );
-    }
-
     const where: Prisma.CoinTransactionWhereInput = {
       userId,
-      ...(direction ? { credit: direction === "CREDIT" } : {}),
       ...(type ? { type } : {}),
       ...(reason ? { reason: { contains: reason } } : {}),
     };
@@ -67,7 +58,7 @@ export async function GET(request: Request) {
           amount: true,
           type: true,
           reason: true,
-          relatedId: true,
+          referenceId: true,
           balanceAfter: true,
           createdAt: true,
         },
@@ -83,7 +74,7 @@ export async function GET(request: Request) {
         amount: transaction.amount,
         type: transaction.type,
         reason: transaction.reason,
-        referenceId: transaction.relatedId,
+        referenceId: transaction.referenceId,
         balanceAfter: transaction.balanceAfter,
         createdAt: transaction.createdAt,
       })),

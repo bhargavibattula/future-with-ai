@@ -35,9 +35,9 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning className={`dark ${plusJakartaSans.variable} ${spaceGrotesk.variable}`}>
       <head>
         {/* Anti-FOUC: default to dark theme before first paint */}
-        <Script
+        <script
           id="theme-script"
-          strategy="beforeInteractive"
+          suppressHydrationWarning
           dangerouslySetInnerHTML={{
             __html: `(function(){try{var t=localStorage.getItem('theme');if(!t){localStorage.setItem('theme','dark');t='dark';}if(t==='dark'){document.documentElement.classList.add('dark');}}catch(e){document.documentElement.classList.add('dark');}})();`,
           }}

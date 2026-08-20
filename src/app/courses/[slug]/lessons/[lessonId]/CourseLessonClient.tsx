@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { Bookmark, BookmarkCheck } from "lucide-react";
+import { Bookmark, BookmarkCheck, FileText } from "lucide-react";
+import NotesDrawer from "@/components/course-path/NotesDrawer";
 import {
   CourseModule,
   CourseLesson,
@@ -32,6 +33,7 @@ export default function CourseLessonClient({ slug, lessonId }: CourseLessonClien
   const [bookmarkLoading, setBookmarkLoading] = useState(true);
   const [bookmarkSaving, setBookmarkSaving] = useState(false);
   const [bookmarkError, setBookmarkError] = useState<string | null>(null);
+  const [notesOpen, setNotesOpen] = useState(false);
 
   useEffect(() => {
     const saved = getStoredUserProgress(slug);
@@ -265,30 +267,48 @@ export default function CourseLessonClient({ slug, lessonId }: CourseLessonClien
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
-      <div className="mx-auto flex max-w-5xl items-center justify-end gap-3 px-4 pt-4 sm:px-6">
-        {bookmarkError && <span className="text-xs text-red-600">{bookmarkError}</span>}
-        <button
-          type="button"
-          onClick={() => void handleBookmarkToggle()}
-          disabled={bookmarkLoading || bookmarkSaving}
-          aria-label={isBookmarked ? "Remove lesson bookmark" : "Bookmark lesson"}
-          title={isBookmarked ? "Bookmarked" : "Bookmark lesson"}
-          className="inline-flex items-center gap-2 rounded-xl border border-[#EAE6FE] bg-white px-3 py-2 text-xs font-bold text-[#6B6785] shadow-sm transition-colors hover:bg-[#F3F0FE] disabled:cursor-not-allowed disabled:opacity-60"
-        >
-          {bookmarkLoading || bookmarkSaving ? (
-            "Saving..."
-          ) : isBookmarked ? (
-            <><BookmarkCheck className="h-4 w-4 text-[#8B7FE8]" /> Bookmarked</>
-          ) : (
-            <><Bookmark className="h-4 w-4" /> Bookmark</>
-          )}
-        </button>
-      </div>
+      <NotesDrawer
+        isOpen={notesOpen}
+        onClose={() => setNotesOpen(false)}
+        lessonId={lessonId}
+        courseSlug={slug}
+        lessonTitle={targetLesson?.title}
+      />
       <LessonContainer
         cards={generatedCards}
         onFinishLesson={handleMarkComplete}
         onExit={handleExit}
         lessonTitle={targetLesson.title}
+        actions={
+          <div className="flex items-center gap-2">
+            {bookmarkError && <span className="text-xs text-red-600 hidden sm:inline">{bookmarkError}</span>}
+            <button
+              type="button"
+              onClick={() => void handleBookmarkToggle()}
+              disabled={bookmarkLoading || bookmarkSaving}
+              aria-label={isBookmarked ? "Remove lesson bookmark" : "Bookmark lesson"}
+              title={isBookmarked ? "Bookmarked" : "Bookmark lesson"}
+              className="inline-flex items-center gap-2 rounded-xl border border-[#EAE6FE] bg-white px-3 py-1.5 text-xs font-bold text-[#6B6785] shadow-sm transition-colors hover:bg-[#F3F0FE] disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {bookmarkLoading || bookmarkSaving ? (
+                "Saving..."
+              ) : isBookmarked ? (
+                <><BookmarkCheck className="h-4 w-4 text-[#8B7FE8]" /> <span className="hidden sm:inline">Bookmarked</span></>
+              ) : (
+                <><Bookmark className="h-4 w-4" /> <span className="hidden sm:inline">Bookmark</span></>
+              )}
+            </button>
+            <button
+              type="button"
+              onClick={() => setNotesOpen(true)}
+              aria-label="Open lesson notes"
+              title="My Notes"
+              className="inline-flex items-center gap-2 rounded-xl border border-[#EAE6FE] bg-white px-3 py-1.5 text-xs font-bold text-[#6B6785] shadow-sm transition-colors hover:bg-[#F3F0FE]"
+            >
+              <FileText className="h-4 w-4" /> <span className="hidden sm:inline">Notes</span>
+            </button>
+          </div>
+        }
       />
     </div>
   );

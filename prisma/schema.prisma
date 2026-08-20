@@ -38,6 +38,7 @@ model User {
   sentGifts         Gift[]          @relation("GiftSender")
   receivedGifts     Gift[]          @relation("GiftRecipient")
   bookmarks         Bookmark[]
+  lessonNotes       LessonNote[]
 }
 
 model Account {
@@ -310,8 +311,9 @@ model CourseLesson {
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
 
-  module    CourseModule @relation(fields: [moduleId], references: [id], onDelete: Cascade)
-  bookmarks Bookmark[]
+  module      CourseModule @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  bookmarks   Bookmark[]
+  lessonNotes LessonNote[]
 
   @@unique([moduleId, staticId])
   @@index([moduleId, order])
@@ -405,19 +407,33 @@ model Gift {
 }
 
 model CoinTransaction {
-  id         String   @id @default(cuid())
-  userId     String
-  amount     Int
-  type       String   // PURCHASE, GIFT_SEND, GIFT_RECEIVE, REWARD, ADJUSTMENT
-  credit     Boolean  @default(false)
-  balanceAfter Int     @default(0)
-  reason     String?
-  relatedId  String?  // e.g., StoreItem id, Course id, Gift id
-  createdAt  DateTime @default(now())
+  id           String   @id @default(cuid())
+  userId       String
+  amount       Int
+  type         String   // CREDIT or DEBIT
+  reason       String?  // LESSON_COMPLETION, STREAK_FREEZE, etc.
+  referenceId  String?  // Related lesson, quiz, purchase, gift, etc.
+  balanceAfter Int      @default(0)
+  createdAt    DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([type])
+}
+
+model LessonNote {
+  id        String   @id @default(cuid())
+  userId    String
+  lessonId  String
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user   User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lesson CourseLesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([lessonId])
 }
 

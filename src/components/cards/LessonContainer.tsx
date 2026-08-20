@@ -17,9 +17,10 @@ interface LessonContainerProps {
   onFinishLesson: () => void;
   onExit: () => void;
   lessonTitle: string;
+  actions?: React.ReactNode;
 }
 
-export function LessonContainer({ cards, onFinishLesson, onExit, lessonTitle }: LessonContainerProps) {
+export function LessonContainer({ cards, onFinishLesson, onExit, lessonTitle, actions }: LessonContainerProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAiPanelOpen, setIsAiPanelOpen] = useState(false);
   const [aiInput, setAiInput] = useState("");
@@ -86,8 +87,11 @@ export function LessonContainer({ cards, onFinishLesson, onExit, lessonTitle }: 
           </div>
         </div>
 
-        <div className="w-10 flex justify-end font-bold text-xs text-[#8B7FE8]">
-          {currentIndex + 1}/{cards.length}
+        <div className="flex items-center gap-4">
+          {actions}
+          <div className="w-10 flex justify-end font-bold text-xs text-[#8B7FE8]">
+            {currentIndex + 1}/{cards.length}
+          </div>
         </div>
       </header>
 
