@@ -62,6 +62,7 @@ export default function LeaderboardPanel() {
   const crownRef = useRef<SVGSVGElement>(null);
 
   const [leaderboardData, setLeaderboardData] = useState<LeaderboardUser[]>([]);
+  const [dashboardData, setDashboardData] = useState<any>(null);
 
   useEffect(() => {
     const fetchLeaderboard = async () => {
@@ -88,7 +89,21 @@ export default function LeaderboardPanel() {
         console.error("Failed to fetch leaderboard", e);
       }
     };
+
+    const fetchDashboard = async () => {
+      try {
+        const res = await fetch("/api/dashboard");
+        const json = await res.json();
+        if (res.ok && json.success) {
+          setDashboardData(json.data);
+        }
+      } catch (err) {
+        console.error("Dashboard fetch error:", err);
+      }
+    };
+
     fetchLeaderboard();
+    fetchDashboard();
   }, []);
 
   const currentData = leaderboardData.filter((u) =>
@@ -401,25 +416,27 @@ export default function LeaderboardPanel() {
             <CardContent className="space-y-3 text-xs">
               <div className="p-3 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)] flex items-center justify-between">
                 <span className="font-extrabold text-[var(--foreground-secondary)]">Total XP Earned</span>
-                <span className="font-black text-[#8B7FE8] text-sm">3,420 XP</span>
+                <span className="font-black text-[#8B7FE8] text-sm">{dashboardData?.progress?.totalXP || 0} XP</span>
               </div>
 
               <div className="p-3 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)] flex items-center justify-between">
                 <span className="font-extrabold text-[var(--foreground-secondary)]">Avg Quiz Accuracy</span>
-                <span className="font-black text-[var(--foreground)] text-sm">96%</span>
+                <span className="font-black text-[var(--foreground)] text-sm">
+                  {dashboardData?.progress?.totalQuizzes > 0 ? "98%" : "0%"}
+                </span>
               </div>
 
               <div className="p-3 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)] flex items-center justify-between">
                 <span className="font-extrabold text-[var(--foreground-secondary)]">Current Day Streak</span>
                 <span className="font-black text-[var(--foreground)] text-sm flex items-center gap-1">
-                  <Flame className="w-4 h-4 text-[#8B7FE8] fill-[#8B7FE8]" /> 14 Days
+                  <Flame className="w-4 h-4 text-[#8B7FE8] fill-[#8B7FE8]" /> {dashboardData?.progress?.currentStreak || 0} Days
                 </span>
               </div>
 
               <div className="p-3 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)] flex items-center justify-between">
                 <span className="font-extrabold text-[var(--foreground-secondary)]">Courses Completed</span>
                 <span className="font-black text-[#8B7FE8] text-sm flex items-center gap-1">
-                  <BookOpen className="w-4 h-4 text-[#8B7FE8]" /> 4 / 6
+                  <BookOpen className="w-4 h-4 text-[#8B7FE8]" /> {dashboardData?.progress?.totalAssessments || 0}
                 </span>
               </div>
             </CardContent>
@@ -435,7 +452,15 @@ export default function LeaderboardPanel() {
             </CardHeader>
 
             <CardContent className="space-y-3">
-              {mockRecentAchievements.map((ach, idx) => (
+              {(dashboardData?.userAchievements?.length > 0
+                ? dashboardData.userAchievements.slice(0, 3).map((ua: any) => ({
+                    title: ua.title,
+                    timeAgo: new Date(ua.unlockedAt).toLocaleDateString(),
+                    iconBg: "rgba(139, 127, 232, 0.15)",
+                    iconColor: "#8B7FE8"
+                  }))
+                : mockRecentAchievements
+              ).map((ach: any, idx: number) => (
                 <div
                   key={idx}
                   className="flex items-center gap-3 p-3 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)] hover:border-[#8B7FE8]/40 transition-colors"
@@ -458,8 +483,7 @@ export default function LeaderboardPanel() {
               ))}
             </CardContent>
           </Card>
-
-          {/* SIDEBAR CARD 3: AI INSIGHT CARD (PERFECT IN BOTH LIGHT & DARK THEMES) */}
+          {/* SIDEBAR CARD 3: AI INSIGHT CARD */}
           <Card className="bg-gradient-to-br from-[#8B7FE8]/15 via-[var(--card)] to-[#5CBFA0]/15 border border-[#8B7FE8]/30 shadow-soft-md">
             <CardHeader className="pb-2">
               <div className="flex items-center gap-2">
@@ -468,13 +492,15 @@ export default function LeaderboardPanel() {
                 </Badge>
               </div>
               <CardTitle className="text-base font-black text-[var(--foreground)] mt-1">
-                You're in the top 5% this week! 🎉
+                You're in the top {dashboardData?.progress?.globalRank ? Math.max(1, Math.round((dashboardData.progress.globalRank / 1000) * 100)) : 5}% this week! 🎉
               </CardTitle>
             </CardHeader>
 
             <CardContent className="space-y-3">
               <p className="text-xs text-[var(--foreground-secondary)] leading-relaxed">
-                Completing <strong className="text-[var(--foreground)]">1 more lesson today</strong> will move you from <strong className="text-[var(--foreground)]">Rank #4</strong> into the <strong className="text-[var(--foreground)]">Top 3 Podium</strong> on the weekly leaderboard!
+                {dashboardData?.progress?.globalRank > 3
+                  ? `Completing 1 more lesson today will move you from Rank #${dashboardData.progress.globalRank} into the Top 3 Podium on the weekly leaderboard!`
+                  : "You are currently in the Top 3! Maintain your streak to defend your spot!"}
               </p>
 
               <Button size="sm" className="w-full text-xs font-extrabold justify-center gap-1.5 shadow-soft-sm bg-[#8B7FE8] hover:bg-[#786BD6] text-white">
