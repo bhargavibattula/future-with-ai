@@ -59,13 +59,13 @@ export default function PublicVerifyPage({ params }: PublicVerifyPageProps) {
     <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] flex flex-col font-sans">
       <Navbar />
 
-      <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
+      <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-12 relative z-10">
         {/* Soft Radial Ambient Lighting */}
         <div className="pointer-events-none fixed top-10 left-1/3 w-[500px] h-[500px] rounded-full bg-[#8B7FE8]/15 blur-[130px]" />
         <div className="pointer-events-none fixed bottom-10 right-1/3 w-[500px] h-[500px] rounded-full bg-[#5CBFA0]/15 blur-[130px]" />
 
         {loading ? (
-          <div className="min-h-[400px] flex flex-col items-center justify-center rounded-3xl bg-white/80 dark:bg-[#171717]/80 backdrop-blur-xl border border-[#E8E3FF] dark:border-[#2A2540] p-12">
+          <div className="min-h-[400px] flex flex-col items-center justify-center rounded-2xl sm:rounded-3xl bg-white/80 dark:bg-[#171717]/80 backdrop-blur-xl border border-[#E8E3FF] dark:border-[#2A2540] p-6 sm:p-12">
             <RefreshCw className="w-8 h-8 text-[#8B7FE8] animate-spin mb-3" />
             <span className="text-sm font-bold text-[#6B6785] dark:text-[#B3B3B3]">
               Verifying Certificate ID #{certId}...
@@ -73,23 +73,23 @@ export default function PublicVerifyPage({ params }: PublicVerifyPageProps) {
           </div>
         ) : verified && certData ? (
           /* Valid Certificate Verification View */
-          <div className="space-y-8">
+          <div className="space-y-6 sm:space-y-8">
             {/* Status Header Banner */}
-            <div className="rounded-3xl bg-gradient-to-r from-[#E6F9F0] via-[#F3F0FE] to-[#E6F9F0] dark:from-[#0E2018] dark:via-[#1A1830] dark:to-[#0E2018] border border-[#9DD9C5] dark:border-[#5CBFA0]/30 p-6 sm:p-8 shadow-soft flex flex-col sm:flex-row items-center justify-between gap-6">
-              <div className="flex items-center gap-4 text-center sm:text-left">
-                <div className="w-14 h-14 rounded-2xl bg-[#5CBFA0] text-[#0A0A0A] flex items-center justify-center shrink-0 shadow-md">
-                  <CheckCircle2 className="w-8 h-8 stroke-[2.5]" />
+            <div className="rounded-2xl sm:rounded-3xl bg-gradient-to-r from-[#E6F9F0] via-[#F3F0FE] to-[#E6F9F0] dark:from-[#0E2018] dark:via-[#1A1830] dark:to-[#0E2018] border border-[#9DD9C5] dark:border-[#5CBFA0]/30 p-4 sm:p-8 shadow-soft flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6">
+              <div className="flex flex-col sm:flex-row items-center gap-3.5 sm:gap-4 text-center sm:text-left">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-[#5CBFA0] text-[#0A0A0A] flex items-center justify-center shrink-0 shadow-md">
+                  <CheckCircle2 className="w-6 h-6 sm:w-8 sm:h-8 stroke-[2.5]" />
                 </div>
                 <div>
                   <div className="flex items-center justify-center sm:justify-start gap-2 mb-1">
-                    <span className="px-3 py-0.5 rounded-full text-xs font-extrabold bg-[#5CBFA0] text-[#0A0A0A]">
+                    <span className="px-2.5 py-0.5 sm:px-3 rounded-full text-[10px] sm:text-xs font-extrabold bg-[#5CBFA0] text-[#0A0A0A]">
                       OFFICIALLY VERIFIED
                     </span>
-                    <span className="text-xs font-mono font-bold text-[#6B6785] dark:text-[#B3B3B3]">
+                    <span className="text-[11px] sm:text-xs font-mono font-bold text-[#6B6785] dark:text-[#B3B3B3]">
                       #{certData.certificateId}
                     </span>
                   </div>
-                  <h1 className="text-2xl sm:text-3xl font-black text-[#1E1B2E] dark:text-white">
+                  <h1 className="text-xl sm:text-3xl font-black text-[#1E1B2E] dark:text-white">
                     ✅ Certificate Verified
                   </h1>
                   <p className="text-xs sm:text-sm text-[#6B6785] dark:text-[#B3B3B3] font-medium mt-1">
@@ -103,7 +103,7 @@ export default function PublicVerifyPage({ params }: PublicVerifyPageProps) {
                   href={certData.pdfUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="shrink-0 flex items-center gap-2 px-6 py-3 rounded-2xl bg-[#8B7FE8] text-white font-extrabold text-xs hover:bg-[#786BD6] transition-all shadow-md"
+                  className="w-full sm:w-auto shrink-0 flex items-center justify-center gap-2 px-6 py-3 rounded-xl sm:rounded-2xl bg-[#8B7FE8] text-white font-extrabold text-xs hover:bg-[#786BD6] transition-all shadow-md min-h-[44px]"
                 >
                   <Download className="w-4 h-4" />
                   Download PDF

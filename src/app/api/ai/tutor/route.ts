@@ -4,16 +4,31 @@ const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
 
 export async function POST(request: Request) {
   try {
-    const { messages } = await request.json();
-
-    if (!messages || !Array.isArray(messages)) {
+    const body = await request.json().catch(() => null);
+    if (!body || !body.messages || !Array.isArray(body.messages)) {
       return NextResponse.json(
         { success: false, message: "Valid messages array is required." },
         { status: 400 }
       );
     }
 
-    const groqApiKey = process.env.GROQ_API_KEY || "gsk_fallback_demo_key";
+    // Security & DoS Protection: Limit history to last 15 messages and truncate extreme input lengths
+    const safeMessages = body.messages
+      .slice(-15)
+      .filter((m: any) => m && typeof m.content === "string" && (m.role === "user" || m.role === "assistant"))
+      .map((m: any) => ({
+        role: m.role as "user" | "assistant",
+        content: String(m.content).slice(0, 3000),
+      }));
+
+    if (safeMessages.length === 0) {
+      return NextResponse.json(
+        { success: false, message: "No valid user messages provided." },
+        { status: 400 }
+      );
+    }
+
+    const groqApiKey = process.env.GROQ_API_KEY;
 
     if (!groqApiKey || groqApiKey.startsWith("gsk_fallback")) {
       return NextResponse.json({
@@ -48,7 +63,7 @@ You are a highly advanced, encouraging, and precise AI assistant designed exclus
 - NEVER output internal thinking processes, reasoning chains, or <think> tags. You must output ONLY the final, polished answer directly to the student.`,
     };
 
-    const payloadMessages = [systemPrompt, ...messages];
+    const payloadMessages = [systemPrompt, ...safeMessages];
 
     const groqRes = await fetch(GROQ_API_URL, {
       method: "POST",

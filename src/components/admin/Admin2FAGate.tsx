@@ -216,7 +216,7 @@ export default function Admin2FAGate({ onAuthenticated }: Admin2FAGateProps) {
           ) : (
             /* STEP 2: 2FA OTP VERIFICATION FORM */
             <form onSubmit={handleVerify2FA} className="space-y-5">
-              <div className="flex items-center justify-center gap-2 my-4">
+              <div className="flex items-center justify-center gap-1.5 sm:gap-2 my-4">
                 {otpValues.map((val, idx) => (
                   <input
                     key={idx}
@@ -224,10 +224,11 @@ export default function Admin2FAGate({ onAuthenticated }: Admin2FAGateProps) {
                       inputRefs.current[idx] = el;
                     }}
                     type="text"
+                    inputMode="numeric"
                     maxLength={1}
                     value={val}
                     onChange={(e) => handleOtpChange(idx, e.target.value)}
-                    className="w-11 h-12 rounded-2xl text-center text-lg font-black bg-[#FCFBFF] border-2 border-[#E8E3FF] focus:border-[#8B7FE8] focus:ring-4 focus:ring-[#8B7FE8]/15 outline-none transition-all"
+                    className="w-9 h-11 sm:w-11 sm:h-12 rounded-xl sm:rounded-2xl text-center text-base sm:text-lg font-black bg-[#FCFBFF] border-2 border-[#E8E3FF] focus:border-[#8B7FE8] focus:ring-4 focus:ring-[#8B7FE8]/15 outline-none transition-all"
                   />
                 ))}
               </div>

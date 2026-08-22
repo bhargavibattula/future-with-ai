@@ -876,7 +876,7 @@ export default function AuthCard({
           {/* 6-DIGIT OTP INPUT (2FA Mode) */}
           {mode === "2fa" && (
             <div className="py-2 space-y-4">
-              <div className="flex justify-between items-center gap-2">
+              <div className="flex items-center justify-center gap-1.5 sm:gap-2 py-2">
                 {otpValues.map((val, idx) => (
                   <input
                     key={idx}
@@ -890,7 +890,7 @@ export default function AuthCard({
                     onChange={(e) => handleOtpChange(idx, e.target.value)}
                     onKeyDown={(e) => handleOtpKeyDown(idx, e)}
                     onPaste={handleOtpPaste}
-                    className="w-12 h-14 text-center text-xl font-bold rounded-2xl bg-[#FCFBFF] border-2 border-[#EAE6FE] text-[#1E1B2E] focus:outline-none focus:border-[#8B7FE8] focus:ring-4 focus:ring-[#8B7FE8]/20 transition-all shadow-sm"
+                    className="w-9 h-11 sm:w-12 sm:h-14 text-center text-base sm:text-xl font-bold rounded-xl sm:rounded-2xl bg-[#FCFBFF] border-2 border-[#EAE6FE] text-[#1E1B2E] focus:outline-none focus:border-[#8B7FE8] focus:ring-4 focus:ring-[#8B7FE8]/20 transition-all shadow-sm"
                   />
                 ))}
               </div>
