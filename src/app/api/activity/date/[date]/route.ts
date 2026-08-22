@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/auth";
+import { resolveAuthenticatedUserId } from "@/lib/learning-journey";
 import { prisma } from "@/lib/prisma";
 
 export async function GET(
@@ -12,23 +12,7 @@ export async function GET(
       return NextResponse.json({ success: false, error: "Date parameter is required." }, { status: 400 });
     }
 
-    const session = await auth();
-    let userId = session?.user?.id;
-
-    if (!userId && session?.user?.email) {
-      const dbUser = await prisma.user.findUnique({
-        where: { email: session.user.email },
-      });
-      if (dbUser) userId = dbUser.id;
-    }
-
-    if (!userId) {
-      const defaultUser = await prisma.user.findFirst();
-      if (!defaultUser) {
-        return NextResponse.json({ success: false, error: "Authentication required." }, { status: 401 });
-      }
-      userId = defaultUser.id;
-    }
+    const userId = await resolveAuthenticatedUserId(req);
 
     const daily = await prisma.dailyActivity.findUnique({
       where: { userId_date: { userId, date } },

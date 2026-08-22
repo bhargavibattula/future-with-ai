@@ -305,11 +305,25 @@ export default function CourseQuizClient({ slug, moduleId }: CourseQuizClientPro
     try {
       const headers: Record<string, string> = { "Content-Type": "application/json" };
       if (user?.email) headers["X-User-Email"] = user.email;
-      await fetch(`/api/progress/course/${slug}`, {
+      
+      // 1. Record activity to update the contribution graph and streak
+      await fetch("/api/activity/complete", {
         method: "POST", headers,
-        body: JSON.stringify({ action: "quizComplete", moduleId, quizId: quiz.id, score: pct }),
+        body: JSON.stringify({
+          activityType: "QUIZ",
+          courseId: slug,
+          lessonId: moduleId, // Store moduleId as lessonId for tracking which modules are complete
+          xp: quiz.xpReward || 100,
+          coins: Math.floor((quiz.xpReward || 100) / 2),
+          timeSpent: 10, // approximate time spent
+          completionPercentage: pct,
+        }),
       });
-    } catch {}
+      
+      // 2. We can also optionally update the course progress if needed, but the activity completion already updates completedModuleIds if we pass lessonId.
+    } catch (err) {
+      console.error("Failed to save quiz score", err);
+    }
   };
 
   const handleRetry = () => {

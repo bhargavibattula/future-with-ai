@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import FlameMascot from "./FlameMascot";
 import { useAuth } from "@/lib/auth";
@@ -134,16 +134,50 @@ export default function StreaksPanel() {
   const [freezeConsumedModal, setFreezeConsumedModal] = useState<boolean>(false);
   const [activeAnalyticsTab, setActiveAnalyticsTab] = useState<"weekly" | "monthly" | "yearly">("weekly");
 
-  // Fetch live dashboard data from API
-  const fetchDashboard = async () => {
+  const [weeklyAnalytics, setWeeklyAnalytics] = useState<any>(null);
+  const [monthlyAnalytics, setMonthlyAnalytics] = useState<any>(null);
+  const [yearlyAnalytics, setYearlyAnalytics] = useState<any>(null);
+
+  const getAuthHeaders = useCallback(() => {
+    const headers: Record<string, string> = { "Content-Type": "application/json" };
+    if (authUser?.email) headers["X-User-Email"] = authUser.email;
+    if (authUser?.id) headers["X-User-Id"] = authUser.id;
+    return headers;
+  }, [authUser?.email, authUser?.id]);
+
+  // Fetch live dashboard & analytics data from API
+  const fetchDashboard = useCallback(async () => {
     try {
       setError(null);
-      const res = await fetch("/api/streak");
-      const json = await res.json();
-      if (!res.ok || !json.success) {
+      const headers: Record<string, string> = {};
+      if (authUser?.email) headers["X-User-Email"] = authUser.email;
+      if (authUser?.id) headers["X-User-Id"] = authUser.id;
+
+      const [streakRes, weeklyRes, monthlyRes, yearlyRes] = await Promise.all([
+        fetch("/api/streak", { cache: "no-store", headers }),
+        fetch("/api/analytics/weekly", { cache: "no-store", headers }).catch(() => null),
+        fetch("/api/analytics/monthly", { cache: "no-store", headers }).catch(() => null),
+        fetch("/api/analytics/yearly", { cache: "no-store", headers }).catch(() => null),
+      ]);
+
+      const json = await streakRes.json();
+      if (!streakRes.ok || !json.success) {
         throw new Error(json.error || "Failed to load streak data.");
       }
       setDashboardData(json.data);
+
+      if (weeklyRes && weeklyRes.ok) {
+        const wJson = await weeklyRes.json();
+        if (wJson.weekly) setWeeklyAnalytics(wJson.weekly);
+      }
+      if (monthlyRes && monthlyRes.ok) {
+        const mJson = await monthlyRes.json();
+        if (mJson.monthly) setMonthlyAnalytics(mJson.monthly);
+      }
+      if (yearlyRes && yearlyRes.ok) {
+        const yJson = await yearlyRes.json();
+        if (yJson.yearly) setYearlyAnalytics(yJson.yearly);
+      }
 
       // Dispatch custom event for navbar sync
       if (typeof window !== "undefined" && json.data?.progress?.currentStreak !== undefined) {
@@ -157,11 +191,11 @@ export default function StreaksPanel() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [authUser?.email, authUser?.id]);
 
   useEffect(() => {
     fetchDashboard();
-  }, []);
+  }, [fetchDashboard]);
 
   // Motivational quote rotator
   useEffect(() => {
@@ -183,7 +217,11 @@ export default function StreaksPanel() {
     setSelectedDateTile(tile);
     setLoadingDetail(true);
     try {
-      const res = await fetch(`/api/activity/date/${tile.dateStr}`);
+      const headers: Record<string, string> = {};
+      if (authUser?.email) headers["X-User-Email"] = authUser.email;
+      if (authUser?.id) headers["X-User-Id"] = authUser.id;
+
+      const res = await fetch(`/api/activity/date/${tile.dateStr}`, { headers });
       const json = await res.json();
       if (res.ok && json.success) {
         setDateDetail(json.activity);
@@ -204,7 +242,7 @@ export default function StreaksPanel() {
     try {
       const res = await fetch("/api/activity/complete", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: getAuthHeaders(),
         body: JSON.stringify({
           activityType: type,
           xp: type === "LESSON" ? 60 : type === "QUIZ" ? 80 : 100,
@@ -259,7 +297,7 @@ export default function StreaksPanel() {
     try {
       const res = await fetch("/api/freeze/purchase", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: getAuthHeaders(),
       });
       const json = await res.json();
       if (!res.ok || !json.success) {
@@ -287,7 +325,7 @@ export default function StreaksPanel() {
     try {
       const res = await fetch("/api/milestone/claim", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: getAuthHeaders(),
         body: JSON.stringify({ milestoneId }),
       });
       const json = await res.json();
@@ -928,7 +966,7 @@ export default function StreaksPanel() {
                   XP Earned This Week
                 </span>
                 <span className="text-xl font-black text-[#8B7FE8] mt-1 block">
-                  +1,780 XP
+                  +{weeklyAnalytics?.totalXP?.toLocaleString() ?? 0} XP
                 </span>
               </div>
               <div className="p-3.5 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)]">
@@ -936,7 +974,7 @@ export default function StreaksPanel() {
                   Study Hours
                 </span>
                 <span className="text-xl font-black text-[#5CBFA0] mt-1 block">
-                  5.4 Hours
+                  {weeklyAnalytics?.totalStudyHours ?? 0} Hours
                 </span>
               </div>
               <div className="p-3.5 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)]">
@@ -944,49 +982,57 @@ export default function StreaksPanel() {
                   Learning Days
                 </span>
                 <span className="text-xl font-black text-[var(--foreground)] mt-1 block">
-                  7 / 7 Days
+                  {weeklyAnalytics?.learningDays ?? (daysLearned > 0 ? Math.min(7, daysLearned) : 0)} / 7 Days
                 </span>
               </div>
               <div className="p-3.5 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)]">
                 <span className="text-[10px] font-extrabold uppercase text-[var(--foreground-secondary)] block">
-                  Weekly Accuracy
+                  Weekly Completion
                 </span>
                 <span className="text-xl font-black text-[#F0879B] mt-1 block">
-                  94%
+                  {weeklyAnalytics?.completionPercentage ?? (currentStreak > 0 ? Math.min(100, Math.round((Math.min(7, currentStreak) / 7) * 100)) : 0)}%
                 </span>
               </div>
             </div>
 
-            {/* Weekly Bar Chart Simulation */}
+            {/* Weekly Bar Chart from Database */}
             <div className="space-y-2">
               <span className="text-xs font-black text-[var(--foreground)] block">
                 Daily XP Trend (Last 7 Days)
               </span>
               <div className="h-44 flex items-end justify-between gap-3 pt-6 pb-2 px-4 bg-[var(--background-secondary)] rounded-2xl border border-[var(--border)]">
-                {[
-                  { day: "Mon", xp: 240, height: "60%" },
-                  { day: "Tue", xp: 380, height: "95%" },
-                  { day: "Wed", xp: 180, height: "45%" },
-                  { day: "Thu", xp: 450, height: "100%" },
-                  { day: "Fri", xp: 120, height: "30%" },
-                  { day: "Sat", xp: 310, height: "78%" },
-                  { day: "Sun", xp: 400, height: "88%" },
-                ].map((b, idx) => (
-                  <div key={idx} className="flex-1 flex flex-col items-center gap-2 group">
-                    <span className="text-[10px] font-extrabold text-[#8B7FE8] opacity-0 group-hover:opacity-100 transition-opacity">
-                      +{b.xp}
-                    </span>
-                    <div className="w-full bg-[#8B7FE8]/20 rounded-xl overflow-hidden h-28 flex items-end">
-                      <motion.div
-                        className="w-full bg-[#8B7FE8] rounded-xl group-hover:bg-[#786BD6] transition-colors"
-                        initial={{ height: 0 }}
-                        animate={{ height: b.height }}
-                        transition={{ duration: 0.6, delay: idx * 0.08 }}
-                      />
-                    </div>
-                    <span className="text-[10px] font-bold text-[var(--foreground-secondary)]">{b.day}</span>
-                  </div>
-                ))}
+                {(() => {
+                  const breakdown = weeklyAnalytics?.dailyBreakdown || [
+                    { dayName: "Mon", xp: 0 },
+                    { dayName: "Tue", xp: 0 },
+                    { dayName: "Wed", xp: 0 },
+                    { dayName: "Thu", xp: 0 },
+                    { dayName: "Fri", xp: 0 },
+                    { dayName: "Sat", xp: 0 },
+                    { dayName: "Sun", xp: 0 },
+                  ];
+                  const maxXp = Math.max(100, ...breakdown.map((b: any) => b.xp || 0));
+
+                  return breakdown.map((b: any, idx: number) => {
+                    const heightPct = b.xp > 0 ? `${Math.max(15, Math.min(100, Math.round((b.xp / maxXp) * 100)))}%` : "6%";
+                    return (
+                      <div key={idx} className="flex-1 flex flex-col items-center gap-2 group">
+                        <span className="text-[10px] font-extrabold text-[#8B7FE8] opacity-0 group-hover:opacity-100 transition-opacity">
+                          +{b.xp}
+                        </span>
+                        <div className="w-full bg-[#8B7FE8]/20 rounded-xl overflow-hidden h-28 flex items-end">
+                          <motion.div
+                            className={`w-full rounded-xl transition-colors ${b.xp > 0 ? "bg-[#8B7FE8] group-hover:bg-[#786BD6]" : "bg-[var(--border)]"}`}
+                            initial={{ height: 0 }}
+                            animate={{ height: heightPct }}
+                            transition={{ duration: 0.6, delay: idx * 0.08 }}
+                          />
+                        </div>
+                        <span className="text-[10px] font-bold text-[var(--foreground-secondary)]">{b.dayName || b.day}</span>
+                      </div>
+                    );
+                  });
+                })()}
               </div>
             </div>
           </div>
@@ -1000,15 +1046,15 @@ export default function StreaksPanel() {
                   Best Learning Day
                 </span>
                 <span className="text-lg font-black text-[#8B7FE8] mt-1 block">
-                  Wednesday
+                  {monthlyAnalytics?.bestLearningDay || "Today"}
                 </span>
               </div>
               <div className="p-3.5 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)]">
                 <span className="text-[10px] font-extrabold uppercase text-[var(--foreground-secondary)] block">
-                  Most Active Week
+                  Monthly XP Earned
                 </span>
                 <span className="text-lg font-black text-[#5CBFA0] mt-1 block">
-                  Week 3 (+2,450 XP)
+                  +{monthlyAnalytics?.totalXP?.toLocaleString() ?? totalXP.toLocaleString()} XP
                 </span>
               </div>
               <div className="p-3.5 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)]">
@@ -1016,7 +1062,7 @@ export default function StreaksPanel() {
                   Perfect Days
                 </span>
                 <span className="text-lg font-black text-yellow-500 mt-1 block">
-                  12 Days
+                  {monthlyAnalytics?.perfectDays ?? perfectDays} Days
                 </span>
               </div>
               <div className="p-3.5 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)]">
@@ -1024,7 +1070,7 @@ export default function StreaksPanel() {
                   Monthly Study Hours
                 </span>
                 <span className="text-lg font-black text-[#F0879B] mt-1 block">
-                  24.5 Hours
+                  {monthlyAnalytics?.totalStudyHours ?? Number(((progress.totalStudyMinutes || 0) / 60).toFixed(1))} Hours
                 </span>
               </div>
             </div>
@@ -1032,7 +1078,7 @@ export default function StreaksPanel() {
             <div className="p-4 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)] text-xs text-[var(--foreground)] space-y-1">
               <span className="font-black text-[#8B7FE8] block">🧠 AI Monthly Performance Summary</span>
               <p className="text-[11px] text-[var(--foreground-secondary)]">
-                You studied 28 out of 30 days this month! Your quiz accuracy improved by 14% compared to last month.
+                You logged {monthlyAnalytics?.learningDays ?? daysLearned} active learning sessions in the past 30 days, completing {monthlyAnalytics?.totalLessons ?? progress.totalLessons ?? 0} lessons and {monthlyAnalytics?.totalQuizzes ?? progress.totalQuizzes ?? 0} quizzes!
               </p>
             </div>
           </div>
@@ -1046,7 +1092,7 @@ export default function StreaksPanel() {
                   Total Learning Days
                 </span>
                 <span className="text-xl font-black text-[#8B7FE8] mt-1 block">
-                  {daysLearned} Days
+                  {yearlyAnalytics?.totalLearningDays ?? daysLearned} Days
                 </span>
               </div>
               <div className="p-3.5 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)]">
@@ -1054,7 +1100,7 @@ export default function StreaksPanel() {
                   Longest Active Streak
                 </span>
                 <span className="text-xl font-black text-[#5CBFA0] mt-1 block">
-                  {longestStreak} Days
+                  {yearlyAnalytics?.longestActivePeriod ?? `${longestStreak} Days`}
                 </span>
               </div>
               <div className="p-3.5 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)]">
@@ -1062,7 +1108,7 @@ export default function StreaksPanel() {
                   Most Productive Month
                 </span>
                 <span className="text-xl font-black text-[#F0879B] mt-1 block">
-                  October
+                  {yearlyAnalytics?.mostProductiveMonth || "This Month"}
                 </span>
               </div>
               <div className="p-3.5 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)]">
@@ -1070,14 +1116,18 @@ export default function StreaksPanel() {
                   Total Study Hours
                 </span>
                 <span className="text-xl font-black text-yellow-500 mt-1 block">
-                  142 Hours
+                  {yearlyAnalytics?.totalStudyHours ?? Number(((progress.totalStudyMinutes || 0) / 60).toFixed(1))} Hours
                 </span>
               </div>
             </div>
 
-            <div className="p-4 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)] flex items-center justify-between text-xs font-bold text-[var(--foreground)]">
-              <span>Activity Distribution: 45% Lessons • 30% Quizzes • 25% AI Challenges</span>
-              <Badge variant="primary" className="text-[10px]">Top 5% Learner</Badge>
+            <div className="p-4 rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs font-bold text-[var(--foreground)]">
+              <span>
+                Activity Distribution: {yearlyAnalytics?.activityDistribution?.lessonsPct ?? 45}% Lessons • {yearlyAnalytics?.activityDistribution?.quizzesPct ?? 30}% Quizzes • {yearlyAnalytics?.activityDistribution?.challengesPct ?? 25}% AI Challenges
+              </span>
+              <Badge variant="primary" className="text-[10px]">
+                {daysLearned >= 30 ? "Elite Learner" : daysLearned >= 7 ? "Consistent Scholar" : "Rising AI Explorer"}
+              </Badge>
             </div>
           </div>
         )}

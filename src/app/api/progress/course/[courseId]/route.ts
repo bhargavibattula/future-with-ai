@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/auth";
+import { resolveAuthenticatedUserId, recordActivityCompletion } from "@/lib/learning-journey";
 import { prisma } from "@/lib/prisma";
 
 export async function GET(
@@ -7,30 +7,8 @@ export async function GET(
   { params }: { params: Promise<{ courseId: string }> }
 ) {
   try {
-    const session = await auth();
-    let userId = session?.user?.id;
+    const userId = await resolveAuthenticatedUserId(req);
 
-    if (!userId && session?.user?.email) {
-      const dbUser = await prisma.user.findUnique({
-        where: { email: session.user.email },
-      });
-      if (dbUser) userId = dbUser.id;
-    }
-
-    if (!userId) {
-      // Try custom auth: X-User-Email header from frontend
-      const emailHeader = req.headers.get("X-User-Email");
-      if (emailHeader) {
-        const dbUser = await prisma.user.findUnique({
-          where: { email: emailHeader.toLowerCase().trim() },
-        });
-        if (dbUser) userId = dbUser.id;
-      }
-    }
-
-    if (!userId) {
-      return NextResponse.json({ success: false, error: "Authentication required." }, { status: 401 });
-    }
 
     // Await params per Next.js 16 requirements for dynamic route segments
     const resolvedParams = await params;
@@ -69,3 +47,62 @@ export async function GET(
     );
   }
 }
+
+export async function POST(
+  req: Request,
+  { params }: { params: Promise<{ courseId: string }> }
+) {
+  try {
+    const userId = await resolveAuthenticatedUserId(req);
+    const resolvedParams = await params;
+    const courseId = resolvedParams.courseId;
+    const body = await req.json();
+
+    const { action, lessonId, moduleId, quizId, score } = body || {};
+
+    let actResult = null;
+    if (action === "lessonComplete" && lessonId) {
+      actResult = await recordActivityCompletion(userId, {
+        activityType: "LESSON",
+        courseId,
+        lessonId,
+        xp: 50,
+        coins: 25,
+        timeSpent: 15,
+        completionPercentage: 100,
+      });
+    } else if (action === "quizComplete" && moduleId) {
+      actResult = await recordActivityCompletion(userId, {
+        activityType: "QUIZ",
+        courseId,
+        lessonId: moduleId,
+        xp: 100,
+        coins: 50,
+        timeSpent: 15,
+        completionPercentage: typeof score === "number" ? score : 100,
+      });
+    }
+
+    // Return updated enrollment
+    const enrollment = await prisma.courseEnrollment.findUnique({
+      where: { userId_courseId: { userId, courseId } },
+    });
+    const userProgress = await prisma.userProgress.findUnique({
+      where: { userId },
+    });
+
+    return NextResponse.json({
+      success: true,
+      enrollment,
+      userProgress,
+      activityResult: actResult,
+    });
+  } catch (error: any) {
+    console.error("Error in POST /api/progress/course/[courseId]:", error);
+    return NextResponse.json(
+      { success: false, error: error.message || "Failed to update course progress." },
+      { status: 500 }
+    );
+  }
+}
+
