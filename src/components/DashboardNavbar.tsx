@@ -139,7 +139,7 @@ export default function DashboardNavbar() {
         </Link>
 
         {/* Minimal Clean Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-6 text-sm font-bold select-none">
+        <nav className="hidden lg:flex items-center space-x-6 text-sm font-bold select-none">
           {/* Home Link */}
           <Link
             href="/dashboard"
@@ -372,7 +372,7 @@ export default function DashboardNavbar() {
         </nav>
 
         {/* Right side Actions / Profile */}
-        <div className="hidden md:flex items-center space-x-4">
+        <div className="hidden lg:flex items-center space-x-4">
           <DarkModeToggle />
 
           {/* Flame / Streak Badge */}
@@ -482,7 +482,7 @@ export default function DashboardNavbar() {
         </div>
 
         {/* Mobile menu button */}
-        <div className="md:hidden flex items-center gap-2">
+        <div className="lg:hidden flex items-center gap-2">
           <DarkModeToggle />
           <Link 
             href="/dashboard/streak"
@@ -509,7 +509,7 @@ export default function DashboardNavbar() {
 
       {/* Clean Grouped Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-white dark:bg-[#1A1827] border-b border-[#EAE6FE] dark:border-[#332C4A] px-4 py-4 space-y-3 animate-in slide-in-from-top max-h-[85vh] overflow-y-auto shadow-2xl">
+        <div className="lg:hidden bg-white dark:bg-[#1A1827] border-b border-[#EAE6FE] dark:border-[#332C4A] px-4 py-4 space-y-3 animate-in slide-in-from-top max-h-[85vh] overflow-y-auto shadow-2xl">
           {/* User Profile & Streak Micro Row */}
           <div className="p-3 bg-[#F8F6FF] dark:bg-[#231E38] rounded-2xl border border-[#EAE6FE] dark:border-white/10 flex items-center justify-between gap-3 mb-1">
             <div className="flex items-center gap-2.5 min-w-0">

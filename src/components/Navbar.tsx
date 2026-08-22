@@ -122,8 +122,8 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
             </div>
           </Link>
 
-          {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center space-x-9 text-[15px] font-medium text-[#1E1B2E]">
+          {/* Desktop Navigation Links (Visible on lg+) */}
+          <nav className="hidden lg:flex items-center space-x-6 xl:space-x-8 text-[14px] xl:text-[15px] font-medium text-[var(--foreground)]">
             <Link
               href="/#explore"
               className="hover:text-[#8B7FE8] transition-colors py-1 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-[#8B7FE8] hover:after:w-full after:transition-all"
@@ -157,7 +157,7 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
           </nav>
 
           {/* Action Buttons / User Profile */}
-          <div className="hidden md:flex items-center space-x-3">
+          <div className="hidden lg:flex items-center space-x-3">
             {/* Dark mode toggle */}
             <DarkModeToggle />
 
@@ -299,8 +299,8 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
             )}
           </div>
 
-          {/* Mobile menu button & actions */}
-          <div className="md:hidden flex items-center gap-2">
+          {/* Mobile/Tablet menu button & actions (Visible on < lg) */}
+          <div className="lg:hidden flex items-center gap-2">
             <DarkModeToggle />
             {onSearchClick && (
               <button
@@ -322,9 +322,9 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
           </div>
         </div>
 
-        {/* Mobile Drawer Overlay & Content */}
+        {/* Mobile/Tablet Drawer Overlay & Content */}
         {mobileMenuOpen && (
-          <div className="md:hidden bg-white dark:bg-[#12101B] border-b border-[#EAE6FE] dark:border-white/10 px-4 sm:px-6 py-5 space-y-4 animate-in slide-in-from-top duration-300 shadow-2xl max-h-[85vh] overflow-y-auto">
+          <div className="lg:hidden bg-white dark:bg-[#12101B] border-b border-[#EAE6FE] dark:border-white/10 px-4 sm:px-6 py-5 space-y-4 animate-in slide-in-from-top duration-300 shadow-2xl max-h-[85vh] overflow-y-auto">
             {user && (
               <div className="p-3.5 bg-[#F3F0FE] dark:bg-[#1E1933] rounded-2xl border border-[#EAE6FE] dark:border-white/10 flex items-center justify-between gap-3 mb-2">
                 <div className="flex items-center gap-3 min-w-0">
