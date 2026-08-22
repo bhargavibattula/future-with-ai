@@ -2,11 +2,29 @@ import { AICourse, COURSES } from "@/data/courses";
 
 export interface CourseQuizQuestion {
   id?: string;
-  type: "fill_blank" | "true_false" | "matching" | "order" | "mcq";
+  type:
+    | "mcq"
+    | "multi_select"
+    | "true_false"
+    | "fill_blank"
+    | "matching"
+    | "order"
+    | "drag_drop"
+    | "code_trace"
+    | "hotspot"
+    | "scenario"
+    | "sorting"
+    | "syntax_fix";
   question: string;
   options?: string[];
   matchingPairs?: { item: string; functionText: string }[];
   orderItems?: string[];
+  dragItems?: { id: string; text: string }[];
+  correctOrder?: string[];
+  codeSnippet?: string;
+  sortBuckets?: { bucket: string; items: string[] }[];
+  scenarioChoices?: { id: string; text: string; next?: string; correct?: boolean }[];
+  hotspotOptions?: { id: string; label: string; correct?: boolean }[];
   answer: string;
   explanation?: string;
 }
@@ -132,45 +150,6 @@ export const LOVABLE_CURRICULUM_MODULES: CourseModule[] = [
       questions: [
         {
           id: "q-1-1",
-          type: "fill_blank",
-          question: "Lovable provides built-in application protection using two core security scanners called the Basic scan and the ______________ scan.",
-          answer: "Deep",
-          explanation: "The Deep scan performs an exhaustive agentic review across the entire codebase to detect complex access-control issues and exposed secrets."
-        },
-        {
-          id: "q-1-2",
-          type: "true_false",
-          question: "Applications created in Lovable are restricted to static visual templates and cannot execute real, compilable React and TypeScript code.",
-          options: ["True", "False"],
-          answer: "False",
-          explanation: "Lovable compiles real React, TypeScript, and Tailwind CSS code dynamically under the hood."
-        },
-        {
-          id: "q-1-3",
-          type: "matching",
-          question: "Match each item with its corresponding function:",
-          matchingPairs: [
-            { item: "A. Live Preview Canvas", functionText: "1. Displays live, interactive application updates side-by-side as code runs." },
-            { item: "B. Lovable Cloud", functionText: "2. Supplies integrated database, storage, authentication, and hosting features." },
-            { item: "C. Secret Vault", functionText: "3. Encrypts and securely stores third-party credentials and keys." },
-          ],
-          answer: "A-1, B-2, C-3",
-          explanation: "Each component serves a critical role in the dual-panel developer workspace."
-        },
-        {
-          id: "q-1-4",
-          type: "order",
-          question: "Sequence the following steps correctly:",
-          orderItems: [
-            "1. Review the initial prototype rendering inside the live preview canvas.",
-            "2. Open the Lovable workspace and type a comprehensive natural language prompt.",
-            "3. Execute the prompt so the AI agent generates the initial full-stack code.",
-          ],
-          answer: "2 -> 3 -> 1",
-          explanation: "You first input a clear prompt, allow the AI agent to execute code, and then review the rendered result."
-        },
-        {
-          id: "q-1-5",
           type: "mcq",
           question: "Which underlying database architecture powers the built-in Lovable Cloud backend?",
           options: [
@@ -181,6 +160,132 @@ export const LOVABLE_CURRICULUM_MODULES: CourseModule[] = [
           ],
           answer: "C) PostgreSQL",
           explanation: "Lovable Cloud builds directly on top of an open-source PostgreSQL relational database foundation."
+        },
+        {
+          id: "q-1-2",
+          type: "multi_select",
+          question: "Select ALL features that are included in the Lovable Cloud stack:",
+          options: [
+            "A) Managed PostgreSQL database",
+            "B) Built-in authentication system",
+            "C) Native mobile app compiler",
+            "D) Object storage for files",
+            "E) Blockchain ledger",
+          ],
+          answer: "A,B,D",
+          explanation: "Lovable Cloud includes a managed database, authentication, and object storage. It does not include a native mobile compiler or blockchain ledger."
+        },
+        {
+          id: "q-1-3",
+          type: "true_false",
+          question: "Applications created in Lovable are restricted to static visual templates and cannot execute real, compilable React and TypeScript code.",
+          options: ["True", "False"],
+          answer: "False",
+          explanation: "Lovable compiles real React, TypeScript, and Tailwind CSS code dynamically under the hood."
+        },
+        {
+          id: "q-1-4",
+          type: "fill_blank",
+          question: "Lovable provides built-in application protection using two core security scanners called the Basic scan and the ______________ scan.",
+          answer: "Deep",
+          explanation: "The Deep scan performs an exhaustive agentic review across the entire codebase to detect complex access-control issues and exposed secrets."
+        },
+        {
+          id: "q-1-5",
+          type: "matching",
+          question: "Match each Lovable component with its corresponding function:",
+          matchingPairs: [
+            { item: "A. Live Preview Canvas", functionText: "1. Displays live, interactive application updates side-by-side as code runs." },
+            { item: "B. Lovable Cloud", functionText: "2. Supplies integrated database, storage, authentication, and hosting features." },
+            { item: "C. Secret Vault", functionText: "3. Encrypts and securely stores third-party credentials and keys." },
+          ],
+          answer: "A-1, B-2, C-3",
+          explanation: "Each component serves a critical role in the dual-panel developer workspace."
+        },
+        {
+          id: "q-1-6",
+          type: "drag_drop",
+          question: "Drag the steps of the Lovable generation pipeline into the correct chronological order:",
+          dragItems: [
+            { id: "step-review", text: "Review the initial prototype in the live preview canvas" },
+            { id: "step-prompt", text: "Open the workspace and type a natural language prompt" },
+            { id: "step-execute", text: "Execute the prompt so the AI agent generates full-stack code" },
+          ],
+          correctOrder: ["step-prompt", "step-execute", "step-review"],
+          answer: "step-prompt,step-execute,step-review",
+          explanation: "You first input a clear prompt, allow the AI agent to execute code, and then review the rendered result."
+        },
+        {
+          id: "q-1-7",
+          type: "code_trace",
+          question: "What will this Lovable-generated TypeScript component render as the heading text?",
+          codeSnippet: "const ProjectDashboard = () => {\n  const title = \"My \" + \"AI\" + \" App\";\n  return (\n    <div>\n      <h1>{title.toUpperCase()}</h1>\n    </div>\n  );\n};",
+          options: [
+            "A) My AI App",
+            "B) MY AI APP",
+            "C) my ai app",
+            "D) undefined",
+          ],
+          answer: "B) MY AI APP",
+          explanation: "The string concatenation produces 'My AI App', and .toUpperCase() converts it to 'MY AI APP'."
+        },
+        {
+          id: "q-1-8",
+          type: "hotspot",
+          question: "Which part of the Lovable workspace is responsible for showing real-time application changes as code is generated?",
+          hotspotOptions: [
+            { id: "hs-1", label: "Chat Prompt Panel", correct: false },
+            { id: "hs-2", label: "Live Preview Canvas", correct: true },
+            { id: "hs-3", label: "Git History Sidebar", correct: false },
+            { id: "hs-4", label: "Secret Vault Settings", correct: false },
+          ],
+          answer: "Live Preview Canvas",
+          explanation: "The Live Preview Canvas displays live, interactive application updates side-by-side as code runs."
+        },
+        {
+          id: "q-1-9",
+          type: "scenario",
+          question: "You need to add a Stripe API key to your Lovable project. What is the correct approach?",
+          scenarioChoices: [
+            { id: "sc-1", text: "Paste the key directly into your frontend React code", correct: false },
+            { id: "sc-2", text: "Store it in the Secret Vault and reference it via environment variables", correct: true },
+            { id: "sc-3", text: "Add it as a comment in your main component file", correct: false },
+            { id: "sc-4", text: "Share it in the project's public README.md", correct: false },
+          ],
+          answer: "sc-2",
+          explanation: "The Secret Vault encrypts and securely stores third-party credentials. You should never expose API keys in frontend code, comments, or public files."
+        },
+        {
+          id: "q-1-10",
+          type: "sorting",
+          question: "Sort these items into the correct categories:",
+          sortBuckets: [
+            { bucket: "Frontend (Client-Side)", items: ["React Components", "Tailwind CSS Styles", "Browser DOM"] },
+            { bucket: "Backend (Server-Side)", items: ["PostgreSQL Database", "API Route Handlers", "Authentication Logic"] },
+          ],
+          answer: "Frontend:React Components,Tailwind CSS Styles,Browser DOM|Backend:PostgreSQL Database,API Route Handlers,Authentication Logic",
+          explanation: "React components, styling, and the DOM operate on the client. Database, API routes, and auth logic run on the server."
+        },
+        {
+          id: "q-1-11",
+          type: "syntax_fix",
+          question: "Find and fix the syntax error in this Lovable-generated React component:",
+          codeSnippet: "const UserCard = ({ name, role }) => {\n  return (\n    <div className=\"card\">\n      <h2>{name}</h2>\n      <p>{role}<p>\n    </div>\n  );\n};",
+          answer: "</p>",
+          explanation: "The closing <p> tag is missing the forward slash. It should be </p> instead of <p>."
+        },
+        {
+          id: "q-1-12",
+          type: "order",
+          question: "Arrange the Lovable project lifecycle phases in the correct order:",
+          orderItems: [
+            "1. Deploy the application to production hosting",
+            "2. Write a detailed natural language prompt describing your app",
+            "3. Iterate on the generated code using follow-up prompts",
+            "4. Review the AI-generated prototype in the preview canvas",
+          ],
+          answer: "2 -> 4 -> 3 -> 1",
+          explanation: "First you write the prompt, then review the generated prototype, iterate to refine it, and finally deploy to production."
         },
       ],
     },
