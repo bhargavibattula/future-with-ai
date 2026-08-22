@@ -154,7 +154,8 @@ export default function AuthCard({
   // Send OTP Call to API (`/api/auth/send-otp`)
   const requestOtpDispatch = async (
     targetEmail: string,
-    purpose: "2FA" | "Forgot Password" | "Sign Up 2FA"
+    purpose: "2FA" | "Forgot Password" | "Sign Up 2FA",
+    targetPassword?: string
   ) => {
     setLoading(true);
     setErrorMsg(null);
@@ -164,7 +165,7 @@ export default function AuthCard({
       const res = await fetch("/api/auth/send-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: targetEmail, purpose }),
+        body: JSON.stringify({ email: targetEmail, purpose, password: targetPassword }),
       });
 
       const data = await res.json();
@@ -273,7 +274,7 @@ export default function AuthCard({
       }
 
       // Credentials valid — now send OTP
-      await requestOtpDispatch(email, "2FA");
+      await requestOtpDispatch(email, "2FA", password);
       return;
     }
 
@@ -900,7 +901,7 @@ export default function AuthCard({
                 {canResend ? (
                   <button
                     type="button"
-                    onClick={() => requestOtpDispatch(email, otpPurpose)}
+                    onClick={() => requestOtpDispatch(email, otpPurpose, password)}
                     className="text-[#8B7FE8] font-bold hover:underline inline-flex items-center gap-1"
                   >
                     <RefreshCw className="w-3.5 h-3.5" /> Resend OTP
