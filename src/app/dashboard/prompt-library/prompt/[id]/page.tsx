@@ -192,7 +192,7 @@ export default function PromptDetailPage({
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-6 select-none font-sans">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-6 select-none font-sans">
       {/* BACK NAVIGATION */}
       <div>
         <Link
@@ -205,24 +205,24 @@ export default function PromptDetailPage({
       </div>
 
       {/* PROMPT READER HEADER CARD */}
-      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#E8E3FF] shadow-soft relative overflow-hidden">
+      <div className="bg-[var(--card)] rounded-2xl sm:rounded-3xl p-5 sm:p-8 border border-[var(--border)] shadow-soft relative overflow-hidden">
         <div className="pointer-events-none absolute -top-12 -right-12 w-48 h-48 rounded-full bg-[#8B7FE8]/10 blur-2xl" />
 
-        <div className="flex flex-wrap items-center gap-2.5 mb-4">
-          <span className="text-xs font-extrabold text-[#8B7FE8] bg-[#F5F2FF] px-3 py-1 rounded-full border border-[#E8E3FF]">
+        <div className="flex flex-wrap items-center gap-2.5 mb-3 sm:mb-4">
+          <span className="text-xs font-extrabold text-[#8B7FE8] bg-[#F5F2FF] dark:bg-[#1E1933] px-3 py-1 rounded-full border border-[#E8E3FF] dark:border-white/10">
             {prompt.category?.name || "Prompt"}
           </span>
           {renderTypeBadge(prompt.type)}
         </div>
 
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-[#1E1B2E] tracking-tight">
+        <h1 className="text-xl sm:text-3xl font-extrabold text-[var(--foreground)] tracking-tight">
           {prompt.title}
         </h1>
 
         {/* LOCKED BANNER IF CLAIMED ONE-TIME PROMPT */}
         {prompt.type === "ONE_TIME_PREMIUM" && isClaimed && (
-          <div className="mt-4 p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-800 text-xs font-bold flex items-center gap-2.5">
-            <Lock className="w-4 h-4 text-amber-600 shrink-0" />
+          <div className="mt-4 p-3.5 sm:p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-600 dark:text-amber-300 text-xs font-bold flex items-center gap-2.5">
+            <Lock className="w-4 h-4 text-amber-500 shrink-0" />
             <span>
               Already Claimed — You have claimed this one-time prompt. Copying is now locked for your account.
             </span>
@@ -231,14 +231,14 @@ export default function PromptDetailPage({
 
         {/* TASK 15: SUCCESS TOAST MESSAGE */}
         {toastMessage && (
-          <div className="mt-4 p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold flex items-center justify-between gap-2.5 animate-in fade-in duration-200">
+          <div className="mt-4 p-3.5 sm:p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 text-xs font-bold flex items-center justify-between gap-2.5 animate-in fade-in duration-200">
             <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+              <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
               <span>{toastMessage}</span>
             </div>
             <button
               onClick={() => setToastMessage(null)}
-              className="text-emerald-700 hover:text-emerald-900 text-xs font-extrabold cursor-pointer"
+              className="text-emerald-700 dark:text-emerald-300 hover:opacity-80 text-xs font-extrabold cursor-pointer"
             >
               Dismiss
             </button>
@@ -247,21 +247,21 @@ export default function PromptDetailPage({
       </div>
 
       {/* PROMPT CONTENT READER CONTAINER */}
-      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#E8E3FF] shadow-soft space-y-4">
-        <div className="flex items-center justify-between pb-3 border-b border-[#F5F2FF]">
-          <div className="flex items-center gap-2 text-xs font-extrabold text-[#1E1B2E]">
+      <div className="bg-[var(--card)] rounded-2xl sm:rounded-3xl p-5 sm:p-8 border border-[var(--border)] shadow-soft space-y-4">
+        <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
+          <div className="flex items-center gap-2 text-xs font-extrabold text-[var(--foreground)]">
             <Terminal className="w-4 h-4 text-[#8B7FE8]" />
             <span>Prompt Content Template</span>
           </div>
 
-          <span className="text-[11px] font-semibold text-[#6B6785]">
+          <span className="text-[11px] font-semibold text-[var(--foreground-secondary)]">
             Ready to copy
           </span>
         </div>
 
         {/* PROMPT TEXT BOX */}
-        <div className="bg-[#FCFBFF] rounded-2xl p-5 sm:p-6 border border-[#E8E3FF] relative">
-          <pre className="text-xs sm:text-sm font-mono text-[#1E1B2E] whitespace-pre-wrap leading-relaxed select-text overflow-x-auto">
+        <div className="bg-[var(--background)] rounded-2xl p-4 sm:p-6 border border-[var(--border)] relative">
+          <pre className="text-xs sm:text-sm font-mono text-[var(--foreground)] whitespace-pre-wrap leading-relaxed select-text overflow-x-auto">
             {prompt.content}
           </pre>
         </div>
@@ -272,7 +272,7 @@ export default function PromptDetailPage({
             <button
               type="button"
               disabled
-              className="px-6 py-3 rounded-2xl text-xs font-extrabold text-amber-800 bg-amber-100 border border-amber-300 opacity-80 cursor-not-allowed flex items-center gap-2"
+              className="w-full sm:w-auto justify-center px-6 py-3 rounded-2xl text-xs font-extrabold text-amber-800 bg-amber-100 border border-amber-300 opacity-80 cursor-not-allowed flex items-center gap-2 min-h-[44px]"
             >
               <Lock className="w-4 h-4" />
               <span>Already Claimed 🔒</span>
@@ -282,7 +282,7 @@ export default function PromptDetailPage({
               type="button"
               onClick={handleCopyPrompt}
               disabled={copying}
-              className="px-6 py-3 rounded-2xl text-xs font-extrabold text-white bg-[#8B7FE8] hover:bg-[#786BD6] shadow-soft-sm hover:shadow-soft-md transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
+              className="w-full sm:w-auto justify-center px-6 py-3 rounded-2xl text-xs font-extrabold text-white bg-[#8B7FE8] hover:bg-[#786BD6] shadow-soft-sm hover:shadow-soft-md transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50 min-h-[44px]"
             >
               {copied ? (
                 <>

@@ -118,7 +118,7 @@ export default function CategoryDetailsPage({
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 select-none font-sans">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6 sm:space-y-8 select-none font-sans">
       {/* BACK BUTTON */}
       <div>
         <Link
@@ -131,31 +131,31 @@ export default function CategoryDetailsPage({
       </div>
 
       {/* HEADER SECTION */}
-      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#E8E3FF] shadow-soft relative overflow-hidden">
+      <div className="bg-[var(--card)] rounded-2xl sm:rounded-3xl p-5 sm:p-8 border border-[var(--border)] shadow-soft relative overflow-hidden">
         <div className="pointer-events-none absolute -top-12 -right-12 w-40 h-40 rounded-full bg-[#8B7FE8]/10 blur-2xl" />
 
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative z-10">
           <div>
-            <span className="text-xs font-extrabold text-[#8B7FE8] bg-[#F5F2FF] px-3 py-1 rounded-full border border-[#E8E3FF]">
+            <span className="text-xs font-extrabold text-[#8B7FE8] bg-[#F5F2FF] dark:bg-[#1E1933] px-3 py-1 rounded-full border border-[#E8E3FF] dark:border-white/10">
               Domain Category
             </span>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#1E1B2E] mt-2">
+            <h1 className="text-xl sm:text-3xl font-extrabold text-[var(--foreground)] mt-2">
               {category ? category.name : "Loading Domain..."}
             </h1>
-            <p className="text-xs sm:text-sm text-[#6B6785] mt-1 max-w-2xl font-medium">
+            <p className="text-xs sm:text-sm text-[var(--foreground-secondary)] mt-1 max-w-2xl font-medium">
               {category?.description || "Browse curated prompts in this domain category."}
             </p>
           </div>
 
-          <div className="bg-[#FCFBFF] border border-[#E8E3FF] px-4 py-3 rounded-2xl text-center">
-            <span className="text-xs font-bold text-[#6B6785] block">Available Prompts</span>
+          <div className="bg-[var(--background)] border border-[var(--border)] px-4 py-3 rounded-2xl text-center self-start sm:self-auto min-w-[120px]">
+            <span className="text-xs font-bold text-[var(--foreground-secondary)] block">Available Prompts</span>
             <span className="text-xl font-extrabold text-[#8B7FE8]">{prompts.length}</span>
           </div>
         </div>
       </div>
 
       {/* SEARCH BAR */}
-      <div className="bg-white rounded-3xl p-4 border border-[#E8E3FF] shadow-soft flex items-center justify-between">
+      <div className="bg-[var(--card)] rounded-2xl sm:rounded-3xl p-3 sm:p-4 border border-[var(--border)] shadow-soft flex items-center justify-between">
         <div className="relative w-full sm:w-96">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8B7FE8]" />
           <input
@@ -163,7 +163,7 @@ export default function CategoryDetailsPage({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search prompts in this category..."
-            className="w-full pl-11 pr-4 py-2.5 rounded-2xl bg-[#FCFBFF] border border-[#E8E3FF] text-xs font-semibold outline-none focus:border-[#8B7FE8]"
+            className="w-full pl-11 pr-4 py-2.5 rounded-2xl bg-[var(--background)] border border-[var(--border)] text-xs font-semibold text-[var(--foreground)] outline-none focus:border-[#8B7FE8] min-h-[44px]"
           />
         </div>
       </div>

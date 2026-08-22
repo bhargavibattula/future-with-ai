@@ -568,11 +568,11 @@ export default function StreaksPanel() {
       </div>
 
       {/* 3. 365-DAY GITHUB-STYLE LEARNING CONTRIBUTION CALENDAR */}
-      <Card className="bg-[var(--card)] border-[var(--border)] shadow-soft-sm p-6">
-        <CardHeader className="p-0 mb-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <Card className="bg-[var(--card)] border-[var(--border)] shadow-soft-sm p-4 sm:p-6">
+        <CardHeader className="p-0 mb-4 sm:mb-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
             <div>
-              <CardTitle className="text-lg sm:text-xl font-black text-[var(--foreground)] flex items-center gap-2">
+              <CardTitle className="text-base sm:text-xl font-black text-[var(--foreground)] flex items-center gap-2">
                 <Flame className="w-5 h-5 text-[#8B7FE8] fill-[#8B7FE8]" />
                 365-Day Learning Contribution Graph
               </CardTitle>
@@ -582,7 +582,7 @@ export default function StreaksPanel() {
             </div>
 
             {/* Heatmap Legend */}
-            <div className="flex items-center gap-2 text-xs font-bold text-[var(--foreground-secondary)]">
+            <div className="flex flex-wrap items-center gap-2 text-xs font-bold text-[var(--foreground-secondary)]">
               <span className="text-[11px]">Less</span>
               <span className="w-3.5 h-3.5 rounded-sm bg-[#F3F0FE] dark:bg-[#231E38] border border-[var(--border)]" title="0 Activity" />
               <span className="w-3.5 h-3.5 rounded-sm bg-[#D8D2FA]" title="1 Activity" />
@@ -595,7 +595,10 @@ export default function StreaksPanel() {
         </CardHeader>
 
         <CardContent className="p-0 space-y-6">
-          <div className="overflow-x-auto pb-4 pt-2">
+          <div className="sm:hidden text-[10px] font-bold text-[#8B7FE8] flex items-center gap-1">
+            <span>← Swipe horizontally to explore full year →</span>
+          </div>
+          <div className="overflow-x-auto pb-4 pt-2 custom-scrollbar">
             <div className="flex justify-between text-[11px] font-extrabold text-[var(--foreground-secondary)] mb-3 min-w-[750px] px-8">
               {monthNames.map((m, idx) => (
                 <span key={idx}>{m}</span>

@@ -38,7 +38,7 @@ export default function StoreItemCard({ item, ownedQuantity, purchasing, onBuy, 
       
       {insufficientError && (
         <div className="text-[11px] text-red-600 font-bold mb-2 p-2 bg-red-50 rounded-lg border border-red-200">
-          You don't have enough coins.<br/>
+          You don&apos;t have enough coins.<br/>
           Required: {item.price} <br/>
           Available: {balance}
         </div>

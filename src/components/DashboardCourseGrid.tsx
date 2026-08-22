@@ -217,19 +217,19 @@ export default function DashboardCourseGrid() {
 
       {/* Grid of Courses */}
       {filteredCourses.length > 0 ? (
-        <div ref={gridRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div ref={gridRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
           {filteredCourses.map((course) => (
             <CourseCard key={course.id} course={course} />
           ))}
         </div>
       ) : (
-        <div className="bg-white rounded-3xl p-12 border border-[#EAE6FE] text-center max-w-md mx-auto shadow-sm">
-          <div className="w-14 h-14 rounded-full bg-[#FFF0F5] text-[#C0336A] flex items-center justify-center mx-auto mb-4">
+        <div className="bg-[var(--card)] rounded-3xl p-8 sm:p-12 border border-[var(--border)] text-center max-w-md mx-auto shadow-sm">
+          <div className="w-14 h-14 rounded-full bg-[#FFF0F5] dark:bg-[#2A1520] text-[#C0336A] dark:text-[#FFC9DE] flex items-center justify-center mx-auto mb-4">
             <Search className="w-6 h-6" />
           </div>
-          <h3 className="text-lg font-bold text-[#1E1B2E] mb-2">No courses found</h3>
-          <p className="text-sm text-[#6B6785] mb-6">
-            We couldn&apos;t find any courses matching "{searchQuery}".
+          <h3 className="text-lg font-bold text-[var(--foreground)] mb-2">No courses found</h3>
+          <p className="text-xs sm:text-sm text-[var(--foreground-secondary)] mb-6">
+            We couldn&apos;t find any courses matching &quot;{searchQuery}&quot;.
           </p>
           <button
             onClick={() => {

@@ -60,7 +60,7 @@ export default function Footer() {
               </div>
             </div>
 
-            <p className="text-xs sm:text-sm font-bold text-[#4A4665] leading-relaxed max-w-sm mb-6">
+            <p className="text-xs sm:text-sm font-bold text-[#4A4665] dark:text-[#A09CAE] leading-relaxed max-w-sm mb-6">
               Empowering learners worldwide to master cutting-edge AI tools through interactive courses, hands-on challenges, and industry-recognized certificates.
             </p>
 
@@ -77,7 +77,7 @@ export default function Footer() {
                   key={idx}
                   href={item.href}
                   aria-label={item.name}
-                  className="w-9 h-9 rounded-xl bg-[#F3F0FE] hover:bg-[#8B7FE8] text-[#8B7FE8] hover:text-white border border-[#D8D2FA] flex items-center justify-center transition-all shadow-sm"
+                  className="w-9 h-9 rounded-xl bg-[#F3F0FE] dark:bg-[#1E1B2E] hover:bg-[#8B7FE8] dark:hover:bg-[#8B7FE8] text-[#8B7FE8] hover:text-white border border-[#D8D2FA] dark:border-white/10 flex items-center justify-center transition-all shadow-sm"
                 >
                   <item.Icon className="w-4 h-4" />
                 </a>
@@ -87,10 +87,10 @@ export default function Footer() {
 
           {/* Col 3: Popular AI Courses */}
           <div>
-            <h4 className="text-xs font-black text-[#1E1B2E] uppercase tracking-wider mb-4">
+            <h4 className="text-xs font-black text-[#1E1B2E] dark:text-white uppercase tracking-wider mb-4">
               Popular Courses
             </h4>
-            <ul className="space-y-2.5 text-xs font-bold text-[#4A4665]">
+            <ul className="space-y-2.5 text-xs font-bold text-[#4A4665] dark:text-[#A09CAE]">
               <li>
                 <a href="#explore" className="hover:text-[#8B7FE8] transition-colors flex items-center gap-1.5">
                   <span>ChatGPT Masterclass</span>
@@ -126,10 +126,10 @@ export default function Footer() {
 
           {/* Col 4: Platform Features */}
           <div>
-            <h4 className="text-xs font-black text-[#1E1B2E] uppercase tracking-wider mb-4">
+            <h4 className="text-xs font-black text-[#1E1B2E] dark:text-white uppercase tracking-wider mb-4">
               Platform Features
             </h4>
-            <ul className="space-y-2.5 text-xs font-bold text-[#4A4665]">
+            <ul className="space-y-2.5 text-xs font-bold text-[#4A4665] dark:text-[#A09CAE]">
               <li>
                 <Link href="/dashboard/tools" className="hover:text-[#8B7FE8] transition-colors font-black text-[#8B7FE8]">
                   AI Tools & Engineering Blogs
@@ -165,10 +165,10 @@ export default function Footer() {
 
           {/* Col 5: Account & Company */}
           <div>
-            <h4 className="text-xs font-black text-[#1E1B2E] uppercase tracking-wider mb-4">
+            <h4 className="text-xs font-black text-[#1E1B2E] dark:text-white uppercase tracking-wider mb-4">
               Account & Legal
             </h4>
-            <ul className="space-y-2.5 text-xs font-bold text-[#4A4665]">
+            <ul className="space-y-2.5 text-xs font-bold text-[#4A4665] dark:text-[#A09CAE]">
               <li>
                 <Link href="/login" className="hover:text-[#8B7FE8] transition-colors">
                   Sign In
@@ -200,7 +200,7 @@ export default function Footer() {
         </div>
 
         {/* BOTTOM COPYRIGHT */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-bold text-[#4A4665]">
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-bold text-[#4A4665] dark:text-[#A09CAE]">
           <div className="flex items-center gap-3">
             <span>© {new Date().getFullYear()} Future.ai Inc. All rights reserved.</span>
           </div>

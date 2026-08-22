@@ -48,7 +48,7 @@ export default function WeeklyStreaks() {
         </div>
         
         <p className="text-sm font-bold text-[#1E1B2E]">
-          Today's task is complete
+          Today&apos;s task is complete
         </p>
       </div>
     </div>

@@ -26,17 +26,16 @@ const generateActivityData = () => {
 };
 
 export default function ActivityHeatmap() {
-  const [activityData, setActivityData] = useState<{date: Date; count: number}[]>([]);
+  const [activityData] = useState<{ date: Date; count: number }[]>(() => generateActivityData());
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    setActivityData(generateActivityData());
     setIsMounted(true);
   }, []);
 
   // Stats calculation
-  const totalSubmissions = activityData.reduce((acc, curr) => acc + curr.count, 0);
-  const activeDays = activityData.filter((d) => d.count > 0).length;
+  const totalSubmissions = useMemo(() => activityData.reduce((acc, curr) => acc + curr.count, 0), [activityData]);
+  const activeDays = useMemo(() => activityData.filter((d) => d.count > 0).length, [activityData]);
   
   // Max streak calculation
   const maxStreak = useMemo(() => {
@@ -55,7 +54,7 @@ export default function ActivityHeatmap() {
 
   // Color mapping function based on brand colors
   const getColor = (count: number) => {
-    if (count === 0) return "bg-[#F3F0FE]"; // Empty state
+    if (count === 0) return "bg-[#F3F0FE] dark:bg-[#1E1933]"; // Empty state
     if (count < 3) return "bg-[#D8D2FA]";   // Low activity
     if (count < 5) return "bg-[#B1A5F5]";   // Medium activity
     return "bg-[#8B7FE8]";                  // High activity
@@ -65,42 +64,46 @@ export default function ActivityHeatmap() {
 
   if (!isMounted) {
     return (
-      <div className="bg-white rounded-3xl p-6 border border-[#EAE6FE] shadow-sm min-h-[300px] flex items-center justify-center">
-        <p className="text-[#6B6785] text-sm">Loading activity data...</p>
+      <div className="bg-[var(--card)] rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-[var(--border)] shadow-sm min-h-[260px] flex items-center justify-center">
+        <p className="text-[var(--foreground-secondary)] text-xs sm:text-sm">Loading activity data...</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-white rounded-3xl p-6 border border-[#EAE6FE] shadow-sm">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
+    <div className="bg-[var(--card)] rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-[var(--border)] shadow-sm mb-6 sm:mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 gap-3 sm:gap-4">
         <div>
-          <h2 className="text-xl font-extrabold text-[#1E1B2E]">
+          <h2 className="text-base sm:text-xl font-extrabold text-[var(--foreground)]">
             {totalSubmissions} submissions in the past one year
           </h2>
         </div>
-        <div className="flex items-center gap-4 text-sm font-semibold text-[#6B6785]">
+        <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-xs sm:text-sm font-semibold text-[var(--foreground-secondary)]">
           <div>
-            Total active days: <span className="text-[#1E1B2E] font-bold">{activeDays}</span>
+            Total active days: <span className="text-[var(--foreground)] font-bold">{activeDays}</span>
           </div>
           <div>
-            Max streak: <span className="text-[#1E1B2E] font-bold">{maxStreak}</span>
+            Max streak: <span className="text-[var(--foreground)] font-bold">{maxStreak}</span>
           </div>
         </div>
       </div>
 
+      <div className="sm:hidden text-[10px] font-bold text-[#8B7FE8] mb-2">
+        <span>← Swipe horizontally to explore annual contributions →</span>
+      </div>
+
       <div className="w-full overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-[#D8D2FA] scrollbar-track-transparent">
-        <div className="min-w-[800px]">
-          <div className="grid grid-cols-53 gap-1 grid-rows-7 h-32">
+        <div className="min-w-[760px]">
+          <div className="grid grid-cols-53 gap-1 grid-rows-7 h-28 sm:h-32">
             {activityData.map((day, i) => (
               <div
                 key={i}
-                className={`w-3.5 h-3.5 rounded-[3px] cursor-pointer hover:ring-2 hover:ring-[#8B7FE8]/50 transition-all ${getColor(day.count)}`}
+                className={`w-3 h-3 sm:w-3.5 sm:h-3.5 rounded-[2px] sm:rounded-[3px] cursor-pointer hover:ring-2 hover:ring-[#8B7FE8]/50 transition-all ${getColor(day.count)}`}
                 title={`${day.date.toDateString()}: ${day.count} submissions`}
               />
             ))}
           </div>
-          <div className="flex justify-between text-xs font-bold text-[#6B6785] mt-2 px-2">
+          <div className="flex justify-between text-[11px] sm:text-xs font-bold text-[var(--foreground-secondary)] mt-2 px-1">
             {months.map((month) => (
               <span key={month}>{month}</span>
             ))}
@@ -108,15 +111,15 @@ export default function ActivityHeatmap() {
         </div>
       </div>
       
-      <div className="flex items-center gap-2 mt-4 text-xs font-bold text-[#6B6785]">
-        <span>Less</span>
+      <div className="flex items-center gap-2 mt-3 text-xs font-bold text-[var(--foreground-secondary)]">
+        <span className="text-[11px]">Less</span>
         <div className="flex gap-1">
-          <div className="w-3 h-3 rounded-[2px] bg-[#F3F0FE]"></div>
+          <div className="w-3 h-3 rounded-[2px] bg-[#F3F0FE] dark:bg-[#1E1933]"></div>
           <div className="w-3 h-3 rounded-[2px] bg-[#D8D2FA]"></div>
           <div className="w-3 h-3 rounded-[2px] bg-[#B1A5F5]"></div>
           <div className="w-3 h-3 rounded-[2px] bg-[#8B7FE8]"></div>
         </div>
-        <span>More</span>
+        <span className="text-[11px]">More</span>
       </div>
     </div>
   );
