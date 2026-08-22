@@ -425,13 +425,15 @@ export default function DashboardPage() {
                 <Badge variant="primary" className="text-[10px]">
                   <Sparkles className="w-3 h-3 text-white" /> AI Recommendation
                 </Badge>
-                <span className="text-xs font-bold text-[#6B6785]">Est. 18 min</span>
+                <span className="text-xs font-bold text-[#6B6785]">Est. {Math.floor(Math.random() * 15) + 5} min</span>
               </div>
               <CardTitle className="text-lg font-black text-[#1E1B2E] mt-2">
-                Machine Learning & Neural Nets Basics
+                {activeCourse ? `${activeCourse.title} Practice` : "Machine Learning & Neural Nets Basics"}
               </CardTitle>
               <CardDescription className="text-xs text-[#6B6785]">
-                Based on your recent quiz accuracy, reviewing backpropagation will boost your benchmark score by 12%.
+                {activeCourse 
+                  ? `Based on your recent progress in ${activeCourse.title}, completing this practice will boost your benchmark score.`
+                  : "Based on your recent quiz accuracy, reviewing backpropagation will boost your benchmark score by 12%."}
               </CardDescription>
             </CardHeader>
 
@@ -449,7 +451,7 @@ export default function DashboardPage() {
                   </div>
                 </div>
 
-                <Link href="/courses/claude">
+                <Link href={activeCourse ? `/courses/${activeCourse.id.replace('course-', '')}` : "/courses/claude"}>
                   <Button size="sm" className="text-xs font-bold shadow-soft-sm">
                     Start Now
                   </Button>
@@ -472,7 +474,14 @@ export default function DashboardPage() {
 
             <CardContent>
               <div ref={timelineRef} className="space-y-3">
-                {mockActivities.map((act) => (
+                {(dashboardData?.recentLogs?.length > 0
+                  ? dashboardData.recentLogs.slice(0, 4).map((log: any) => ({
+                      id: log.id,
+                      title: `Completed ${log.activityType.toLowerCase()} (+${log.xp} XP)`,
+                      timeAgo: new Date(log.createdAt).toLocaleDateString(),
+                      type: log.activityType.toLowerCase() === "quiz" ? "quiz" : log.activityType.toLowerCase() === "lesson" ? "lesson" : "streak"
+                    }))
+                  : mockActivities).map((act: any) => (
                   <div
                     key={act.id}
                     className="timeline-item p-3 rounded-2xl bg-[#FCFBFF] border border-[#EAE6FE] hover:border-[#8B7FE8]/50 hover:shadow-soft-sm transition-all flex items-center justify-between"
