@@ -406,3 +406,40 @@ model CoinTransaction {
 }
 
 
+
+model Quiz {
+  id          String     @id @default(cuid())
+  moduleId    String     @unique // Ties to course module
+  title       String
+  description String?
+  xpReward    Int        @default(100)
+  questions   Question[]
+}
+
+model Question {
+  id            String         @id @default(cuid())
+  quizId        String
+  quiz          Quiz           @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  type          QuestionType   // MULTIPLE_CHOICE, DRAG_DROP, FILL_BLANK, CODE_TRACE, HOTSPOT...
+  prompt        String
+  codeSnippet   String?
+  options       Json           // Stores choices or drag-and-drop blocks
+  correctAnswer Json           // Stores the required order or correct ID
+  explanation   String?
+  orderIndex    Int            @default(0)
+}
+
+enum QuestionType {
+  MULTIPLE_CHOICE
+  MULTIPLE_SELECT
+  TRUE_FALSE
+  DRAG_DROP_ORDERING
+  MATCHING_PAIRS
+  FILL_IN_THE_BLANKS
+  CODE_TRACING
+  IMAGE_HOTSPOT
+  SCENARIO_BRANCHING
+  AI_FREE_TEXT
+  SORTING
+  SYNTAX_CORRECTION
+}
