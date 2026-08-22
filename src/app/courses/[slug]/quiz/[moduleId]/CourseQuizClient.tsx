@@ -140,27 +140,14 @@ export default function CourseQuizClient({ slug, moduleId }: CourseQuizClientPro
         colors: ['#8B7FE8', '#5CBFA0', '#F0879B', '#FFD700']
       });
 
-      // Sound Appreciation
+      // Sound Appreciation - Alternate Approach (HTML5 Audio)
       try {
-        const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
-        if (AudioContext) {
-          const ctx = new AudioContext();
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-          osc.connect(gain);
-          gain.connect(ctx.destination);
-          osc.type = "sine";
-          osc.frequency.setValueAtTime(523.25, ctx.currentTime);
-          osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.1);
-          osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.2);
-          osc.frequency.setValueAtTime(1046.50, ctx.currentTime + 0.3);
-          gain.gain.setValueAtTime(0.1, ctx.currentTime);
-          gain.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + 1);
-          osc.start();
-          osc.stop(ctx.currentTime + 1);
-        }
+        // Play a short, pleasant success chime
+        const chime = new Audio("https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3");
+        chime.volume = 0.4;
+        chime.play().catch(e => console.warn("Audio play blocked by browser policy:", e));
       } catch (e) {
-        console.warn("Audio context not supported", e);
+        console.warn("Audio playback failed:", e);
       }
       
       // Update backend via API
