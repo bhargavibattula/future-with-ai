@@ -324,9 +324,9 @@ export default function DashboardNavbar() {
                     <Wrench className="w-4 h-4" />
                   </div>
                   <div>
-                    <div className="font-extrabold text-xs">AI Tools Directory</div>
+                    <div className="font-extrabold text-xs">AI Tools & Guides</div>
                     <div className="text-[11px] font-normal text-[var(--foreground-secondary)]">
-                      Discover 100+ curated AI tools
+                      Discover AI guides, benchmarks & tools
                     </div>
                   </div>
                 </Link>
@@ -570,7 +570,7 @@ export default function DashboardNavbar() {
                 }`}
               >
                 <Wrench className="w-4 h-4 text-[#8B7FE8]" />
-                <span>AI Tools Directory</span>
+                <span>AI Tools & Guides</span>
               </Link>
               <Link
                 href="/dashboard/games"

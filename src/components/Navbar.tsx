@@ -143,6 +143,12 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
               How it works
             </Link>
             <Link
+              href="/dashboard/tools"
+              className="hover:text-[#8B7FE8] transition-colors py-1 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-[#8B7FE8] hover:after:w-full after:transition-all text-[#8B7FE8] font-bold"
+            >
+              AI Blogs & Tools
+            </Link>
+            <Link
               href="/#submit"
               className="hover:text-[#8B7FE8] transition-colors py-1 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-[#8B7FE8] hover:after:w-full after:transition-all"
             >
@@ -356,6 +362,13 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
                 className="py-2 hover:text-[#8B7FE8] border-b border-[#EAE6FE]/50"
               >
                 How it works
+              </Link>
+              <Link
+                href="/dashboard/tools"
+                onClick={() => setMobileMenuOpen(false)}
+                className="py-2 text-[#8B7FE8] font-bold border-b border-[#EAE6FE]/50"
+              >
+                AI Blogs & Tools
               </Link>
               <Link
                 href="/#submit"

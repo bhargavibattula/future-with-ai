@@ -131,6 +131,11 @@ export default function Footer() {
             </h4>
             <ul className="space-y-2.5 text-xs font-bold text-[#4A4665]">
               <li>
+                <Link href="/dashboard/tools" className="hover:text-[#8B7FE8] transition-colors font-black text-[#8B7FE8]">
+                  AI Tools & Engineering Blogs
+                </Link>
+              </li>
+              <li>
                 <a href="#challenge" className="hover:text-[#8B7FE8] transition-colors">
                   28-Day AI Challenge
                 </a>
