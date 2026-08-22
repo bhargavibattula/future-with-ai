@@ -41,7 +41,7 @@ Format your valid responses using markdown where appropriate. If you don't know 
         Authorization: `Bearer ${groqApiKey}`,
       },
       body: JSON.stringify({
-        model: "llama-3.3-70b-versatile",
+        model: "llama3-8b-8192",
         messages: payloadMessages,
         temperature: 0.7,
         max_tokens: 1024,
@@ -51,8 +51,16 @@ Format your valid responses using markdown where appropriate. If you don't know 
     if (!groqRes.ok) {
       const errorText = await groqRes.text();
       console.error("[AI_TUTOR] Groq API Error:", errorText);
+      let errorMessage = "Failed to communicate with AI service.";
+      try {
+        const parsed = JSON.parse(errorText);
+        if (parsed?.error?.message) {
+          errorMessage = parsed.error.message;
+        }
+      } catch (e) {}
+      
       return NextResponse.json(
-        { success: false, message: "Failed to communicate with AI service." },
+        { success: false, message: errorMessage },
         { status: 502 }
       );
     }

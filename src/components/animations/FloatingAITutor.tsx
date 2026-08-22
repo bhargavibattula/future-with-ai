@@ -54,7 +54,7 @@ export default function FloatingAITutor() {
       } else {
         setMessages((prev) => [
           ...prev,
-          { role: "assistant", content: "Sorry, I ran into an error processing your request." },
+          { role: "assistant", content: data.message || "Sorry, I ran into an error processing your request." },
         ]);
       }
     } catch (error) {
@@ -68,7 +68,7 @@ export default function FloatingAITutor() {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
+    <div className="fixed bottom-6 right-6 z-[9999]">
       <AnimatePresence>
         {isOpen && (
           <motion.div

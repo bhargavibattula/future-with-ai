@@ -34,7 +34,7 @@ export async function POST(req: Request) {
             Authorization: `Bearer ${groqApiKey}`,
           },
           body: JSON.stringify({
-            model: "llama-3.3-70b-versatile",
+            model: "llama3-8b-8192",
             messages: promptMessages,
             temperature: 0.7,
             max_tokens: 300,
