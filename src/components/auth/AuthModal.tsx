@@ -39,11 +39,11 @@ export default function AuthModal({
       />
 
       {/* Modal Container */}
-      <div className="relative z-10 w-full max-w-md my-auto">
+      <div className="relative z-10 w-full max-w-md my-auto px-2 sm:px-0">
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute -top-4 -right-4 z-20 p-2.5 rounded-full bg-white text-[#1E1B2E] shadow-lg border border-[#EAE6FE] hover:bg-[#F3F0FE] hover:scale-110 transition-all duration-200"
+          className="absolute top-4 right-4 sm:-top-3 sm:-right-3 z-30 p-2 rounded-full bg-white dark:bg-[#1E1933] text-[#1E1B2E] dark:text-white shadow-lg border border-[#EAE6FE] dark:border-white/20 hover:bg-[#F3F0FE] dark:hover:bg-[#282142] transition-all min-h-[40px] min-w-[40px] flex items-center justify-center"
           aria-label="Close modal"
         >
           <X className="w-5 h-5" />

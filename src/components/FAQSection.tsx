@@ -57,22 +57,22 @@ export default function FAQSection() {
   const rightColumn = faqs.filter((_, i) => i % 2 !== 0);
 
   return (
-    <section className="w-full bg-[var(--background)] py-24 px-6 sm:px-12 lg:px-24 overflow-hidden transition-colors duration-300">
+    <section className="w-full bg-[var(--background)] py-14 sm:py-20 lg:py-28 px-4 sm:px-8 lg:px-16 overflow-hidden transition-colors duration-300">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[var(--foreground)] font-['Space_Grotesk'] tracking-tight mb-4">
+        <div className="text-center mb-10 sm:mb-16">
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-[var(--foreground)] font-['Space_Grotesk'] tracking-tight mb-3">
             Frequently asked questions
           </h2>
-          <p className="text-[var(--muted)] text-lg">
+          <p className="text-[var(--muted)] text-sm sm:text-base md:text-lg">
             Find answers to common questions about Future With AI
           </p>
         </div>
 
         {/* FAQ Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3.5 sm:gap-4">
           {/* Left Column */}
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-3.5 sm:gap-4">
             {leftColumn.map((faq, i) => {
               const realIndex = i * 2;
               return (
@@ -88,7 +88,7 @@ export default function FAQSection() {
           </div>
 
           {/* Right Column */}
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-3.5 sm:gap-4">
             {rightColumn.map((faq, i) => {
               const realIndex = i * 2 + 1;
               return (
@@ -121,15 +121,15 @@ function FAQItem({
 }) {
   return (
     <div
-      className={`rounded-xl border transition-all duration-300 cursor-pointer ${
+      className={`rounded-2xl border transition-all duration-300 cursor-pointer ${
         isOpen
-          ? "bg-[var(--primary-soft)] border-[var(--primary)]/40"
+          ? "bg-[var(--primary-soft)] border-[var(--primary)]/40 shadow-sm"
           : "bg-[var(--elevated)] border-[var(--border)] hover:border-[var(--primary)]/30"
       }`}
       onClick={onClick}
     >
-      <div className="flex items-center justify-between px-6 py-5">
-        <span className="text-[var(--foreground)] font-medium text-[15px] pr-4">
+      <div className="flex items-center justify-between px-4 sm:px-6 py-4 sm:py-5 min-h-[48px]">
+        <span className="text-[var(--foreground)] font-semibold text-sm sm:text-[15px] pr-3 leading-snug">
           {question}
         </span>
         <ChevronDown
@@ -140,10 +140,10 @@ function FAQItem({
       </div>
       <div
         className={`overflow-hidden transition-all duration-300 ease-in-out ${
-          isOpen ? "max-h-60 opacity-100" : "max-h-0 opacity-0"
+          isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
         }`}
       >
-        <p className="px-6 pb-5 text-[var(--foreground-secondary)] text-sm leading-relaxed">
+        <p className="px-4 sm:px-6 pb-4 sm:pb-5 text-[var(--foreground-secondary)] text-xs sm:text-sm leading-relaxed">
           {answer}
         </p>
       </div>

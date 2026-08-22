@@ -248,12 +248,12 @@ export default function LeaderboardPanel() {
             </CardHeader>
 
             <CardContent className="p-0 pt-4">
-              <div ref={podiumRef} className="flex flex-col sm:flex-row items-end justify-center gap-4 sm:gap-6 pt-8 pb-4">
+              <div ref={podiumRef} className="flex flex-col sm:flex-row items-center sm:items-end justify-center gap-6 sm:gap-6 pt-6 pb-4 px-2">
                 {/* #2 PODIUM (LEFT FLANK - SILVER MINT) */}
                 {second && (
-                  <div className="podium-block w-full sm:w-1/3 flex flex-col items-center order-2 sm:order-1">
+                  <div className="podium-block w-full max-w-[240px] sm:max-w-none sm:w-1/3 flex flex-col items-center order-2 sm:order-1">
                     <div className="relative mb-3 flex flex-col items-center">
-                      <div className="w-16 h-16 rounded-full bg-[#5CBFA0] text-white font-black flex items-center justify-center text-xl border-4 border-[var(--card)] shadow-soft-md hover:scale-110 transition-transform">
+                      <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#5CBFA0] text-white font-black flex items-center justify-center text-lg sm:text-xl border-4 border-[var(--card)] shadow-soft-md hover:scale-110 transition-transform">
                         {second.avatarInitials}
                       </div>
                       <span className="absolute -bottom-2 bg-[var(--foreground)] text-[var(--card)] text-[10px] font-black px-2.5 py-0.5 rounded-full border border-[var(--card)]">
@@ -266,7 +266,7 @@ export default function LeaderboardPanel() {
                     <div className="text-xs font-bold text-[#8B7FE8]">{second.xp.toLocaleString()} XP</div>
 
                     {/* Platform Base */}
-                    <div className="w-full h-28 bg-gradient-to-b from-[#5CBFA0]/20 via-[var(--card)] to-[var(--background-secondary)] border-2 border-[#5CBFA0] rounded-t-2xl mt-3 flex flex-col items-center justify-center p-3 text-center shadow-soft-sm">
+                    <div className="w-full h-24 sm:h-28 bg-gradient-to-b from-[#5CBFA0]/20 via-[var(--card)] to-[var(--background-secondary)] border-2 border-[#5CBFA0] rounded-2xl sm:rounded-t-2xl sm:rounded-b-none mt-3 flex flex-col items-center justify-center p-3 text-center shadow-soft-sm">
                       <span className="text-xs font-black text-[var(--foreground)]">{second.accuracy} Acc</span>
                       <span className="text-[10px] font-bold text-[var(--foreground-secondary)]">🔥 {second.streak} Day Streak</span>
                     </div>
@@ -275,13 +275,13 @@ export default function LeaderboardPanel() {
 
                 {/* #1 PODIUM (CENTER ELEVATED - GOLD PURPLE) */}
                 {first && (
-                  <div className="podium-block w-full sm:w-1/3 flex flex-col items-center order-1 sm:order-2">
+                  <div className="podium-block w-full max-w-[260px] sm:max-w-none sm:w-1/3 flex flex-col items-center order-1 sm:order-2">
                     <div className="relative mb-3 flex flex-col items-center">
                       <Crown
                         ref={crownRef}
-                        className="w-8 h-8 text-[#8B7FE8] fill-[#8B7FE8] absolute -top-8 animate-pulse-subtle"
+                        className="w-7 h-7 sm:w-8 sm:h-8 text-[#8B7FE8] fill-[#8B7FE8] absolute -top-7 sm:-top-8 animate-pulse-subtle"
                       />
-                      <div className="w-22 h-22 rounded-full bg-[#8B7FE8] text-white font-black flex items-center justify-center text-2xl border-4 border-[#D8D2FA] shadow-glow-primary hover:scale-110 transition-transform">
+                      <div className="w-18 h-18 sm:w-22 sm:h-22 rounded-full bg-[#8B7FE8] text-white font-black flex items-center justify-center text-xl sm:text-2xl border-4 border-[#D8D2FA] shadow-glow-primary hover:scale-110 transition-transform">
                         {first.avatarInitials}
                       </div>
                       <span className="absolute -bottom-2 bg-[#8B7FE8] text-white text-xs font-black px-3 py-0.5 rounded-full border border-white shadow-soft-sm">
@@ -294,7 +294,7 @@ export default function LeaderboardPanel() {
                     <div className="text-sm font-black text-[#8B7FE8]">{first.xp.toLocaleString()} XP</div>
 
                     {/* Platform Base */}
-                    <div className="w-full h-40 bg-gradient-to-b from-[#8B7FE8]/25 via-[var(--card)] to-[var(--background-secondary)] border-2 border-[#8B7FE8] rounded-t-2xl mt-3 flex flex-col items-center justify-center p-3 text-center shadow-glow-primary">
+                    <div className="w-full h-32 sm:h-40 bg-gradient-to-b from-[#8B7FE8]/25 via-[var(--card)] to-[var(--background-secondary)] border-2 border-[#8B7FE8] rounded-2xl sm:rounded-t-2xl sm:rounded-b-none mt-3 flex flex-col items-center justify-center p-3 text-center shadow-glow-primary">
                       <Badge variant="primary" className="mb-1 text-[10px]">
                         Level {first.level}
                       </Badge>

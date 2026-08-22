@@ -299,12 +299,22 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
             )}
           </div>
 
-          {/* Mobile menu button */}
-          <div className="md:hidden flex items-center gap-3">
+          {/* Mobile menu button & actions */}
+          <div className="md:hidden flex items-center gap-2">
             <DarkModeToggle />
+            {onSearchClick && (
+              <button
+                type="button"
+                onClick={onSearchClick}
+                className="p-2 text-[var(--foreground)] hover:bg-[#D8D2FA]/30 rounded-xl transition-colors min-w-[40px] min-h-[40px] flex items-center justify-center"
+                aria-label="Search AI Tools"
+              >
+                <Search className="w-5 h-5 text-[#8B7FE8]" />
+              </button>
+            )}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 text-[#1E1B2E] hover:bg-[#D8D2FA]/30 rounded-xl transition-colors"
+              className="p-2 text-[var(--foreground)] hover:bg-[#D8D2FA]/30 rounded-xl transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
               aria-label="Toggle navigation menu"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -312,74 +322,89 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
           </div>
         </div>
 
-        {/* Mobile Drawer */}
+        {/* Mobile Drawer Overlay & Content */}
         {mobileMenuOpen && (
-          <div className="md:hidden bg-[#FCFBFF] border-b border-[#EAE6FE] px-6 py-6 space-y-4 animate-in slide-in-from-top duration-300">
+          <div className="md:hidden bg-white dark:bg-[#12101B] border-b border-[#EAE6FE] dark:border-white/10 px-4 sm:px-6 py-5 space-y-4 animate-in slide-in-from-top duration-300 shadow-2xl max-h-[85vh] overflow-y-auto">
             {user && (
-              <div className="p-3 bg-[#F3F0FE] rounded-2xl border border-[#EAE6FE] flex items-center gap-3 mb-2">
-                <div className="w-10 h-10 rounded-full bg-[#8B7FE8] text-white flex items-center justify-center font-bold">
-                  {getInitial(user.name)}
+              <div className="p-3.5 bg-[#F3F0FE] dark:bg-[#1E1933] rounded-2xl border border-[#EAE6FE] dark:border-white/10 flex items-center justify-between gap-3 mb-2">
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#8B7FE8] to-[#D8D2FA] text-white flex items-center justify-center font-bold shrink-0 shadow-sm">
+                    {getInitial(user.name)}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-bold text-[var(--foreground)] truncate">
+                      {user.name}
+                    </p>
+                    <p className="text-xs text-[var(--foreground-secondary)] truncate">
+                      {user.email}
+                    </p>
+                  </div>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-bold text-[#1E1B2E] truncate">
-                    {user.name}
-                  </p>
-                  <p className="text-xs text-[#6B6785] truncate">
-                    {user.email}
-                  </p>
+
+                {/* Mobile Streak & XP indicators */}
+                <div className="flex items-center gap-1.5 shrink-0">
+                  <div className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-orange-500/15 border border-orange-500/30 text-orange-500 text-xs font-bold">
+                    <Flame className="w-3.5 h-3.5 fill-orange-500" />
+                    <span>{localStreak}</span>
+                  </div>
+                  <div className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-500 text-xs font-bold">
+                    <Trophy className="w-3.5 h-3.5 fill-amber-500" />
+                    <span>{localXp} XP</span>
+                  </div>
                 </div>
               </div>
             )}
 
-            <nav className="flex flex-col space-y-3 font-medium text-[#1E1B2E]">
+            <nav className="flex flex-col space-y-1 font-semibold text-sm text-[var(--foreground)]">
               {user && (
                 <Link
                   href="/dashboard"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="py-2 text-[#8B7FE8] hover:text-[#786BD6] border-b border-[#EAE6FE]/50 font-bold flex items-center gap-2"
+                  className="min-h-[44px] px-3 rounded-xl bg-[#F3F0FE] dark:bg-[#1E1933] text-[#8B7FE8] font-bold flex items-center gap-3 transition-colors"
                 >
-                  <LayoutDashboard className="w-5 h-5" />
-                  Dashboard
+                  <LayoutDashboard className="w-5 h-5 text-[#8B7FE8]" />
+                  <span>Dashboard</span>
                 </Link>
               )}
               <Link
+                href="/dashboard/tools"
+                onClick={() => setMobileMenuOpen(false)}
+                className="min-h-[44px] px-3 rounded-xl hover:bg-[#F3F0FE] dark:hover:bg-[#1E1933] text-[#8B7FE8] font-bold flex items-center gap-3 transition-colors"
+              >
+                <Sparkles className="w-5 h-5 text-[#8B7FE8]" />
+                <span>AI Blogs & Engineering Guides</span>
+              </Link>
+              <Link
                 href="/#explore"
                 onClick={() => setMobileMenuOpen(false)}
-                className="py-2 hover:text-[#8B7FE8] border-b border-[#EAE6FE]/50"
+                className="min-h-[44px] px-3 rounded-xl hover:bg-[#F3F0FE] dark:hover:bg-[#1E1933] text-[var(--foreground)] flex items-center gap-3 transition-colors"
               >
-                Explore Tools
+                <span>Explore AI Tools & Courses</span>
               </Link>
               <Link
                 href="/#ecosystem"
                 onClick={() => setMobileMenuOpen(false)}
-                className="py-2 hover:text-[#8B7FE8] border-b border-[#EAE6FE]/50"
+                className="min-h-[44px] px-3 rounded-xl hover:bg-[#F3F0FE] dark:hover:bg-[#1E1933] text-[var(--foreground)] flex items-center gap-3 transition-colors"
               >
-                Ecosystem
+                <span>Ecosystem Features</span>
               </Link>
               <Link
                 href="/#how-it-works"
                 onClick={() => setMobileMenuOpen(false)}
-                className="py-2 hover:text-[#8B7FE8] border-b border-[#EAE6FE]/50"
+                className="min-h-[44px] px-3 rounded-xl hover:bg-[#F3F0FE] dark:hover:bg-[#1E1933] text-[var(--foreground)] flex items-center gap-3 transition-colors"
               >
-                How it works
-              </Link>
-              <Link
-                href="/dashboard/tools"
-                onClick={() => setMobileMenuOpen(false)}
-                className="py-2 text-[#8B7FE8] font-bold border-b border-[#EAE6FE]/50"
-              >
-                AI Blogs & Tools
+                <span>How it Works</span>
               </Link>
               <Link
                 href="/#submit"
                 onClick={() => setMobileMenuOpen(false)}
-                className="py-2 hover:text-[#8B7FE8]"
+                className="min-h-[44px] px-3 rounded-xl hover:bg-[#F3F0FE] dark:hover:bg-[#1E1933] text-[var(--foreground)] flex items-center gap-3 transition-colors"
               >
-                Submit Tool
+                <span>Submit Tool</span>
               </Link>
             </nav>
 
-            <div className="pt-2 flex flex-col gap-2.5">
+            <div className="pt-2 flex flex-col gap-2.5 border-t border-[#EAE6FE] dark:border-white/10">
               {user ? (
                 <Button
                   variant="outline"
@@ -387,39 +412,39 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
                     logout();
                     setMobileMenuOpen(false);
                   }}
-                  className="w-full justify-center text-red-600 border-red-200 hover:bg-red-50"
+                  className="w-full min-h-[44px] justify-center text-red-600 dark:text-red-400 border-red-200 dark:border-red-900/40 hover:bg-red-50 dark:hover:bg-red-950/30"
                 >
                   <LogOut className="w-4 h-4 mr-2" />
                   <span>Log Out ({user.name})</span>
                 </Button>
               ) : (
-                <>
+                <div className="grid grid-cols-2 gap-3">
                   <Button
                     asChild
                     variant="outline"
-                    className="w-full justify-center"
+                    className="w-full min-h-[44px] justify-center"
                   >
                     <Link
                       href="/login"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="flex items-center gap-2"
+                      className="flex items-center justify-center gap-1.5"
                     >
                       <LogIn className="w-4 h-4 text-[#8B7FE8]" />
                       <span>Log in</span>
                     </Link>
                   </Button>
 
-                  <Button asChild variant="default" className="w-full">
+                  <Button asChild variant="default" className="w-full min-h-[44px] bg-[#8B7FE8] hover:bg-[#786BD6] text-white">
                     <Link
                       href="/signup"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="flex items-center justify-center gap-2"
+                      className="flex items-center justify-center gap-1.5"
                     >
                       <UserPlus className="w-4 h-4" />
-                      <span>Create Account</span>
+                      <span>Sign Up</span>
                     </Link>
                   </Button>
-                </>
+                </div>
               )}
             </div>
           </div>

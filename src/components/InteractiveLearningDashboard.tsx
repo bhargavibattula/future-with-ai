@@ -156,23 +156,23 @@ export default function InteractiveLearningDashboard() {
                 </div>
 
                 {/* Multilingual Voice Switcher */}
-                <div className="flex items-center gap-2 bg-white p-1.5 rounded-full border border-[#EAE6FE]">
+                <div className="flex flex-wrap items-center gap-1.5 bg-white dark:bg-[#1A1827] p-1 rounded-2xl sm:rounded-full border border-[#EAE6FE] dark:border-white/10 w-fit">
                   <button
                     onClick={() => setActiveLanguage("English")}
-                    className={`px-3 py-1 rounded-full text-xs font-bold transition-all ${
+                    className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all ${
                       activeLanguage === "English"
-                        ? "bg-[#8B7FE8] text-white"
-                        : "text-[#6B6785]"
+                        ? "bg-[#8B7FE8] text-white shadow-sm"
+                        : "text-[#6B6785] dark:text-[#A09CAE]"
                     }`}
                   >
                     English Voice
                   </button>
                   <button
                     onClick={() => setActiveLanguage("Telugu")}
-                    className={`px-3 py-1 rounded-full text-xs font-bold transition-all ${
+                    className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all ${
                       activeLanguage === "Telugu"
-                        ? "bg-[#8B7FE8] text-white"
-                        : "text-[#6B6785]"
+                        ? "bg-[#8B7FE8] text-white shadow-sm"
+                        : "text-[#6B6785] dark:text-[#A09CAE]"
                     }`}
                   >
                     Telugu Voice (తెలుగు)
@@ -183,11 +183,12 @@ export default function InteractiveLearningDashboard() {
 
             <CardContent className="space-y-6">
               {/* ElevenLabs Voice Simulation Player */}
-              <div className="bg-white p-5 rounded-2xl border border-[#EAE6FE] flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div className="flex items-center gap-4 w-full sm:w-auto">
+              <div className="bg-white dark:bg-[#141220] p-4 sm:p-5 rounded-2xl border border-[#EAE6FE] dark:border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="flex items-center gap-3.5 w-full sm:w-auto">
                   <button
                     onClick={() => setIsPlayingAudio(!isPlayingAudio)}
-                    className="w-12 h-12 rounded-2xl bg-[#8B7FE8] text-white flex items-center justify-center shadow-soft-md hover:scale-105 transition-transform"
+                    className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-[#8B7FE8] text-white flex items-center justify-center shadow-soft-md hover:scale-105 transition-transform shrink-0"
+                    aria-label={isPlayingAudio ? "Pause Audio" : "Play Audio"}
                   >
                     {isPlayingAudio ? (
                       <span className="flex h-3.5 w-3.5 rounded-sm bg-white" />
@@ -195,12 +196,12 @@ export default function InteractiveLearningDashboard() {
                       <Play className="w-5 h-5 fill-white ml-0.5" />
                     )}
                   </button>
-                  <div>
-                    <h4 className="text-sm font-bold text-[#1E1B2E] flex items-center gap-2">
-                      <Volume2 className="w-4 h-4 text-[#8B7FE8]" />
-                      Voice Lesson ({activeLanguage})
+                  <div className="min-w-0">
+                    <h4 className="text-sm font-bold text-[#1E1B2E] dark:text-white flex items-center gap-2 truncate">
+                      <Volume2 className="w-4 h-4 text-[#8B7FE8] shrink-0" />
+                      <span>Voice Lesson ({activeLanguage})</span>
                     </h4>
-                    <p className="text-xs text-[#6B6785]">
+                    <p className="text-xs text-[#6B6785] dark:text-[#A09CAE] truncate">
                       {isPlayingAudio
                         ? "Playing audio lesson narration..."
                         : "Click play to listen to AI explanation"}
@@ -208,9 +209,9 @@ export default function InteractiveLearningDashboard() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3">
-                  <span className="text-xs font-bold text-[#6B6785]">Playback: 1.25x</span>
-                  <Button size="sm" variant="outline" className="text-xs">
+                <div className="flex items-center justify-between w-full sm:w-auto gap-3 pt-2 sm:pt-0 border-t sm:border-t-0 border-[#EAE6FE] dark:border-white/10">
+                  <span className="text-xs font-bold text-[#6B6785] dark:text-[#A09CAE]">Playback: 1.25x</span>
+                  <Button size="sm" variant="outline" className="text-xs min-h-[36px]">
                     Generate AI Notes
                   </Button>
                 </div>

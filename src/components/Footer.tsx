@@ -6,20 +6,20 @@ import { FaGithub, FaXTwitter, FaLinkedin, FaYoutube, FaDiscord } from "react-ic
 
 export default function Footer() {
   return (
-    <footer className="w-full bg-white border-t border-[#EAE6FE] pt-16 pb-12 text-[#1E1B2E] select-none">
+    <footer className="w-full bg-white dark:bg-[#0A0A0A] border-t border-[#EAE6FE] dark:border-white/10 pt-10 sm:pt-16 pb-8 sm:pb-12 text-[#1E1B2E] dark:text-white select-none transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* TOP NEWSLETTER BANNER CARD */}
-        <div className="mb-16 p-8 sm:p-10 rounded-3xl bg-gradient-to-r from-[#F3F0FE] via-[#FCFBFF] to-[#EDF9F5] border border-[#D8D2FA] shadow-soft-md flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="max-w-xl">
+        <div className="mb-10 sm:mb-16 p-6 sm:p-10 rounded-3xl bg-gradient-to-r from-[#F3F0FE] via-[#FCFBFF] to-[#EDF9F5] dark:from-[#1A162B] dark:via-[#13111C] dark:to-[#111A18] border border-[#D8D2FA] dark:border-white/10 shadow-soft-md flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="max-w-xl text-center md:text-left">
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#8B7FE8] text-white text-xs font-black mb-3 shadow-sm">
               <Sparkles className="w-3.5 h-3.5" />
               <span>Weekly AI Insights</span>
             </div>
-            <h3 className="text-2xl sm:text-3xl font-black text-[#1E1B2E] tracking-tight mb-2">
+            <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-[#1E1B2E] dark:text-white tracking-tight mb-2">
               Stay ahead in the AI revolution
             </h3>
-            <p className="text-xs sm:text-sm font-bold text-[#4A4665] leading-relaxed">
+            <p className="text-xs sm:text-sm font-bold text-[#4A4665] dark:text-[#A09CAE] leading-relaxed">
               Join 50,000+ professionals receiving curated AI course updates, prompt guides, and tool breakdowns every Tuesday.
             </p>
           </div>
@@ -27,17 +27,17 @@ export default function Footer() {
           {/* Newsletter Input Form */}
           <form
             onSubmit={(e) => e.preventDefault()}
-            className="w-full md:w-auto flex flex-col sm:flex-row gap-3 min-w-0 md:min-w-[320px]"
+            className="w-full md:w-auto flex flex-col sm:flex-row gap-2.5 sm:gap-3 min-w-0 md:min-w-[320px]"
           >
             <input
               type="email"
               placeholder="Enter your email address..."
-              className="px-4 py-3 rounded-2xl bg-white border border-[#D8D2FA] text-xs font-bold text-[#1E1B2E] placeholder-[#6B6785] focus:outline-none focus:ring-2 focus:ring-[#8B7FE8] shadow-inner flex-grow"
+              className="px-4 py-3 rounded-2xl bg-white dark:bg-[#1A1827] border border-[#D8D2FA] dark:border-white/15 text-xs font-bold text-[#1E1B2E] dark:text-white placeholder-[#6B6785] dark:placeholder-[#8E8A9F] focus:outline-none focus:ring-2 focus:ring-[#8B7FE8] shadow-inner flex-grow min-h-[44px]"
               required
             />
             <button
               type="submit"
-              className="px-6 py-3 rounded-2xl bg-[#8B7FE8] hover:bg-[#786BD6] text-white text-xs font-black shadow-md transition-all active:scale-95 flex items-center justify-center gap-2 whitespace-nowrap"
+              className="px-6 py-3 rounded-2xl bg-[#8B7FE8] hover:bg-[#786BD6] text-white text-xs font-black shadow-md transition-all active:scale-95 flex items-center justify-center gap-2 whitespace-nowrap min-h-[44px]"
             >
               <span>Subscribe Free</span>
               <ArrowRight className="w-4 h-4" />
@@ -46,16 +46,16 @@ export default function Footer() {
         </div>
 
         {/* MAIN 4-COLUMN FOOTER LINKS GRID */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-[#EAE6FE]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 sm:gap-10 pb-10 sm:pb-12 border-b border-[#EAE6FE] dark:border-white/10">
           
           {/* Col 1 & 2: Brand, Tagline & Socials */}
-          <div className="lg:col-span-2">
+          <div className="sm:col-span-2">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-2xl bg-[#8B7FE8] flex items-center justify-center text-white shadow-md">
                 <Sparkles className="w-5 h-5 fill-white" />
               </div>
               <div className="flex items-baseline">
-                <span className="text-2xl font-black text-[#1E1B2E] tracking-tight">Future</span>
+                <span className="text-2xl font-black text-[#1E1B2E] dark:text-white tracking-tight">Future</span>
                 <span className="text-2xl font-black text-[#8B7FE8]">.ai</span>
               </div>
             </div>

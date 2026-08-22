@@ -838,35 +838,35 @@ export default function GamesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FCFBFF] text-[#1E1B2E]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] transition-colors">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6 sm:space-y-8">
         
-        {/* HERO BANNER - Soft Clean Light Theme */}
-        <div className="relative rounded-3xl p-8 sm:p-10 bg-gradient-to-r from-[#F3F0FE] via-[#FFF0F5] to-[#EDF9F5] border border-[#EAE6FE] shadow-soft-sm overflow-hidden">
-          <div className="relative z-10 max-w-3xl space-y-5">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white text-[#8B7FE8] text-xs font-black border border-[#EAE6FE] shadow-soft-sm">
+        {/* HERO BANNER - Soft Clean Theme */}
+        <div className="relative rounded-3xl p-6 sm:p-10 bg-gradient-to-r from-[#F3F0FE] via-[#FFF0F5] to-[#EDF9F5] dark:from-[#1E1933] dark:via-[#1A1827] dark:to-[#13111C] border border-[#EAE6FE] dark:border-white/10 shadow-soft-sm overflow-hidden">
+          <div className="relative z-10 max-w-3xl space-y-4 sm:space-y-5">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-[#282142] text-[#8B7FE8] text-xs font-black border border-[#EAE6FE] dark:border-white/10 shadow-soft-sm">
               <Sparkles className="w-4 h-4 text-amber-500" />
               <span>Interactive AI Arena • College Edition</span>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-[#1E1B2E]">
+            <h1 className="text-2xl sm:text-4xl font-black tracking-tight text-[var(--foreground)]">
               Build with AI <span className="text-[#8B7FE8]">Mini Games</span> 🎮
             </h1>
 
-            <p className="text-sm sm:text-base text-[#6B6785] leading-relaxed font-medium">
+            <p className="text-xs sm:text-base text-[var(--foreground-secondary)] leading-relaxed font-medium">
               Short, high-energy (2–5 minute) individual AI challenges. Reverse-engineer high-resolution AI art, spot human vs AI creations, write prompt sprints, & test your AI knowledge in fun, live sandbox mode!
             </p>
 
-            <div className="flex flex-wrap gap-3 text-xs font-extrabold text-[#1E1B2E] pt-1">
-              <div className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-[#EAE6FE] shadow-soft-sm">
+            <div className="flex flex-wrap gap-2 sm:gap-3 text-xs font-extrabold text-[var(--foreground)] pt-1">
+              <div className="flex items-center gap-2 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl bg-white dark:bg-[#1E1933] border border-[#EAE6FE] dark:border-white/10 shadow-soft-sm">
                 <Clock className="w-4 h-4 text-amber-500" />
                 <span>2–5 Mins Each</span>
               </div>
-              <div className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-[#EAE6FE] shadow-soft-sm">
+              <div className="flex items-center gap-2 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl bg-white dark:bg-[#1E1933] border border-[#EAE6FE] dark:border-white/10 shadow-soft-sm">
                 <User className="w-4 h-4 text-emerald-500" />
                 <span>Individual Challenges</span>
               </div>
-              <div className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-[#EAE6FE] shadow-soft-sm">
+              <div className="flex items-center gap-2 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl bg-white dark:bg-[#1E1933] border border-[#EAE6FE] dark:border-white/10 shadow-soft-sm">
                 <Zap className="w-4 h-4 text-[#8B7FE8]" />
                 <span>Instant Feedback</span>
               </div>
@@ -875,7 +875,7 @@ export default function GamesPage() {
         </div>
 
         {/* Category Filter Pills */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none border-b border-[#EAE6FE]">
+        <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none border-b border-[#EAE6FE] dark:border-white/10">
           {[
             { id: "recommended", label: "⭐ Event Recommendations" },
             { id: "all", label: "All 20 Games" },
@@ -887,10 +887,10 @@ export default function GamesPage() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
-              className={`px-4 py-2.5 rounded-2xl text-xs font-black whitespace-nowrap transition-all duration-200 ${
+              className={`px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-2xl text-xs font-black whitespace-nowrap transition-all duration-200 min-h-[38px] ${
                 activeTab === tab.id
                   ? "bg-[#8B7FE8] text-white shadow-soft-sm"
-                  : "bg-white text-[#6B6785] border border-[#EAE6FE] hover:border-[#8B7FE8] hover:text-[#1E1B2E]"
+                  : "bg-white dark:bg-[#1A1827] text-[#6B6785] dark:text-[#A09CAE] border border-[#EAE6FE] dark:border-white/10 hover:border-[#8B7FE8] hover:text-[var(--foreground)]"
               }`}
             >
               {tab.label}
@@ -898,28 +898,28 @@ export default function GamesPage() {
           ))}
         </div>
 
-        {/* Game Cards Grid (Clean White Light Aesthetic) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Game Cards Grid (Clean Theme Aesthetic) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
           {filteredGames.map((game) => {
             const IconComponent = game.icon;
             return (
               <div
                 key={game.id}
-                className="group relative rounded-3xl bg-white border border-[#EAE6FE] hover:border-[#8B7FE8] transition-all duration-300 hover:-translate-y-1 hover:shadow-soft-md p-6 flex flex-col justify-between"
+                className="group relative rounded-3xl bg-white dark:bg-[#13111C] border border-[#EAE6FE] dark:border-white/10 hover:border-[#8B7FE8] dark:hover:border-[#8B7FE8]/60 transition-all duration-300 hover:-translate-y-1 hover:shadow-soft-md p-5 sm:p-6 flex flex-col justify-between"
               >
                 <div className="space-y-4">
                   <div className="flex justify-between items-start">
-                    <div className={`w-13 h-13 rounded-2xl flex items-center justify-center bg-gradient-to-br ${game.gradient} border shadow-soft-sm group-hover:scale-105 transition-transform duration-300`}>
+                    <div className={`w-12 h-12 sm:w-13 sm:h-13 rounded-2xl flex items-center justify-center bg-gradient-to-br ${game.gradient} border shadow-soft-sm group-hover:scale-105 transition-transform duration-300`}>
                       <IconComponent className="w-6 h-6" />
                     </div>
 
                     <div className="flex items-center gap-2">
                       {game.isRecommended && (
-                        <span className="px-2.5 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-800 text-[10px] font-black flex items-center gap-1">
+                        <span className="px-2.5 py-1 rounded-full bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/40 text-amber-800 dark:text-amber-400 text-[10px] font-black flex items-center gap-1">
                           <Star className="w-3 h-3 fill-amber-500 text-amber-500" /> Event Pick
                         </span>
                       )}
-                      <span className="px-2.5 py-1 rounded-full bg-[#F8F7FF] border border-[#EAE6FE] text-[10px] font-extrabold text-[#6B6785] flex items-center gap-1">
+                      <span className="px-2.5 py-1 rounded-full bg-[#F8F7FF] dark:bg-[#1E1933] border border-[#EAE6FE] dark:border-white/10 text-[10px] font-extrabold text-[#6B6785] dark:text-[#A09CAE] flex items-center gap-1">
                         <Clock className="w-3 h-3 text-[#8B7FE8]" /> {game.duration}
                       </span>
                     </div>
@@ -929,30 +929,30 @@ export default function GamesPage() {
                     <span className={`text-[10px] font-black tracking-wider uppercase px-2 py-0.5 rounded-md border ${game.badgeBg}`}>
                       {game.tag}
                     </span>
-                    <h3 className="text-lg font-black text-[#1E1B2E] group-hover:text-[#8B7FE8] transition-colors mt-2">
+                    <h3 className="text-base sm:text-lg font-black text-[var(--foreground)] group-hover:text-[#8B7FE8] transition-colors mt-2">
                       {game.title}
                     </h3>
-                    <p className="text-xs text-[#6B6785] mt-1.5 leading-relaxed font-medium">
+                    <p className="text-xs text-[var(--foreground-secondary)] mt-1.5 leading-relaxed font-medium line-clamp-3">
                       {game.description}
                     </p>
                   </div>
                 </div>
 
                 {/* Card Action Footer */}
-                <div className="pt-5 mt-5 border-t border-[#EAE6FE] flex items-center justify-between">
+                <div className="pt-4 mt-5 border-t border-[#EAE6FE] dark:border-white/10 flex items-center justify-between">
                   <span className={`text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-lg ${
                     game.difficulty === "Easy"
-                      ? "bg-emerald-50 text-emerald-800 border border-emerald-200"
+                      ? "bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-900/40"
                       : game.difficulty === "Medium"
-                      ? "bg-blue-50 text-blue-800 border border-blue-200"
-                      : "bg-purple-50 text-purple-800 border border-purple-200"
+                      ? "bg-blue-50 dark:bg-blue-950/40 text-blue-800 dark:text-blue-400 border border-blue-200 dark:border-blue-900/40"
+                      : "bg-purple-50 dark:bg-purple-950/40 text-purple-800 dark:text-purple-400 border border-purple-200 dark:border-purple-900/40"
                   }`}>
                     {game.difficulty}
                   </span>
 
                   <button
                     onClick={() => startGame(game.id)}
-                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#8B7FE8] text-white text-xs font-extrabold hover:bg-[#786BD6] transition-all shadow-soft-sm"
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#8B7FE8] text-white text-xs font-extrabold hover:bg-[#786BD6] transition-all shadow-soft-sm min-h-[38px]"
                   >
                     <span>Play Challenge</span>
                     <Play className="w-3.5 h-3.5 fill-current" />
@@ -963,13 +963,14 @@ export default function GamesPage() {
           })}
         </div>
 
-        {/* Light Modal Overlay for Playing Active Game */}
+        {/* Modal Overlay for Playing Active Game */}
         {selectedGame && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-fadeIn">
-            <div className="relative w-full max-w-2xl bg-white border border-[#EAE6FE] rounded-3xl p-6 sm:p-8 shadow-2xl overflow-y-auto max-h-[90vh]">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/50 backdrop-blur-sm animate-fadeIn">
+            <div className="relative w-full max-w-2xl bg-white dark:bg-[#13111C] border border-[#EAE6FE] dark:border-white/15 rounded-3xl p-5 sm:p-8 shadow-2xl overflow-y-auto max-h-[92vh]">
               <button
                 onClick={closeGame}
-                className="absolute top-6 right-6 p-2 rounded-full hover:bg-[#F8F7FF] text-[#6B6785] hover:text-[#1E1B2E] transition-colors"
+                className="absolute top-4 right-4 sm:top-6 sm:right-6 p-2 rounded-full hover:bg-[#F8F7FF] dark:hover:bg-[#1E1933] text-[#6B6785] dark:text-[#A09CAE] hover:text-[var(--foreground)] transition-colors min-h-[40px] min-w-[40px] flex items-center justify-center"
+                aria-label="Close game"
               >
                 <XCircle className="w-6 h-6" />
               </button>

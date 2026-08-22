@@ -509,12 +509,35 @@ export default function DashboardNavbar() {
 
       {/* Clean Grouped Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-white dark:bg-[#1A1827] border-b border-[#EAE6FE] dark:border-[#332C4A] px-4 py-4 space-y-4 animate-in slide-in-from-top">
-          <nav className="flex flex-col space-y-3">
+        <div className="md:hidden bg-white dark:bg-[#1A1827] border-b border-[#EAE6FE] dark:border-[#332C4A] px-4 py-4 space-y-3 animate-in slide-in-from-top max-h-[85vh] overflow-y-auto shadow-2xl">
+          {/* User Profile & Streak Micro Row */}
+          <div className="p-3 bg-[#F8F6FF] dark:bg-[#231E38] rounded-2xl border border-[#EAE6FE] dark:border-white/10 flex items-center justify-between gap-3 mb-1">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#8B7FE8] to-[#D8D2FA] text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-sm">
+                {getInitial(user?.name)}
+              </div>
+              <div className="min-w-0">
+                <div className="text-xs font-bold text-[var(--foreground)] truncate">{user?.name || "Learner"}</div>
+                <div className="text-[10px] text-[var(--foreground-secondary)] truncate">{user?.email || ""}</div>
+              </div>
+            </div>
+            <div className="flex items-center gap-1.5 shrink-0">
+              <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-orange-500/15 text-orange-500 text-[11px] font-bold">
+                <Flame className="w-3 h-3 fill-orange-500" />
+                <span>{streakCount}</span>
+              </div>
+              <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-500 text-[11px] font-bold">
+                <Trophy className="w-3 h-3 fill-amber-500" />
+                <span>{xpCount} XP</span>
+              </div>
+            </div>
+          </div>
+
+          <nav className="flex flex-col space-y-1">
             <Link
               href="/dashboard"
               onClick={() => setMobileMenuOpen(false)}
-              className={`flex items-center gap-3 px-4 py-2.5 rounded-xl font-bold text-sm ${
+              className={`min-h-[44px] flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-bold text-sm ${
                 pathname === "/dashboard"
                   ? "bg-[#F3F0FE] dark:bg-[#282142] text-[#8B7FE8]"
                   : "text-[var(--foreground)] hover:bg-gray-50 dark:hover:bg-[#231E38]"
@@ -525,8 +548,8 @@ export default function DashboardNavbar() {
             </Link>
 
             {/* Learn Group */}
-            <div className="space-y-1 pt-1">
-              <div className="px-4 text-[10px] font-extrabold uppercase tracking-wider text-[#8B7FE8]">
+            <div className="space-y-0.5 pt-1.5">
+              <div className="px-3.5 text-[10px] font-extrabold uppercase tracking-wider text-[#8B7FE8]">
                 Learn & Prompts
               </div>
               <Link

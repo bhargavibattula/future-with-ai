@@ -78,39 +78,49 @@ export default function GSAPStreakHeatmap() {
   );
 
   return (
-    <section ref={containerRef} className="py-[120px] lg:py-[170px] px-6 lg:px-[6vw] relative w-full bg-[#FCFBFF]">
+    <section ref={containerRef} className="py-16 sm:py-24 lg:py-32 px-4 sm:px-6 lg:px-[6vw] relative w-full bg-[#FCFBFF] dark:bg-[#0A0A0A] transition-colors overflow-hidden">
       
       {/* Header */}
-      <div ref={headRef} className="max-w-[640px] mx-auto mb-[50px] lg:mb-[70px] text-center flex flex-col items-center">
-        <div className="journey-head-item flex items-center gap-2.5 text-[#6B6785] text-xs font-semibold tracking-[0.14em] uppercase mb-4">
+      <div ref={headRef} className="max-w-[640px] mx-auto mb-8 sm:mb-12 lg:mb-16 text-center flex flex-col items-center">
+        <div className="journey-head-item flex items-center gap-2.5 text-[#6B6785] dark:text-[#8E8A9F] text-xs font-semibold tracking-[0.14em] uppercase mb-3">
           <div className="w-1.5 h-1.5 rounded-full bg-[#8B7FE8]" />
           LEARNING JOURNEY
         </div>
-        <h2 className="journey-head-item font-['Space_Grotesk'] font-semibold text-[32px] sm:text-[44px] lg:text-[54px] tracking-[-0.02em] leading-tight text-[#1E1B2E]">
+        <h2 className="journey-head-item font-['Space_Grotesk'] font-semibold text-2xl sm:text-4xl lg:text-[50px] tracking-[-0.02em] leading-tight text-[#1E1B2E] dark:text-white">
           Your streak, mapped like<br className="hidden sm:block" />
           a year of showing up
         </h2>
       </div>
 
-      {/* Heatmap Grid */}
-      <div 
-        ref={gridRef}
-        className="max-w-[900px] mx-auto grid gap-[5px] grid-cols-[repeat(30,minmax(0,1fr))]"
-      >
-        {cellsData.map((cell) => {
-          let bgClass = "bg-[#D8D2FA]"; // lvl 0
-          if (cell.lvl === 1) bgClass = "bg-[#B8E8D8]";
-          if (cell.lvl === 2) bgClass = "bg-[#8B7FE8]";
-          if (cell.lvl === 3) bgClass = "bg-[#FFC9DE]";
+      {/* Heatmap Responsive Scroll Wrapper */}
+      <div className="w-full overflow-x-auto pb-3 scrollbar-none">
+        <div 
+          ref={gridRef}
+          className="min-w-[650px] max-w-[900px] mx-auto grid gap-[5px] grid-cols-[repeat(30,minmax(0,1fr))] px-2"
+        >
+          {cellsData.map((cell) => {
+            const bgClass =
+              cell.lvl === 3
+                ? "bg-[#8B7FE8]"
+                : cell.lvl === 2
+                ? "bg-[#D8D2FA] dark:bg-[#584D9B]"
+                : cell.lvl === 1
+                ? "bg-[#F3F0FE] dark:bg-[#282142]"
+                : "bg-[#EAE6FE]/40 dark:bg-white/5";
 
-          return (
-            <div
-              key={cell.id}
-              className={`streak-cell aspect-square rounded-[4px] ${bgClass}`}
-              style={{ transform: "scale(0)", transformOrigin: "center" }}
-            />
-          );
-        })}
+            return (
+              <div
+                key={cell.id}
+                className={`streak-cell aspect-square rounded-[3px] scale-0 ${bgClass} transition-colors`}
+              />
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Mobile Swipe Hint */}
+      <div className="sm:hidden text-center text-[11px] text-[#6B6785] dark:text-[#8E8A9F] mt-2">
+        ← Swipe horizontally to view full activity heatmap →
       </div>
 
       {/* Caption/Legend */}

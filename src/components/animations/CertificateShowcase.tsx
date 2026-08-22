@@ -38,17 +38,20 @@ export default function CertificateShowcase() {
   }, { scope: sectionRef });
 
   return (
-    <section ref={sectionRef} className="w-full bg-[#FCFBFF] text-[#1E1B2E] py-32 px-6 sm:px-12 overflow-hidden border-t border-b border-[#EAE6FE]">
-      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-20 items-center">
+    <section ref={sectionRef} className="w-full bg-[#FCFBFF] dark:bg-[#0A0A0A] text-[#1E1B2E] dark:text-white py-16 sm:py-24 lg:py-32 px-4 sm:px-8 lg:px-12 overflow-hidden border-t border-b border-[#EAE6FE] dark:border-white/10 transition-colors">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-center">
         
         {/* Left Content */}
-        <div className="space-y-8 max-w-xl">
-          <h2 className="font-[var(--font-display)] font-bold text-5xl lg:text-7xl leading-tight">
+        <div className="space-y-4 sm:space-y-6 max-w-xl text-center lg:text-left mx-auto lg:mx-0">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#8B7FE8]/15 border border-[#8B7FE8]/30 text-xs font-bold text-[#8B7FE8] shadow-sm">
+            <span>Verified Credentials</span>
+          </div>
+          <h2 className="font-[var(--font-display)] font-bold text-3xl sm:text-5xl lg:text-7xl leading-tight">
             Finish the course.<br />
             <span className="text-[#8B7FE8]">Walk away with a certificate.</span>
           </h2>
-          <p className="text-xl lg:text-2xl text-[#6B6785] leading-relaxed font-medium">
-            Recognized AI certificates you can share on LinkedIn and your resume.
+          <p className="text-base sm:text-xl lg:text-2xl text-[#6B6785] dark:text-[#A09CAE] leading-relaxed font-medium">
+            Recognized AI certificates you can share on LinkedIn and your resume with instant verification.
           </p>
         </div>
 
@@ -56,7 +59,7 @@ export default function CertificateShowcase() {
         <div className="relative w-full max-w-2xl mx-auto perspective-1000">
           <div 
             ref={certRef}
-            className="relative bg-white rounded-xl shadow-2xl border border-gray-100 p-8 lg:p-12 transform rotate-y-12 rotate-x-6 hover:rotate-y-0 hover:rotate-x-0 transition-transform duration-700 ease-out"
+            className="relative bg-white rounded-2xl shadow-2xl border border-gray-200 dark:border-white/20 p-5 sm:p-8 lg:p-12 transform sm:rotate-y-6 sm:rotate-x-3 hover:rotate-y-0 hover:rotate-x-0 transition-transform duration-700 ease-out"
             style={{ 
               backgroundImage: "radial-gradient(#8B7FE8 0.5px, transparent 0.5px), radial-gradient(#8B7FE8 0.5px, #ffffff 0.5px)",
               backgroundSize: "20px 20px",

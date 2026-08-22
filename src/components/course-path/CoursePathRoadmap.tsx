@@ -160,9 +160,9 @@ export default function CoursePathRoadmap({
         </div>
 
         {/* MOBILE RESPONSIVE LAYOUT (< md) */}
-        <div className="md:hidden relative flex flex-col items-center gap-12 w-full py-6">
+        <div className="md:hidden relative flex flex-col items-center gap-10 w-full py-6">
           {/* Vertical Connecting Line */}
-          <div className="absolute top-10 bottom-10 left-1/2 -translate-x-1/2 w-1.5 bg-gradient-to-b from-[#74D99F] via-[#8B7FE8] to-[#E9E2FF] rounded-full z-0" />
+          <div className="absolute top-10 bottom-10 left-1/2 -translate-x-1/2 w-1.5 bg-gradient-to-b from-[#74D99F] via-[#8B7FE8] to-[#E9E2FF] dark:to-[#2A2540] rounded-full z-0" />
 
           {modules.map((mod) => (
             <div
@@ -176,8 +176,8 @@ export default function CoursePathRoadmap({
                 totalModules={modules.length}
               />
 
-              <div className="mt-2.5 text-center max-w-[170px]">
-                <h4 className="text-sm font-extrabold text-[#1E1B2E] tracking-tight group-hover:text-[#8B7FE8] transition-colors leading-tight">
+              <div className="mt-2.5 text-center max-w-[200px] px-2">
+                <h4 className="text-xs sm:text-sm font-extrabold text-[#1E1B2E] dark:text-white tracking-tight group-hover:text-[#8B7FE8] transition-colors leading-tight">
                   {mod.title}
                 </h4>
               </div>
@@ -206,24 +206,19 @@ function SquareModuleTile({
   const isLocked = module.status === "locked";
   const isAssessment = module.number === totalModules;
 
-  // Exact state styling matching reference:
-  // Completed: Soft mint green gradient + white check icon
-  // Current: Lavender gradient + white play icon + pulse glow
-  // Locked: White background + lavender border + lock icon
-  // Assessment: White background + purple trophy icon
   let tileStyle = "";
   if (isCompleted) {
     tileStyle =
-      "bg-gradient-to-br from-[#74D99F] to-[#52C582] text-white shadow-[0_10px_25px_rgba(116,217,159,0.35)] border-2 border-white";
+      "bg-gradient-to-br from-[#74D99F] to-[#52C582] text-white shadow-[0_10px_25px_rgba(116,217,159,0.35)] border-2 border-white dark:border-white/20";
   } else if (isCurrent) {
     tileStyle =
-      "bg-gradient-to-br from-[#8B7FE8] to-[#786BD6] text-white shadow-[0_12px_32px_rgba(139,127,232,0.45)] border-2 border-white animate-pulse";
+      "bg-gradient-to-br from-[#8B7FE8] to-[#786BD6] text-white shadow-[0_12px_32px_rgba(139,127,232,0.45)] border-2 border-white dark:border-white/20 animate-pulse";
   } else if (isAssessment) {
     tileStyle =
-      "bg-white border-2 border-[#8B7FE8]/60 text-[#8B7FE8] shadow-soft-sm";
+      "bg-white dark:bg-[#1E1933] border-2 border-[#8B7FE8]/60 dark:border-[#8B7FE8]/40 text-[#8B7FE8] shadow-soft-sm";
   } else {
     tileStyle =
-      "bg-white border-2 border-[#E8E3FF] text-[#8B7FE8] shadow-soft-sm";
+      "bg-white dark:bg-[#1A1827] border-2 border-[#E8E3FF] dark:border-white/10 text-[#8B7FE8] shadow-soft-sm";
   }
 
   return (
