@@ -133,7 +133,7 @@ export default async function ToolBlogDetailPage({ params }: PageProps) {
 
             {/* Featured Tools Panel */}
             {blog.toolsMentioned && blog.toolsMentioned.length > 0 && (
-              <div className="p-6 rounded-3xl bg-[#171424] border border-[#8B7FE8]/30 shadow-lg text-white space-y-4">
+              <div className="p-6 rounded-3xl bg-[#F3F0FE] dark:bg-[#171424] border border-[#D8D2FA] dark:border-[#8B7FE8]/30 shadow-sm dark:shadow-lg text-[#1E1B2E] dark:text-white space-y-4">
                 <div className="text-xs font-extrabold uppercase tracking-wider text-[#8B7FE8] flex items-center gap-2">
                   <Sparkles className="w-4 h-4" />
                   Key AI Tools Covered in this Guide
@@ -142,11 +142,11 @@ export default async function ToolBlogDetailPage({ params }: PageProps) {
                   {blog.toolsMentioned.map((tool, idx) => (
                     <div
                       key={idx}
-                      className="p-3 rounded-2xl bg-[#100D1A] border border-white/10 flex items-center justify-between"
+                      className="p-3 rounded-2xl bg-white dark:bg-[#100D1A] border border-[#EAE6FE] dark:border-white/10 flex items-center justify-between shadow-sm"
                     >
                       <div>
-                        <div className="font-bold text-sm text-white">{tool.name}</div>
-                        <div className="text-xs text-[#A09CAE]">{tool.role}</div>
+                        <div className="font-bold text-sm text-[#1E1B2E] dark:text-white">{tool.name}</div>
+                        <div className="text-xs text-[#6B6785] dark:text-[#A09CAE]">{tool.role}</div>
                       </div>
                     </div>
                   ))}
