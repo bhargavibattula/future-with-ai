@@ -25,14 +25,20 @@ export async function GET(
     }
 
     // Sanitize the questions to prevent users from seeing the correct answer in the network tab
-    const sanitizedQuestions = quiz.questions.map(q => ({
-      id: q.id,
-      type: q.type,
-      prompt: q.prompt,
-      codeSnippet: q.codeSnippet,
-      options: q.options ? JSON.parse(q.options as string) : null,
-      orderIndex: q.orderIndex
-    }));
+    const sanitizedQuestions = quiz.questions.map(q => {
+      let parsedOptions = null;
+      if (q.options) {
+        parsedOptions = typeof q.options === "string" ? JSON.parse(q.options) : q.options;
+      }
+      return {
+        id: q.id,
+        type: q.type,
+        prompt: q.prompt,
+        codeSnippet: q.codeSnippet,
+        options: parsedOptions,
+        orderIndex: q.orderIndex,
+      };
+    });
 
     return NextResponse.json({
       success: true,
