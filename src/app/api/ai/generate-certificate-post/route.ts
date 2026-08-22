@@ -34,7 +34,7 @@ export async function POST(req: Request) {
             Authorization: `Bearer ${groqApiKey}`,
           },
           body: JSON.stringify({
-            model: "gpt-oss-120b",
+            model: "qwen/qwen3.6-27b",
             messages: promptMessages,
             temperature: 0.7,
             max_tokens: 300,

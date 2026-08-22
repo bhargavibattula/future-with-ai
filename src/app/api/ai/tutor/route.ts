@@ -41,7 +41,7 @@ Format your valid responses using markdown where appropriate. If you don't know 
         Authorization: `Bearer ${groqApiKey}`,
       },
       body: JSON.stringify({
-        model: "gpt-oss-120b",
+        model: "qwen/qwen3.6-27b",
         messages: payloadMessages,
         temperature: 0.7,
         max_tokens: 1024,
