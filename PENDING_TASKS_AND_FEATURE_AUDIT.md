@@ -40,7 +40,7 @@ This document provides an up-to-date, comprehensive audit of the **Future With A
 | :--- | :---: | :--- | :--- |
 | **Category, Course, Module, Lesson Hierarchy** | 🟡 FRONTEND ONLY | Mock datasets in `src/data/courses.tsx` & `src/data/coursePathData.ts`. | Add Prisma models: `Category`, `Course`, `Module`, `Lesson`. Implement CRUD API routes. |
 | **Lesson Reader & Interactive Player** | 🟢 DONE | Dynamic lesson viewer (`CourseLessonClient.tsx`) integrated with `CourseEnrollment` schema for saving progress and completion state. | None — Complete. |
-| **Bookmarks & Lesson Notes** | 🔴 PENDING | No UI drawer or database models for saving notes or bookmarking lessons. | Create `Bookmark` and `LessonNote` Prisma models & frontend note drawer inside lesson player. |
+| **Bookmarks & Lesson Notes** | 🟢 DONE | Drawer UI and `Bookmark`/`LessonNote` Prisma models are fully integrated for saving notes or bookmarking lessons. | None — Complete. |
 | **AI Voice Playback (ElevenLabs)** | 🔴 PENDING | Audio controls in UI use HTML audio tags. | Integrate ElevenLabs API route (`/api/ai/voice`) to stream lesson narration in English & Telugu. |
 
 ---
@@ -70,8 +70,8 @@ This document provides an up-to-date, comprehensive audit of the **Future With A
 | Feature | Status | Current Codebase State | Pending Work Required |
 | :--- | :---: | :--- | :--- |
 | **User XP, Level & Coin Schema** | 🟢 DONE | `coins`, `xp`, `streak` fields on `User` and `UserProgress` Prisma models. | None — Complete. |
-| **Coin Wallet & Transaction Ledger** | 🔴 PENDING | No dedicated wallet history or transaction log. | Add `CoinTransaction` model to log credits (lessons, quizzes, streaks) and debits (streak freeze, templates, store). |
-| **Coin Store & Gifting** | 🟡 FRONTEND ONLY | Streak Freeze store functional; general store & peer gifting UI missing. | Build full Coin Store modal (buy course discounts, avatars) and peer gifting API. |
+| **Coin Wallet & Transaction Ledger** | 🟢 DONE | `CoinTransaction` model is active, logging credits/debits. `/dashboard/wallet` UI is fully functional. | None — Complete. |
+| **Coin Store & Gifting** | 🟢 DONE | Full Coin Store modal and peer gifting API are implemented and fully functional. | None — Complete. |
 | **Leaderboard Engine** | 🟢 DONE | `/api/leaderboard` API calculating rankings live from Prisma DB based on XP, streaks, and perfect days. | None — Complete. |
 
 ---
@@ -93,7 +93,7 @@ This document provides an up-to-date, comprehensive audit of the **Future With A
 | **AI Prompt Library** | 🟢 DONE | UI connected to `/api/prompts`, `/api/prompts/category`, and `PromptClaim` model for claiming/copying. | None — Complete. |
 | **AI LinkedIn Post Generator** | 🟢 DONE | `/api/ai/generate-certificate-post` integrated with Groq API (Llama 3.3 70B) & fallback for social sharing. | None — Complete. |
 | **AI Notes Generator & Quiz Generator** | 🔴 PENDING | Not implemented. | Create API handlers utilizing LLM APIs to auto-generate notes and quizzes from course content. |
-| **AI Tutor / Doubt Solver** | 🔴 PENDING | Not implemented. | Build floating chat assistant for instant course question answering. |
+| **AI Tutor / Doubt Solver** | 🟢 DONE | Floating chat assistant component (`FloatingAITutor`) integrated globally with `/api/ai/tutor` using Groq. | None — Complete. |
 
 ---
 
