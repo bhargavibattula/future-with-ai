@@ -185,14 +185,9 @@ export default function ToolGrid({
 
       {/* Search & Filter Header Container */}
       <div
-        className="relative bg-white rounded-3xl p-6 sm:p-8 mb-10"
-        style={{
-          border: "1px solid #D8D2FA",
-          boxShadow:
-            "0 4px 24px rgba(139, 127, 232, 0.10), 0 1px 4px rgba(139, 127, 232, 0.06)",
-        }}
+        className="relative bg-[var(--card)] rounded-2xl sm:rounded-3xl p-4 sm:p-8 mb-8 sm:mb-10 border border-[#D8D2FA] dark:border-white/10 shadow-soft-md transition-colors"
       >
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-6">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
           {/* Search Input */}
           <div className="relative w-full md:w-2/3">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8B7FE8]" />
@@ -201,12 +196,12 @@ export default function ToolGrid({
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by tool name, topic, capability, or tag..."
-              className="w-full pl-12 pr-10 py-3.5 rounded-2xl bg-[#FCFBFF] border border-[#D8D2FA] focus:border-[#8B7FE8] focus:ring-4 focus:ring-[#D8D2FA]/50 text-[#1E1B2E] placeholder-[#6B6785] text-sm font-medium outline-none transition-all"
+              className="w-full pl-12 pr-10 py-3 sm:py-3.5 rounded-2xl bg-[var(--background)] border border-[#D8D2FA] dark:border-white/15 focus:border-[#8B7FE8] focus:ring-4 focus:ring-[#D8D2FA]/30 text-[var(--foreground)] placeholder-[#6B6785] dark:placeholder-[#8E8A9F] text-xs sm:text-sm font-medium outline-none transition-all min-h-[44px]"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery("")}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-[#8B7FE8] hover:text-[#1E1B2E] bg-[#D8D2FA]/50 px-2 py-0.5 rounded-md"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-[#8B7FE8] hover:text-[var(--foreground)] bg-[#D8D2FA]/50 dark:bg-[#1E1933] px-2 py-0.5 rounded-md"
               >
                 Clear
               </button>
@@ -214,14 +209,14 @@ export default function ToolGrid({
           </div>
 
           {/* Pricing & Sorting */}
-          <div className="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end">
-            <div className="flex items-center gap-1.5 bg-[#F3F0FE] border border-[#D8D2FA] rounded-2xl px-3 py-2 text-xs font-semibold text-[#1E1B2E]">
+          <div className="flex flex-wrap sm:flex-nowrap items-center gap-2.5 sm:gap-3 w-full md:w-auto justify-between md:justify-end">
+            <div className="flex-1 sm:flex-none flex items-center gap-1.5 bg-[#F3F0FE] dark:bg-[#1E1933] border border-[#D8D2FA] dark:border-white/10 rounded-2xl px-3 py-2 text-xs font-semibold text-[var(--foreground)] min-h-[44px]">
               <Filter className="w-3.5 h-3.5 text-[#8B7FE8]" />
               <select
                 value={pricingFilter}
                 onChange={(e) => setPricingFilter(e.target.value)}
                 aria-label="Filter by pricing model"
-                className="bg-transparent text-[#1E1B2E] font-semibold outline-none cursor-pointer"
+                className="bg-transparent text-[var(--foreground)] font-semibold outline-none cursor-pointer w-full sm:w-auto dark:bg-[#1E1933]"
               >
                 <option value="All">All Pricing</option>
                 <option value="Free">Free Only</option>
@@ -230,7 +225,7 @@ export default function ToolGrid({
               </select>
             </div>
 
-            <div className="flex items-center gap-1.5 bg-[#F3F0FE] border border-[#D8D2FA] rounded-2xl px-3 py-2 text-xs font-semibold text-[#1E1B2E]">
+            <div className="flex-1 sm:flex-none flex items-center gap-1.5 bg-[#F3F0FE] dark:bg-[#1E1933] border border-[#D8D2FA] dark:border-white/10 rounded-2xl px-3 py-2 text-xs font-semibold text-[var(--foreground)] min-h-[44px]">
               <SlidersHorizontal className="w-3.5 h-3.5 text-[#8B7FE8]" />
               <select
                 value={sortBy}
@@ -238,7 +233,7 @@ export default function ToolGrid({
                   setSortBy(e.target.value as "trending" | "rating" | "reviews")
                 }
                 aria-label="Sort tools"
-                className="bg-transparent text-[#1E1B2E] font-semibold outline-none cursor-pointer"
+                className="bg-transparent text-[var(--foreground)] font-semibold outline-none cursor-pointer w-full sm:w-auto dark:bg-[#1E1933]"
               >
                 <option value="trending">Featured / Trending</option>
                 <option value="rating">Highest Rated</option>

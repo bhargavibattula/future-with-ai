@@ -75,17 +75,16 @@ export default function ToolCard({ tool, onOpenModal }: ToolCardProps) {
   return (
     <div
       ref={cardRef}
-      className="tool-card group relative bg-white rounded-3xl border border-[#EAE6FE] p-6 flex flex-col justify-between"
-      style={{ boxShadow: "0 8px 30px rgba(139, 127, 232, 0.08)" }}
+      className="tool-card group relative bg-[var(--card)] rounded-2xl sm:rounded-3xl border border-[var(--border)] p-5 sm:p-6 flex flex-col justify-between transition-all duration-300 shadow-[0_4px_20px_rgba(139,127,232,0.08)] hover:shadow-[0_12px_30px_rgba(139,127,232,0.18)] dark:shadow-none"
     >
       {/* Top Header */}
       <div>
         <div className="flex items-start justify-between gap-3 mb-4">
-          <div className="flex items-center gap-3.5">
+          <div className="flex items-center gap-3 sm:gap-3.5 min-w-0">
             {/* Tool Avatar — gradient tile with depth */}
             <div
               ref={avatarRef}
-              className="w-13 h-13 rounded-2xl flex items-center justify-center font-bold text-xl ring-2 ring-white shadow-md"
+              className="w-11 h-11 sm:w-13 sm:h-13 rounded-2xl flex items-center justify-center font-bold text-lg sm:text-xl ring-2 ring-white/60 shadow-md shrink-0"
               style={{
                 background: `linear-gradient(135deg, ${tool.iconBgColor} 0%, ${tool.iconBgColor}99 60%, #ffffff44 100%)`,
                 color: tool.iconColor,
@@ -94,12 +93,12 @@ export default function ToolCard({ tool, onOpenModal }: ToolCardProps) {
               {tool.name.substring(0, 2).toUpperCase()}
             </div>
 
-            <div>
-              <div className="flex items-center gap-2 flex-wrap">
-                <h3 className="font-bold text-lg text-[#1E1B2E] group-hover:text-[#8B7FE8] transition-colors leading-tight">
+            <div className="min-w-0">
+              <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+                <h3 className="font-bold text-base sm:text-lg text-[var(--foreground)] group-hover:text-[#8B7FE8] transition-colors leading-tight truncate">
                   {tool.name}
                 </h3>
-                {/* Featured badge — pink accent, the highlight color */}
+                {/* Featured badge — pink accent */}
                 {tool.featured && (
                   <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#FFC9DE] text-[#8B1A4A] border border-[#FFB0CC]">
                     <Sparkles className="w-2.5 h-2.5" />
@@ -107,7 +106,7 @@ export default function ToolCard({ tool, onOpenModal }: ToolCardProps) {
                   </span>
                 )}
               </div>
-              <p className="text-xs text-[#6B6785] font-medium mt-0.5">
+              <p className="text-xs text-[var(--foreground-secondary)] font-medium mt-0.5 truncate">
                 {tool.category}
               </p>
             </div>
@@ -119,10 +118,10 @@ export default function ToolCard({ tool, onOpenModal }: ToolCardProps) {
             onClick={() => setIsBookmarked(!isBookmarked)}
             title={isBookmarked ? "Saved" : "Save tool"}
             aria-label="Save tool"
-            className={`w-8 h-8 rounded-xl flex items-center justify-center transition-all duration-200 ${
+            className={`w-8 h-8 rounded-xl flex items-center justify-center transition-all duration-200 shrink-0 ${
               isBookmarked
                 ? "bg-[#FFC9DE] text-[#8B1A4A]"
-                : "bg-[#F3F0FE] text-[#6B6785] hover:bg-[#FFC9DE] hover:text-[#8B1A4A]"
+                : "bg-[#F3F0FE] dark:bg-[#1E1933] text-[var(--foreground-secondary)] hover:bg-[#FFC9DE] hover:text-[#8B1A4A]"
             }`}
           >
             <Bookmark className={`w-4 h-4 ${isBookmarked ? "fill-current" : ""}`} />
@@ -130,21 +129,21 @@ export default function ToolCard({ tool, onOpenModal }: ToolCardProps) {
         </div>
 
         {/* Tagline */}
-        <p className="text-sm font-semibold text-[#1E1B2E] mb-2 line-clamp-1">
+        <p className="text-xs sm:text-sm font-semibold text-[var(--foreground)] mb-1.5 sm:mb-2 line-clamp-1">
           {tool.tagline}
         </p>
 
         {/* Description */}
-        <p className="text-xs text-[#6B6785] leading-relaxed mb-4 line-clamp-2">
+        <p className="text-xs text-[var(--foreground-secondary)] leading-relaxed mb-4 line-clamp-2">
           {tool.description}
         </p>
 
         {/* Semantic Tags — color encodes meaning per slot */}
-        <div className="flex flex-wrap gap-1.5 mb-5">
+        <div className="flex flex-wrap gap-1.5 mb-4 sm:mb-5">
           {tool.tags.map((tag, idx) => (
             <span
               key={idx}
-              className={`text-[11px] font-semibold px-2.5 py-0.5 rounded-full ${
+              className={`text-[10px] sm:text-[11px] font-semibold px-2 sm:px-2.5 py-0.5 rounded-full ${
                 TAG_VARIANTS[Math.min(idx, TAG_VARIANTS.length - 1)]
               }`}
             >
@@ -155,19 +154,19 @@ export default function ToolCard({ tool, onOpenModal }: ToolCardProps) {
       </div>
 
       {/* Card Footer */}
-      <div className="pt-4 border-t border-[#EAE6FE]/70 flex items-center justify-between gap-2">
-        <div className="flex items-center gap-2.5">
+      <div className="pt-3 sm:pt-4 border-t border-[var(--border)] flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap">
           {/* Rating */}
-          <div className="flex items-center gap-1 text-xs font-bold text-[#1E1B2E]">
+          <div className="flex items-center gap-1 text-xs font-bold text-[var(--foreground)]">
             <Star className="w-3.5 h-3.5 fill-[#8B7FE8] text-[#8B7FE8]" />
             <span>{tool.rating}</span>
-            <span className="text-[#6B6785] font-normal">({tool.reviewsCount})</span>
+            <span className="text-[var(--foreground-secondary)] font-normal text-[11px]">({tool.reviewsCount})</span>
           </div>
 
           {/* Pricing pill — tinted by tier */}
           <span
-            className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full ${
-              PRICING_STYLES[tool.pricing] ?? "bg-[#F3F0FE] text-[#8B7FE8] border border-[#D8D2FA]"
+            className={`text-[10px] sm:text-[11px] font-bold px-2 sm:px-2.5 py-0.5 rounded-full ${
+              PRICING_STYLES[tool.pricing] ?? "bg-[#F3F0FE] dark:bg-[#1E1933] text-[#8B7FE8] border border-[#D8D2FA] dark:border-white/10"
             }`}
           >
             {tool.pricing}
@@ -175,13 +174,13 @@ export default function ToolCard({ tool, onOpenModal }: ToolCardProps) {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
           <button
             type="button"
             onClick={() => onOpenModal(tool)}
             title="Quick view"
             aria-label="Quick view"
-            className="w-8 h-8 rounded-xl flex items-center justify-center bg-[#F3F0FE] text-[#6B6785] hover:bg-[#D8D2FA] hover:text-[#8B7FE8] transition-all duration-200"
+            className="w-8 h-8 rounded-xl flex items-center justify-center bg-[#F3F0FE] dark:bg-[#1E1933] text-[var(--foreground-secondary)] hover:bg-[#D8D2FA] hover:text-[#8B7FE8] transition-all duration-200 min-h-[36px]"
           >
             <Eye className="w-4 h-4" />
           </button>
@@ -191,7 +190,7 @@ export default function ToolCard({ tool, onOpenModal }: ToolCardProps) {
             href={tool.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#8B7FE8] text-white text-xs font-bold shadow-soft-sm hover:bg-[#786BD6] transition-colors duration-200"
+            className="inline-flex items-center justify-center gap-1.5 px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-[#8B7FE8] text-white text-xs font-bold shadow-soft-sm hover:bg-[#786BD6] transition-colors duration-200 min-h-[36px]"
           >
             <span>Try</span>
             <ExternalLink className="w-3.5 h-3.5" />

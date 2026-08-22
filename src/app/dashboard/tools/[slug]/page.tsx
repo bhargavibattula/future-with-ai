@@ -72,34 +72,34 @@ export default async function ToolBlogDetailPage({ params }: PageProps) {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-12">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10">
           {/* Main Article Body (8 cols) */}
-          <article className="lg:col-span-8 space-y-8">
+          <article className="lg:col-span-8 space-y-6 sm:space-y-8">
             {/* Article Heading */}
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider bg-[#8B7FE8]/20 text-[#8B7FE8] border border-[#8B7FE8]/40">
                 <Sparkles className="w-3.5 h-3.5" />
                 {blog.category}
               </div>
 
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[var(--foreground)] tracking-tight leading-tight font-['Plus_Jakarta_Sans',sans-serif]">
+              <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold text-[var(--foreground)] tracking-tight leading-tight font-['Plus_Jakarta_Sans',sans-serif]">
                 {blog.title}
               </h1>
 
-              <p className="text-lg sm:text-xl text-[var(--foreground-secondary)] leading-relaxed">
+              <p className="text-base sm:text-xl text-[var(--foreground-secondary)] leading-relaxed font-medium">
                 {blog.subtitle}
               </p>
 
               {/* Author & Timestamp Bar */}
-              <div className="flex flex-wrap items-center gap-4 pt-4 pb-4 border-y border-[var(--border)] text-xs sm:text-sm text-[var(--foreground-secondary)]">
+              <div className="flex flex-wrap items-center gap-3 sm:gap-4 pt-3 pb-3 sm:pt-4 sm:pb-4 border-y border-[var(--border)] text-xs sm:text-sm text-[var(--foreground-secondary)]">
                 <div className="flex items-center gap-2.5 font-bold text-[var(--foreground)]">
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#8B7FE8] to-[#D8D2FA] flex items-center justify-center text-xs font-bold text-white shadow-soft-sm">
+                  <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-tr from-[#8B7FE8] to-[#D8D2FA] flex items-center justify-center text-xs font-bold text-white shadow-soft-sm">
                     {blog.author.name.charAt(0)}
                   </div>
                   <div>
                     <div>{blog.author.name}</div>
-                    <div className="text-[11px] font-normal text-[var(--foreground-secondary)]">
+                    <div className="text-[10px] sm:text-[11px] font-normal text-[var(--foreground-secondary)]">
                       {blog.author.role}
                     </div>
                   </div>
@@ -107,20 +107,39 @@ export default async function ToolBlogDetailPage({ params }: PageProps) {
 
                 <div className="hidden sm:block w-px h-6 bg-[var(--border)]" />
 
-                <div className="flex items-center gap-1.5">
-                  <Calendar className="w-4 h-4 text-[#8B7FE8]" />
+                <div className="flex items-center gap-1.5 font-medium">
+                  <Calendar className="w-3.5 h-3.5 text-[#8B7FE8]" />
                   <span>{blog.publishedDate}</span>
                 </div>
 
-                <div className="flex items-center gap-1.5">
-                  <Clock className="w-4 h-4 text-[#5CBFA0]" />
+                <div className="flex items-center gap-1.5 font-medium">
+                  <Clock className="w-3.5 h-3.5 text-[#5CBFA0]" />
                   <span>{blog.readTime}</span>
                 </div>
               </div>
             </div>
 
+            {/* Mobile Quick Navigation Accordion (< lg) */}
+            <div className="lg:hidden p-4 rounded-2xl bg-[var(--card)] border border-[var(--border)] space-y-2.5">
+              <div className="text-xs font-extrabold uppercase tracking-wider text-[#8B7FE8] flex items-center gap-2">
+                <Layers className="w-4 h-4" />
+                Quick Table of Contents
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                {blog.contentSections.map((section, idx) => (
+                  <a
+                    key={idx}
+                    href={`#section-${idx}`}
+                    className="inline-block text-xs font-semibold px-2.5 py-1 rounded-lg bg-[var(--background)] border border-[var(--border)] text-[var(--foreground-secondary)] hover:text-[#8B7FE8] transition-colors truncate max-w-full"
+                  >
+                    {idx + 1}. {section.heading}
+                  </a>
+                ))}
+              </div>
+            </div>
+
             {/* Main Featured Hero Image */}
-            <div className="relative w-full aspect-[21/10] rounded-3xl overflow-hidden border border-white/10 bg-[#0A0A0A] shadow-xl">
+            <div className="relative w-full aspect-[16/9] sm:aspect-[21/10] rounded-2xl sm:rounded-3xl overflow-hidden border border-white/10 bg-[#0A0A0A] shadow-xl">
               <Image
                 src={blog.coverImage}
                 alt={blog.title}
@@ -133,20 +152,20 @@ export default async function ToolBlogDetailPage({ params }: PageProps) {
 
             {/* Featured Tools Panel */}
             {blog.toolsMentioned && blog.toolsMentioned.length > 0 && (
-              <div className="p-6 rounded-3xl bg-[#F3F0FE] dark:bg-[#171424] border border-[#D8D2FA] dark:border-[#8B7FE8]/30 shadow-sm dark:shadow-lg text-[#1E1B2E] dark:text-white space-y-4">
+              <div className="p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-[#F3F0FE] dark:bg-[#171424] border border-[#D8D2FA] dark:border-[#8B7FE8]/30 shadow-sm dark:shadow-lg text-[#1E1B2E] dark:text-white space-y-3 sm:space-y-4">
                 <div className="text-xs font-extrabold uppercase tracking-wider text-[#8B7FE8] flex items-center gap-2">
                   <Sparkles className="w-4 h-4" />
                   Key AI Tools Covered in this Guide
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5 sm:gap-3">
                   {blog.toolsMentioned.map((tool, idx) => (
                     <div
                       key={idx}
                       className="p-3 rounded-2xl bg-white dark:bg-[#100D1A] border border-[#EAE6FE] dark:border-white/10 flex items-center justify-between shadow-sm"
                     >
                       <div>
-                        <div className="font-bold text-sm text-[#1E1B2E] dark:text-white">{tool.name}</div>
-                        <div className="text-xs text-[#6B6785] dark:text-[#A09CAE]">{tool.role}</div>
+                        <div className="font-bold text-xs sm:text-sm text-[#1E1B2E] dark:text-white">{tool.name}</div>
+                        <div className="text-[11px] sm:text-xs text-[#6B6785] dark:text-[#A09CAE]">{tool.role}</div>
                       </div>
                     </div>
                   ))}
@@ -155,7 +174,7 @@ export default async function ToolBlogDetailPage({ params }: PageProps) {
             )}
 
             {/* Structured Content Sections */}
-            <div className="space-y-10 text-base sm:text-lg leading-relaxed text-[var(--foreground)]">
+            <div className="space-y-8 sm:space-y-10 text-sm sm:text-base md:text-lg leading-relaxed text-[var(--foreground)]">
               {blog.contentSections.map((section, idx) => (
                 <div key={idx} id={`section-${idx}`} className="space-y-4 scroll-mt-24">
                   <h2 className="text-2xl sm:text-3xl font-extrabold text-[var(--foreground)] tracking-tight font-['Plus_Jakarta_Sans',sans-serif]">

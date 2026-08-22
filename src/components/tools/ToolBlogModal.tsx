@@ -47,30 +47,31 @@ export default function ToolBlogModal({ blog, onClose }: ToolBlogModalProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 md:p-8 bg-black/70 backdrop-blur-md animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-8 bg-black/75 backdrop-blur-md animate-in fade-in duration-200">
       {/* Click outside backdrop */}
       <div className="fixed inset-0" onClick={onClose} />
 
       {/* Modal Container */}
-      <div className="relative w-full max-w-4xl max-h-[90vh] flex flex-col rounded-3xl bg-white dark:bg-[#12101B] border border-[#EAE6FE] dark:border-white/15 shadow-2xl text-[#1E1B2E] dark:text-white overflow-hidden z-10">
+      <div className="relative w-full max-w-4xl max-h-[94vh] sm:max-h-[90vh] flex flex-col rounded-2xl sm:rounded-3xl bg-white dark:bg-[#12101B] border border-[#EAE6FE] dark:border-white/15 shadow-2xl text-[#1E1B2E] dark:text-white overflow-hidden z-10">
         {/* Modal Top Bar / Navigation */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[#EAE6FE] dark:border-white/10 bg-[#F8F7FF] dark:bg-[#171424]">
-          <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#F3F0FE] dark:bg-[#8B7FE8]/20 text-[#8B7FE8] border border-[#D8D2FA] dark:border-[#8B7FE8]/30">
-              <Sparkles className="w-3 h-3" />
-              {blog.category}
+        <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-[#EAE6FE] dark:border-white/10 bg-[#F8F7FF] dark:bg-[#171424]">
+          <div className="flex items-center gap-2 min-w-0 pr-2">
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold bg-[#F3F0FE] dark:bg-[#8B7FE8]/20 text-[#8B7FE8] border border-[#D8D2FA] dark:border-[#8B7FE8]/30 truncate">
+              <Sparkles className="w-3 h-3 shrink-0" />
+              <span className="truncate">{blog.category}</span>
             </span>
             <span className="hidden sm:inline-block text-xs text-[#6B6785] dark:text-[#8E8A9F]">
               • {blog.readTime}
             </span>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
             {/* Share */}
             <button
               onClick={handleShare}
-              className="p-2 rounded-xl bg-white dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 text-[#1E1B2E] dark:text-white/80 hover:text-[#8B7FE8] dark:hover:text-white transition-colors border border-[#EAE6FE] dark:border-white/10 shadow-sm"
+              className="p-1.5 sm:p-2 rounded-xl bg-white dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 text-[#1E1B2E] dark:text-white/80 hover:text-[#8B7FE8] dark:hover:text-white transition-colors border border-[#EAE6FE] dark:border-white/10 shadow-sm min-h-[36px] min-w-[36px] flex items-center justify-center"
               title="Copy Article Link"
+              aria-label="Share guide"
             >
               {copiedLink ? (
                 <Check className="w-4 h-4 text-emerald-500" />
@@ -82,8 +83,9 @@ export default function ToolBlogModal({ blog, onClose }: ToolBlogModalProps) {
             {/* Bookmark */}
             <button
               onClick={() => setIsBookmarked(!isBookmarked)}
-              className="p-2 rounded-xl bg-white dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 text-[#1E1B2E] dark:text-white/80 hover:text-[#8B7FE8] dark:hover:text-white transition-colors border border-[#EAE6FE] dark:border-white/10 shadow-sm"
+              className="p-1.5 sm:p-2 rounded-xl bg-white dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 text-[#1E1B2E] dark:text-white/80 hover:text-[#8B7FE8] dark:hover:text-white transition-colors border border-[#EAE6FE] dark:border-white/10 shadow-sm min-h-[36px] min-w-[36px] flex items-center justify-center"
               title="Bookmark Guide"
+              aria-label="Bookmark guide"
             >
               <Bookmark
                 className={`w-4 h-4 ${
@@ -95,7 +97,7 @@ export default function ToolBlogModal({ blog, onClose }: ToolBlogModalProps) {
             {/* Open Full Page */}
             <Link
               href={`/dashboard/tools/${blog.slug}`}
-              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#F3F0FE] dark:bg-[#8B7FE8]/20 hover:bg-[#EAE6FE] dark:hover:bg-[#8B7FE8]/30 border border-[#D8D2FA] dark:border-[#8B7FE8]/40 text-xs font-bold text-[#8B7FE8] dark:text-[#D8D2FA] transition-colors"
+              className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#F3F0FE] dark:bg-[#8B7FE8]/20 hover:bg-[#EAE6FE] dark:hover:bg-[#8B7FE8]/30 border border-[#D8D2FA] dark:border-[#8B7FE8]/40 text-xs font-bold text-[#8B7FE8] dark:text-[#D8D2FA] transition-colors"
             >
               <ExternalLink className="w-3.5 h-3.5" />
               Full Page
@@ -104,8 +106,9 @@ export default function ToolBlogModal({ blog, onClose }: ToolBlogModalProps) {
             {/* Close */}
             <button
               onClick={onClose}
-              className="p-2 rounded-xl bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 text-[#1E1B2E] dark:text-white transition-colors"
+              className="p-1.5 sm:p-2 rounded-xl bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 text-[#1E1B2E] dark:text-white transition-colors min-h-[36px] min-w-[36px] flex items-center justify-center"
               title="Close Modal"
+              aria-label="Close modal"
             >
               <X className="w-5 h-5" />
             </button>
@@ -113,24 +116,24 @@ export default function ToolBlogModal({ blog, onClose }: ToolBlogModalProps) {
         </div>
 
         {/* Scrollable Content Body */}
-        <div className="flex-1 overflow-y-auto p-6 sm:p-8 space-y-8 custom-scrollbar">
+        <div className="flex-1 overflow-y-auto p-4 sm:p-8 space-y-6 sm:space-y-8 custom-scrollbar">
           {/* Header Area */}
-          <div className="space-y-4">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#1E1B2E] dark:text-white tracking-tight leading-tight font-['Plus_Jakarta_Sans',sans-serif]">
+          <div className="space-y-3 sm:space-y-4">
+            <h1 className="text-xl sm:text-3xl md:text-4xl font-extrabold text-[#1E1B2E] dark:text-white tracking-tight leading-tight font-['Plus_Jakarta_Sans',sans-serif]">
               {blog.title}
             </h1>
-            <p className="text-base sm:text-lg text-[#4A4665] dark:text-[#BDB9D0] leading-relaxed">
+            <p className="text-sm sm:text-base md:text-lg text-[#4A4665] dark:text-[#BDB9D0] leading-relaxed">
               {blog.subtitle}
             </p>
 
             {/* Author & Meta Row */}
-            <div className="flex flex-wrap items-center gap-4 pt-3 pb-2 text-xs sm:text-sm text-[#6B6785] dark:text-[#8E8A9F] border-b border-[#EAE6FE] dark:border-white/10">
+            <div className="flex flex-wrap items-center gap-3 sm:gap-4 pt-2 sm:pt-3 pb-2 text-xs sm:text-sm text-[#6B6785] dark:text-[#8E8A9F] border-b border-[#EAE6FE] dark:border-white/10">
               <div className="flex items-center gap-2 text-[#1E1B2E] dark:text-white font-bold">
-                <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-[#8B7FE8] to-[#D8D2FA] flex items-center justify-center text-xs font-bold text-white shadow-sm">
+                <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-gradient-to-tr from-[#8B7FE8] to-[#D8D2FA] flex items-center justify-center text-xs font-bold text-white shadow-sm">
                   {blog.author.name.charAt(0)}
                 </div>
-                <span>{blog.author.name}</span>
-                <span className="text-[#6B6785] dark:text-[#6B6785] font-normal hidden sm:inline">
+                <span className="truncate max-w-[140px]">{blog.author.name}</span>
+                <span className="text-[#6B6785] dark:text-[#6B6785] font-normal hidden md:inline">
                   ({blog.author.role})
                 </span>
               </div>
@@ -146,7 +149,7 @@ export default function ToolBlogModal({ blog, onClose }: ToolBlogModalProps) {
           </div>
 
           {/* Cover Hero Banner */}
-          <div className="relative w-full aspect-[21/9] rounded-2xl overflow-hidden border border-[#EAE6FE] dark:border-white/10 bg-[#0A0A0A] shadow-lg">
+          <div className="relative w-full aspect-[16/9] sm:aspect-[21/9] rounded-2xl overflow-hidden border border-[#EAE6FE] dark:border-white/10 bg-[#0A0A0A] shadow-lg">
             <Image
               src={blog.coverImage}
               alt={blog.title}

@@ -89,31 +89,31 @@ export default function ToolsBlogHubPage() {
 
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div>
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[var(--foreground)] font-['Plus_Jakarta_Sans',sans-serif]">
+              <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[var(--foreground)] font-['Plus_Jakarta_Sans',sans-serif]">
                 AI Engineering <span className="text-[#8B7FE8]">Blog & Guides</span>
               </h1>
-              <p className="mt-3 text-base sm:text-lg text-[var(--foreground-secondary)] max-w-2xl leading-relaxed">
+              <p className="mt-2.5 sm:mt-3 text-xs sm:text-base md:text-lg text-[var(--foreground-secondary)] max-w-2xl leading-relaxed">
                 Simplified breakdowns, hands-on coding projects, career roadmaps, and benchmarks for cutting-edge AI tools.
               </p>
             </div>
 
             {/* Quick Metrics */}
-            <div className="flex items-center gap-3 shrink-0">
-              <div className="px-4 py-2.5 rounded-2xl bg-[var(--card)] border border-[var(--border)] shadow-sm text-center">
-                <div className="text-xl font-extrabold text-[#8B7FE8]">{totalBlogs}</div>
-                <div className="text-[11px] font-semibold text-[var(--foreground-secondary)] uppercase tracking-wider">
+            <div className="grid grid-cols-3 sm:flex sm:items-center gap-2 sm:gap-3 w-full sm:w-auto shrink-0">
+              <div className="px-3 sm:px-4 py-2 sm:py-2.5 rounded-2xl bg-[var(--card)] border border-[var(--border)] shadow-sm text-center">
+                <div className="text-lg sm:text-xl font-extrabold text-[#8B7FE8]">{totalBlogs}</div>
+                <div className="text-[10px] sm:text-[11px] font-semibold text-[var(--foreground-secondary)] uppercase tracking-wider">
                   Guides
                 </div>
               </div>
-              <div className="px-4 py-2.5 rounded-2xl bg-[var(--card)] border border-[var(--border)] shadow-sm text-center">
-                <div className="text-xl font-extrabold text-[#5CBFA0]">{trendingCount}</div>
-                <div className="text-[11px] font-semibold text-[var(--foreground-secondary)] uppercase tracking-wider">
+              <div className="px-3 sm:px-4 py-2 sm:py-2.5 rounded-2xl bg-[var(--card)] border border-[var(--border)] shadow-sm text-center">
+                <div className="text-lg sm:text-xl font-extrabold text-[#5CBFA0]">{trendingCount}</div>
+                <div className="text-[10px] sm:text-[11px] font-semibold text-[var(--foreground-secondary)] uppercase tracking-wider">
                   Trending
                 </div>
               </div>
-              <div className="px-4 py-2.5 rounded-2xl bg-[var(--card)] border border-[var(--border)] shadow-sm text-center">
-                <div className="text-xl font-extrabold text-[#F0879B]">30+</div>
-                <div className="text-[11px] font-semibold text-[var(--foreground-secondary)] uppercase tracking-wider">
+              <div className="px-3 sm:px-4 py-2 sm:py-2.5 rounded-2xl bg-[var(--card)] border border-[var(--border)] shadow-sm text-center">
+                <div className="text-lg sm:text-xl font-extrabold text-[#F0879B]">30+</div>
+                <div className="text-[10px] sm:text-[11px] font-semibold text-[var(--foreground-secondary)] uppercase tracking-wider">
                   AI Tools
                 </div>
               </div>
@@ -121,7 +121,7 @@ export default function ToolsBlogHubPage() {
           </div>
 
           {/* Search Bar & Sort Row */}
-          <div className="mt-8 flex flex-col sm:flex-row items-center gap-3.5">
+          <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row items-center gap-3 sm:gap-3.5">
             {/* Search Input */}
             <div className="relative flex-1 w-full">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8E8A9F]" />
@@ -130,13 +130,13 @@ export default function ToolsBlogHubPage() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search by tool name (e.g. Cursor, DeepSeek, Claude), topic, or keyword..."
-                className="w-full pl-11 pr-10 py-3 rounded-2xl bg-[var(--card)] border border-[var(--border)] text-sm text-[var(--foreground)] placeholder:text-[var(--foreground-secondary)] focus:outline-none focus:ring-2 focus:ring-[#8B7FE8]/50 transition-all shadow-sm"
+                className="w-full pl-11 pr-10 py-2.5 sm:py-3 rounded-2xl bg-[var(--card)] border border-[var(--border)] text-xs sm:text-sm text-[var(--foreground)] placeholder:text-[var(--foreground-secondary)] focus:outline-none focus:ring-2 focus:ring-[#8B7FE8]/50 transition-all shadow-sm min-h-[44px]"
               />
               {searchQuery && (
                 <button
                   type="button"
                   onClick={() => setSearchQuery("")}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-xs font-bold text-[#8E8A9F] hover:text-[var(--foreground)] px-1.5 py-0.5 rounded-md hover:bg-white/10"
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-xs font-bold text-[#8E8A9F] hover:text-[var(--foreground)] px-2 py-1 rounded-md hover:bg-white/10"
                 >
                   Clear
                 </button>
@@ -144,12 +144,12 @@ export default function ToolsBlogHubPage() {
             </div>
 
             {/* Sort Dropdown */}
-            <div className="flex items-center gap-2 self-stretch sm:self-auto shrink-0">
+            <div className="flex items-center gap-2 w-full sm:w-auto shrink-0">
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as any)}
                 aria-label="Sort guides"
-                className="px-4 py-3 rounded-2xl bg-[var(--card)] border border-[var(--border)] text-xs font-bold text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-[#8B7FE8]/50 shadow-sm cursor-pointer"
+                className="w-full sm:w-auto px-4 py-2.5 sm:py-3 rounded-2xl bg-[var(--card)] border border-[var(--border)] text-xs font-bold text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-[#8B7FE8]/50 shadow-sm cursor-pointer min-h-[44px]"
               >
                 <option value="latest">Latest Published</option>
                 <option value="trending">Most Trending</option>
@@ -159,14 +159,14 @@ export default function ToolsBlogHubPage() {
           </div>
 
           {/* Horizontal Category Pill Tabs */}
-          <div className="mt-6 flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+          <div className="mt-5 sm:mt-6 flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
             {BLOG_CATEGORIES.map((cat) => {
               const isActive = selectedCategory === cat;
               return (
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
-                  className={`shrink-0 px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 uppercase tracking-wider ${
+                  className={`shrink-0 px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 uppercase tracking-wider min-h-[36px] ${
                     isActive
                       ? "bg-[#8B7FE8] text-white shadow-soft-sm scale-[1.02]"
                       : "bg-[var(--card)] text-[var(--foreground-secondary)] hover:text-[var(--foreground)] hover:bg-[var(--elevated)] border border-[var(--border)]"
