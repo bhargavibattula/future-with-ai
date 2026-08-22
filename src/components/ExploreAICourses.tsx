@@ -385,39 +385,39 @@ export default function ExploreAICourses() {
     <section
       ref={sectionRef}
       id="explore"
-      className="relative w-full bg-[#FCFBFF] text-[#1E1B2E] py-20 overflow-hidden select-none"
+      className="relative w-full bg-[#FCFBFF] dark:bg-[#0A0A0A] text-[var(--foreground)] py-12 sm:py-20 overflow-hidden select-none transition-colors"
     >
       {/* Background Animated Floating Particles Canvas */}
       <FloatingParticlesCanvas />
 
       {/* Ambient Moving Radial Glow Blobs */}
-      <div className="pointer-events-none absolute -top-32 left-1/4 w-[500px] h-[500px] rounded-full bg-[#D8D2FA]/30 blur-[100px] animate-pulse" />
-      <div className="pointer-events-none absolute -bottom-32 right-1/4 w-[500px] h-[500px] rounded-full bg-[#FFC9DE]/30 blur-[120px] animate-pulse" />
-      <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[650px] rounded-full bg-[#B8E8D8]/20 blur-[140px]" />
+      <div className="pointer-events-none absolute -top-32 left-1/4 w-[500px] h-[500px] rounded-full bg-[#D8D2FA]/30 dark:bg-[#8B7FE8]/10 blur-[100px] animate-pulse" />
+      <div className="pointer-events-none absolute -bottom-32 right-1/4 w-[500px] h-[500px] rounded-full bg-[#FFC9DE]/30 dark:bg-[#FFC9DE]/10 blur-[120px] animate-pulse" />
+      <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[650px] rounded-full bg-[#B8E8D8]/20 dark:bg-[#5CBFA0]/10 blur-[140px]" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* SECTION HEADER */}
-        <div className="explore-courses-header flex flex-col items-center text-center mb-12">
+        <div className="explore-courses-header flex flex-col items-center text-center mb-8 sm:mb-12">
           {/* Category Pill */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#F3F0FE] border border-[#EAE6FE] text-xs font-bold text-[#8B7FE8] mb-4 shadow-soft-sm">
-            <Sparkles className="w-4 h-4 text-[#8B7FE8]" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#F3F0FE] dark:bg-[#1E1933] border border-[#EAE6FE] dark:border-white/10 text-xs font-bold text-[#8B7FE8] mb-3 sm:mb-4 shadow-soft-sm">
+            <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#8B7FE8]" />
             <span>Interactive Learning Directory</span>
           </div>
 
           {/* Title */}
-          <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-[#1E1B2E] mb-4">
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-[var(--foreground)] mb-3 sm:mb-4">
             Explore <span className="text-[#8B7FE8]">AI Courses</span>
           </h2>
 
           {/* Subtitle */}
-          <p className="max-w-2xl text-base sm:text-lg text-[#6B6785] font-medium leading-relaxed">
+          <p className="max-w-2xl text-xs sm:text-base md:text-lg text-[var(--foreground-secondary)] font-medium leading-relaxed">
             Learn the world&apos;s most powerful AI tools through beautifully designed interactive courses.
           </p>
         </div>
 
         {/* INFINITE CAROUSEL SCROLL CONTAINER */}
         <div
-          className="explore-courses-carousel relative w-full overflow-hidden cursor-grab active:cursor-grabbing py-6"
+          className="explore-courses-carousel relative w-full overflow-hidden cursor-grab active:cursor-grabbing py-4 sm:py-6"
           style={{
             maskImage: "linear-gradient(to right, transparent, black 5%, black 95%, transparent)",
             WebkitMaskImage: "linear-gradient(to right, transparent, black 5%, black 95%, transparent)"
@@ -430,12 +430,10 @@ export default function ExploreAICourses() {
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
-          {/* Left & Right Gradient Fade Mask Overlays (Removed to fix white cast in dark mode, handled by mask-image above) */}
-
           {/* Horizontal Track */}
           <div
             ref={carouselTrackRef}
-            className="flex items-center gap-7 w-max will-change-transform"
+            className="flex items-center gap-5 sm:gap-7 w-max will-change-transform"
           >
             {doubledCourses.map((course, idx) => (
               <CourseCard key={`${course.id}-${idx}`} course={course} />
@@ -444,15 +442,15 @@ export default function ExploreAICourses() {
         </div>
 
         {/* BOTTOM PROGRESS BAR */}
-        <div className="mt-8 max-w-xl mx-auto flex flex-col items-center gap-2">
-          <div className="w-full h-2 bg-[#EAE6FE] rounded-full overflow-hidden relative border border-[#EAE6FE]">
+        <div className="mt-6 sm:mt-8 max-w-xl mx-auto flex flex-col items-center gap-2">
+          <div className="w-full h-2 bg-[#EAE6FE] dark:bg-[#1E1933] rounded-full overflow-hidden relative border border-[#EAE6FE] dark:border-white/10">
             <div
               ref={progressFillRef}
               className="h-full rounded-full bg-gradient-to-r from-[#8B7FE8] via-[#B8E8D8] to-[#FFC9DE] transition-all duration-75"
               style={{ width: "0%" }}
             />
           </div>
-          <span className="text-[11px] font-semibold text-[#6B6785] tracking-wider uppercase">
+          <span className="text-[10px] sm:text-[11px] font-semibold text-[var(--foreground-secondary)] tracking-wider uppercase">
             Scroll or drag to explore 9 courses
           </span>
         </div>

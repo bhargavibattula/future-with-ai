@@ -18,16 +18,16 @@ export default function WhyChooseUs() {
         </p>
 
         {/* Bento Grid */}
-        <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 auto-rows-auto md:auto-rows-[340px]">
+        <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 auto-rows-auto">
 
-          {/* Card 1: 28-Day Challenge (Spans 2 columns) */}
-          <div className="md:col-span-2 bg-gradient-to-br from-[#8B7FE8] to-[#6A47F9] rounded-3xl p-6 sm:p-8 lg:p-10 flex flex-col sm:flex-row items-center justify-between overflow-hidden relative shadow-xl shadow-[#8B7FE8]/20">
+          {/* Card 1: 28-Day Challenge (Spans 2 columns on lg+) */}
+          <div className="md:col-span-2 bg-gradient-to-br from-[#8B7FE8] to-[#6A47F9] rounded-3xl p-6 sm:p-8 lg:p-10 flex flex-col sm:flex-row items-center justify-between overflow-hidden relative shadow-xl shadow-[#8B7FE8]/20 min-h-[300px]">
             <div className="z-10 w-full sm:w-1/2 text-white">
               <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-3 sm:mb-4 font-['Space_Grotesk']">The 28-Day AI Challenge</h3>
               <p className="text-white/80 text-xs sm:text-sm lg:text-base leading-relaxed mb-6 sm:mb-8">
                 Take daily bite-sized steps at your own pace to transform your skills and go from curious to AI engineer.
               </p>
-              <a href="#explore" className="inline-flex items-center justify-center bg-white text-[#6A47F9] font-bold py-3 px-6 rounded-full text-xs sm:text-sm hover:shadow-lg transition-all duration-300 w-full sm:w-auto">
+              <a href="#explore" className="inline-flex items-center justify-center bg-white text-[#6A47F9] font-bold py-3 px-6 rounded-full text-xs sm:text-sm hover:shadow-lg transition-all duration-300 w-full sm:w-auto min-h-[44px]">
                 Start my Challenge →
               </a>
             </div>
