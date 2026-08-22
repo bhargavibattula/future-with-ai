@@ -30,6 +30,8 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
+import { COURSES } from "@/data/courses";
+
 export interface TimelineActivity {
   id: string;
   title: string;
@@ -49,6 +51,7 @@ export default function DashboardPage() {
   const [courseProgress, setCourseProgress] = useState<number>(0);
   const [isMascotCelebrating, setIsMascotCelebrating] = useState<boolean>(false);
   const [dashboardData, setDashboardData] = useState<any>(null);
+  const [activeCourse, setActiveCourse] = useState<any>(null);
 
   // DOM Refs for GSAP
   const pageRef = useRef<HTMLDivElement>(null);
@@ -61,6 +64,12 @@ export default function DashboardPage() {
 
   // Fetch live backend data
   useEffect(() => {
+    // Pick a random course to display as "Active Pathway"
+    if (COURSES && COURSES.length > 0) {
+      const randomCourse = COURSES[Math.floor(Math.random() * COURSES.length)];
+      setActiveCourse(randomCourse);
+    }
+
     const fetchDashboard = async () => {
       try {
         const res = await fetch("/api/dashboard");
@@ -295,10 +304,10 @@ export default function DashboardPage() {
                 <span className="text-xs font-bold text-[#8B7FE8]">Module 4 of 12</span>
               </div>
               <CardTitle className="text-xl font-black text-[#1E1B2E] mt-2">
-                Claude & LLM Fine-Tuning Program
+                {activeCourse?.title || "Claude & LLM Fine-Tuning Program"}
               </CardTitle>
               <CardDescription className="text-xs text-[#6B6785]">
-                Master prompt engineering, LoRA adaptation, and model deployment.
+                {activeCourse?.description || "Master prompt engineering, LoRA adaptation, and model deployment."}
               </CardDescription>
             </CardHeader>
 
