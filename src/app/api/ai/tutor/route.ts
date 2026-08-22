@@ -41,7 +41,7 @@ Format your valid responses using markdown where appropriate. If you don't know 
         Authorization: `Bearer ${groqApiKey}`,
       },
       body: JSON.stringify({
-        model: "llama-3.1-8b-instant",
+        model: "gpt-oss-120b",
         messages: payloadMessages,
         temperature: 0.7,
         max_tokens: 1024,
