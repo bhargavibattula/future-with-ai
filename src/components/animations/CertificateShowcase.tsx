@@ -75,7 +75,7 @@ export default function CertificateShowcase() {
               </div>
               <div className="text-right">
                 <div className="text-[10px] text-gray-400 font-mono uppercase tracking-widest">Certificate ID</div>
-                <div className="text-xs font-mono text-gray-600">TK-2026-AI-99X</div>
+                <div className="text-xs font-mono text-gray-600">FAI-2026-AI-99X</div>
               </div>
             </div>
 
@@ -121,7 +121,7 @@ export default function CertificateShowcase() {
               style={{ clipPath: "polygon(50% 0%, 61% 11%, 77% 11%, 83% 25%, 98% 34%, 93% 50%, 98% 66%, 83% 75%, 77% 89%, 61% 89%, 50% 100%, 39% 89%, 23% 89%, 17% 75%, 2% 66%, 7% 50%, 2% 34%, 17% 25%, 23% 11%, 39% 11%)" }}
             >
               <div className="w-24 h-24 rounded-full border-2 border-dashed border-white/50 flex items-center justify-center">
-                <span className="font-[var(--font-display)] font-black text-4xl text-white italic">Tk</span>
+                <span className="font-[var(--font-display)] font-black text-4xl text-white italic">f.ai</span>
               </div>
             </div>
 
