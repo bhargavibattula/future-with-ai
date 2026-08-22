@@ -24,6 +24,12 @@ export async function POST(req: Request) {
           { status: 400 }
         );
       }
+      if (!password) {
+        return NextResponse.json(
+          { success: false, error: "Password is required for 2FA." },
+          { status: 400 }
+        );
+      }
       const isPasswordValid = await bcrypt.compare(password, user.password);
       if (!isPasswordValid) {
         return NextResponse.json(

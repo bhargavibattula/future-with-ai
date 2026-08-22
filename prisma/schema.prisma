@@ -33,6 +33,12 @@ model User {
   userMilestones    UserMilestone[]
   userAchievements  UserAchievement[]
   courseEnrollments CourseEnrollment[]
+  userItems         UserItem[]
+  coinTransactions  CoinTransaction[]
+  sentGifts         Gift[]          @relation("GiftSender")
+  receivedGifts     Gift[]          @relation("GiftRecipient")
+  bookmarks         Bookmark[]
+  lessonNotes       LessonNote[]
 }
 
 model Account {
@@ -299,4 +305,104 @@ model Course {
   @@index([difficulty])
   @@index([language])
 }
+
+model Bookmark {
+  id        String       @id @default(cuid())
+  userId    String
+  lessonId  String
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  user   User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, lessonId])
+  @@index([userId, createdAt])
+  @@index([lessonId])
+}
+
+model LessonNote {
+  id        String   @id @default(cuid())
+  userId    String
+  lessonId  String
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user   User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([lessonId])
+}
+
+model StoreItem {
+  id          String   @id @default(cuid())
+  sku         String   @unique
+  name        String
+  description String?  @db.Text
+  type        String
+  price       Int
+  image       String?
+  metadata    Json?
+  purchasable Boolean  @default(true)
+  giftable    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  userItems   UserItem[]
+  gifts       Gift[]
+}
+
+model UserItem {
+  id        String    @id @default(cuid())
+  userId    String
+  itemId    String
+  quantity  Int       @default(1)
+  grantedAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  item StoreItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, itemId])
+  @@index([userId])
+  @@index([itemId])
+}
+
+model Gift {
+  id                   String     @id @default(cuid())
+  senderId             String
+  recipientId          String
+  itemId               String?
+  coinAmount           Int?
+  status               String     @default("COMPLETED")
+  senderTransactionId  String?
+  recipientTransactionId String?
+  createdAt            DateTime   @default(now())
+  updatedAt            DateTime   @updatedAt
+  completedAt          DateTime?
+
+  sender    User       @relation("GiftSender", fields: [senderId], references: [id], onDelete: Cascade)
+  recipient User       @relation("GiftRecipient", fields: [recipientId], references: [id], onDelete: Cascade)
+  item      StoreItem? @relation(fields: [itemId], references: [id], onDelete: SetNull)
+
+  @@index([senderId])
+  @@index([recipientId])
+  @@index([status])
+  @@index([itemId])
+}
+
+model CoinTransaction {
+  id           String   @id @default(cuid())
+  userId       String
+  amount       Int
+  type         String   // CREDIT or DEBIT
+  reason       String?  // LESSON_COMPLETION, STREAK_FREEZE, etc.
+  referenceId  String?  // Related lesson, quiz, purchase, gift, etc.
+  balanceAfter Int      @default(0)
+  createdAt    DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([type])
+}
+
 

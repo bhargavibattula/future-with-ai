@@ -24,6 +24,7 @@ import {
   UserCourseProgressState
 } from "@/data/coursePathData";
 import { useAuth } from "@/lib/auth";
+import confetti from "canvas-confetti";
 
 interface CourseQuizClientProps {
   slug: string;
@@ -129,7 +130,38 @@ export default function CourseQuizClient({ slug, moduleId }: CourseQuizClientPro
   const handleSubmitQuiz = async () => {
     setSubmitted(true);
     if (score > 50) {
-      const bonusXp = quiz.xpReward || 100;
+      const bonusXp = (quiz.xpReward || 100) + 100;
+      
+      // Visual Effects (Confetti)
+      confetti({
+        particleCount: 150,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ['#8B7FE8', '#5CBFA0', '#F0879B', '#FFD700']
+      });
+
+      // Sound Appreciation
+      try {
+        const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
+        if (AudioContext) {
+          const ctx = new AudioContext();
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(523.25, ctx.currentTime);
+          osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.1);
+          osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.2);
+          osc.frequency.setValueAtTime(1046.50, ctx.currentTime + 0.3);
+          gain.gain.setValueAtTime(0.1, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + 1);
+          osc.start();
+          osc.stop(ctx.currentTime + 1);
+        }
+      } catch (e) {
+        console.warn("Audio context not supported", e);
+      }
       
       // Update backend via API
       try {

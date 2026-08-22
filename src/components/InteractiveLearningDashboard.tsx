@@ -12,6 +12,7 @@ import {
   BarChart3,
   PlusCircle,
 } from "lucide-react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -111,18 +112,20 @@ export default function InteractiveLearningDashboard() {
               </CardContent>
             </Card>
 
-            <Card className="bg-white hover:border-[#8B7FE8]/40">
-              <CardContent className="p-6 flex items-center justify-between">
-                <div>
-                  <span className="text-xs font-bold text-[#6B6785]">AI Coins Wallet</span>
-                  <div className="text-2xl font-black text-[#1E1B2E] mt-1 flex items-center gap-1.5">
-                    <Award className="w-6 h-6 text-[#1E1B2E]" />
-                    <span>1,850 Coins</span>
+            <Link href="/dashboard/wallet">
+              <Card className="bg-white hover:border-[#8B7FE8]/40 cursor-pointer transition-colors">
+                <CardContent className="p-6 flex items-center justify-between">
+                  <div>
+                    <span className="text-xs font-bold text-[#6B6785]">AI Coins Wallet</span>
+                    <div className="text-2xl font-black text-[#1E1B2E] mt-1 flex items-center gap-1.5">
+                      <Award className="w-6 h-6 text-[#1E1B2E]" />
+                      <span>1,850 Coins</span>
+                    </div>
                   </div>
-                </div>
-                <Badge variant="pink">Wallet</Badge>
-              </CardContent>
-            </Card>
+                  <Badge variant="pink">Wallet</Badge>
+                </CardContent>
+              </Card>
+            </Link>
 
             <Card className="bg-white hover:border-[#8B7FE8]/40">
               <CardContent className="p-6 flex items-center justify-between">

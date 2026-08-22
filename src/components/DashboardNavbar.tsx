@@ -231,6 +231,46 @@ export default function DashboardNavbar() {
                     </div>
                   </div>
                 </Link>
+
+                <Link
+                  href="/dashboard/bookmarks"
+                  onClick={() => setLearnDropdownOpen(false)}
+                  className={`flex items-start gap-3 p-2.5 rounded-xl transition-colors ${
+                    pathname === "/dashboard/bookmarks"
+                      ? "bg-[#F3F0FE] dark:bg-[#282142] text-[#8B7FE8]"
+                      : "hover:bg-[#F8F6FF] dark:hover:bg-[#231E38] text-[var(--foreground)]"
+                  }`}
+                >
+                  <div className="p-2 rounded-lg bg-[#F5F2FF] dark:bg-[#2A2440] text-[#8B7FE8] mt-0.5">
+                    <Bookmark className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <div className="font-extrabold text-xs">Saved Lessons</div>
+                    <div className="text-[11px] font-normal text-[var(--foreground-secondary)]">
+                      Your bookmarked lessons
+                    </div>
+                  </div>
+                </Link>
+
+                <Link
+                  href="/dashboard/wallet"
+                  onClick={() => setLearnDropdownOpen(false)}
+                  className={`flex items-start gap-3 p-2.5 rounded-xl transition-colors ${
+                    pathname === "/dashboard/wallet"
+                      ? "bg-[#F3F0FE] dark:bg-[#282142] text-[#8B7FE8]"
+                      : "hover:bg-[#F8F6FF] dark:hover:bg-[#231E38] text-[var(--foreground)]"
+                  }`}
+                >
+                  <div className="p-2 rounded-lg bg-[#F5F2FF] dark:bg-[#2A2440] text-[#8B7FE8] mt-0.5">
+                    <Trophy className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <div className="font-extrabold text-xs">AI Coins Wallet</div>
+                    <div className="text-[11px] font-normal text-[var(--foreground-secondary)]">
+                      Balance & transaction history
+                    </div>
+                  </div>
+                </Link>
               </div>
             )}
           </div>
@@ -406,6 +446,15 @@ export default function DashboardNavbar() {
                 >
                   <Bookmark className="w-4 h-4 text-[#8B7FE8]" />
                   <span>Saved AI Tools</span>
+                </Link>
+
+                <Link
+                  href="/dashboard/bookmarks"
+                  onClick={() => setProfileDropdownOpen(false)}
+                  className="flex items-center gap-2.5 px-3 py-2 text-sm font-semibold text-[var(--foreground)] rounded-xl hover:bg-[#F3F0FE] dark:hover:bg-[#282142] transition-colors"
+                >
+                  <Bookmark className="w-4 h-4 text-[#8B7FE8]" />
+                  <span>Saved Lessons</span>
                 </Link>
 
                 <div className="flex items-center gap-2.5 px-3 py-2 text-sm font-semibold text-[var(--foreground)] rounded-xl hover:bg-[#F3F0FE] dark:hover:bg-[#282142] transition-colors cursor-default">

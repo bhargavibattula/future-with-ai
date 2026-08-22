@@ -18,7 +18,10 @@ import {
   Lock,
   ChevronLeft,
   Award,
-  HelpCircle
+  HelpCircle,
+  Bookmark,
+  BookmarkCheck,
+  FileText
 } from "lucide-react";
 import {
   CourseModule,
@@ -27,6 +30,7 @@ import {
   UserCourseProgressState
 } from "@/data/coursePathData";
 import { useAuth } from "@/lib/auth";
+import NotesDrawer from "@/components/course-path/NotesDrawer";
 
 import confetti from "canvas-confetti";
 import toast from "react-hot-toast";
@@ -42,6 +46,12 @@ export default function CourseLessonClient({ slug, lessonId }: CourseLessonClien
   const [progressState, setProgressState] = useState<UserCourseProgressState | null>(null);
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
   const [scrollProgress, setScrollProgress] = useState<number>(0);
+
+  // Notes and Bookmark State
+  const [isNotesOpen, setIsNotesOpen] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [bookmarkLoading, setBookmarkLoading] = useState(true);
+  const [bookmarkSaving, setBookmarkSaving] = useState(false);
 
   // Fetch progress from Database on mount
   useEffect(() => {
@@ -69,6 +79,29 @@ export default function CourseLessonClient({ slug, lessonId }: CourseLessonClien
     };
     fetchProgress();
   }, [slug, user?.email]);
+
+  // Load bookmark status
+  useEffect(() => {
+    let cancelled = false;
+    const loadBookmark = async () => {
+      setBookmarkLoading(true);
+      try {
+        const response = await fetch(`/api/lessons/${encodeURIComponent(lessonId)}/bookmark?courseSlug=${encodeURIComponent(slug)}`);
+        const data = await response.json();
+        if (response.ok && !cancelled) {
+          setIsBookmarked(Boolean(data.bookmarked));
+        }
+      } catch (error) {
+        console.error("Failed to load bookmark state.", error);
+      } finally {
+        if (!cancelled) setBookmarkLoading(false);
+      }
+    };
+    void loadBookmark();
+    return () => {
+      cancelled = true;
+    };
+  }, [lessonId, slug]);
 
   const pathData = getCoursePathData(slug, progressState || undefined);
 
@@ -249,6 +282,26 @@ export default function CourseLessonClient({ slug, lessonId }: CourseLessonClien
     setTimeout(() => setCopiedCode(null), 2000);
   };
 
+  const handleBookmarkToggle = async () => {
+    setBookmarkSaving(true);
+    try {
+      const url = `/api/bookmarks/${encodeURIComponent(lessonId)}?courseSlug=${encodeURIComponent(slug)}`;
+      const response = await fetch(isBookmarked ? url : "/api/bookmarks", {
+        method: isBookmarked ? "DELETE" : "POST",
+        body: isBookmarked ? undefined : JSON.stringify({ courseSlug: slug, lessonId }),
+        headers: { "Content-Type": "application/json" }
+      });
+      const data = await response.json();
+      if (response.ok) {
+        setIsBookmarked(Boolean(data.bookmarked));
+      }
+    } catch (error) {
+      console.error("Failed to update bookmark.", error);
+    } finally {
+      setBookmarkSaving(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] flex flex-col font-sans relative">
       {/* Top Fixed Reading Scroll Indicator */}
@@ -288,6 +341,33 @@ export default function CourseLessonClient({ slug, lessonId }: CourseLessonClien
               <Zap className="w-3.5 h-3.5 fill-[#0E8566]" />
               +{targetLesson.xpReward || 50} XP
             </span>
+
+            <div className="flex items-center gap-2 mr-2">
+              <button
+                type="button"
+                onClick={() => setIsNotesOpen(true)}
+                className="px-3 py-2 rounded-xl text-xs font-extrabold bg-[#F5F2FF] dark:bg-[#252136] hover:bg-[#E8E3FF] text-[#8B7FE8] transition-all flex items-center gap-1.5 cursor-pointer border border-[#E8E3FF] dark:border-[#3A3554]"
+              >
+                <FileText className="w-4 h-4" />
+                <span className="hidden sm:inline">Notes</span>
+              </button>
+              
+              <button
+                type="button"
+                onClick={() => void handleBookmarkToggle()}
+                disabled={bookmarkLoading || bookmarkSaving}
+                className="px-3 py-2 rounded-xl text-xs font-extrabold bg-[#F5F2FF] dark:bg-[#252136] hover:bg-[#E8E3FF] text-[#8B7FE8] transition-all flex items-center gap-1.5 cursor-pointer border border-[#E8E3FF] dark:border-[#3A3554]"
+              >
+                {bookmarkLoading || bookmarkSaving ? (
+                  <div className="w-4 h-4 border-2 border-[#8B7FE8] border-t-transparent rounded-full animate-spin" />
+                ) : isBookmarked ? (
+                  <BookmarkCheck className="w-4 h-4" />
+                ) : (
+                  <Bookmark className="w-4 h-4" />
+                )}
+                <span className="hidden sm:inline">{isBookmarked ? "Saved" : "Save"}</span>
+              </button>
+            </div>
 
             {targetLesson.completed ? (
               <span className="px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#E6F9F0] text-[#0E8566] border border-[#9DD9C5] flex items-center gap-1">
@@ -596,6 +676,14 @@ export default function CourseLessonClient({ slug, lessonId }: CourseLessonClien
           </div>
         </div>
       </main>
+
+      <NotesDrawer
+        isOpen={isNotesOpen}
+        onClose={() => setIsNotesOpen(false)}
+        lessonId={lessonId}
+        courseSlug={slug}
+        lessonTitle={targetLesson.title}
+      />
 
       <Footer />
     </div>
